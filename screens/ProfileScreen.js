@@ -17,7 +17,7 @@ function ProfileScreen() {
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>'Loading...'</Text>
+        <Text>Loading...</Text>
       </View>
     )
   }
@@ -36,10 +36,24 @@ function ProfileScreen() {
       name,
       city,
       state,
+      picture: {
+        format,
+        publicId
+      },
+      cloudinaryInfo: {
+        cloudName,
+      }
     }
   } = data
+
+  const url = `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` || ''
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Image
+        style={{ width: 50, height: 50 }}
+        source={{ uri: url }}
+      />
       <Text>{name}</Text>
       <Text>{city}, {state}</Text>
       <Button
