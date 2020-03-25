@@ -12,8 +12,10 @@ function MessageItem({ messageData, navigation }) {
   } = messageData
 
   const handleSelect = () => {
-    console.log('View Touched: ', roomId)
-    navigation.navigate('Message')
+    navigation.navigate('Message', {
+      name,
+      roomId
+    })
   }
 
   const cloudName = "equiptercrm"

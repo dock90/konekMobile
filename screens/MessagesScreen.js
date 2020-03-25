@@ -2,7 +2,7 @@ import React from 'react'
 import { FlatList, View, Text, StyleSheet } from 'react-native';
 import { useQuery } from '@apollo/client';
 // queries
-import { ROOMS_QUERY } from '../gql/MessageQuery'
+import { ROOMS_QUERY } from '../gql/RoomQueries'
 // components
 import MessageItem from '../components/MessageItem'
 

@@ -3,7 +3,7 @@ import { Button, Image, Text, View, StyleSheet } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { auth } from '../config/firebase'
 // queries
-import { ME_QUERY } from '../gql/MeQuery'
+import { ME_QUERY } from '../gql/MeQueries'
 // components
 import Header from '../components/Header'
 

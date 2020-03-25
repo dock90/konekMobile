@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { ASSET_FIELDS } from "./AssetQuery";
+import { ASSET_FIELDS } from "./AssetQueries";
 
 export const ROOM_FIELDS = gql`
   fragment RoomFields on Room {
