@@ -1,9 +1,11 @@
 import React from 'react'
-import { Button, Image, Text, View } from 'react-native';
+import { Button, Image, Text, View, StyleSheet } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { auth } from '../config/firebase'
 // queries
 import { ME_QUERY } from '../gql/MeQuery'
+// components
+import Header from '../components/Header'
 
 function ProfileScreen() {
   const { loading, error, data } = useQuery(ME_QUERY);
@@ -49,7 +51,8 @@ function ProfileScreen() {
   const url = `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` || ''
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
+      <Header title="Me" />
       <Image
         style={{ width: 50, height: 50 }}
         source={{ uri: url }}
@@ -63,5 +66,11 @@ function ProfileScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+})
 
 export default ProfileScreen

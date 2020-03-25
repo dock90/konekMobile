@@ -5,7 +5,7 @@ function ResetPassScreen({ navigation }) {
   const [email, onChangeEmail] = useState('');
 
   const handleResetPass = () => {
-    navigation.navigate('ResetPassSuccess')
+    navigation.navigate('ResetPassSuccessScreen')
   }
 
   return (

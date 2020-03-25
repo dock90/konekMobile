@@ -1,12 +1,20 @@
 import React from 'react'
-import { View, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+// components
+import Header from '../components/Header'
 
 function ContactsScreen() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Contacts Screen</Text>
+    <View style={styles.container}>
+      <Header title="Contacts" />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+})
 
 export default ContactsScreen
