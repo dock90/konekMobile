@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Text, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/client';
 // queries
 import { ROOMS_QUERY } from '../gql/RoomQueries'
@@ -12,7 +12,7 @@ function MessagesScreen({ navigation }) {
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#323232" />
       </View>
     )
   }
@@ -41,6 +41,7 @@ function MessagesScreen({ navigation }) {
         }
         keyExtractor={item => item.roomId}
       />
+      <TextInput />
     </View>
   );
 }
