@@ -63,7 +63,7 @@ function MessageScreen({ navigation, route }) {
     )
   }
 
-  const messages = [...data.messages.data].reverse();
+  const { messages } = data
 
   return (
     <KeyboardAvoidingView
@@ -71,7 +71,7 @@ function MessageScreen({ navigation, route }) {
       style={styles.container}
     >
       <FlatList
-        data={messages}
+        data={messages.data}
         renderItem={({ item }) => (
           <Message
             key={item.messageId}
@@ -80,6 +80,7 @@ function MessageScreen({ navigation, route }) {
         )
         }
         keyExtractor={item => item.messageId}
+        inverted
       />
       <View style={styles.inputContainer}>
         <TextInput

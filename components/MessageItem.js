@@ -5,10 +5,7 @@ function MessageItem({ messageData, navigation }) {
   const {
     roomId,
     name,
-    picture: {
-      format,
-      publicId
-    }
+    picture
   } = messageData
 
   const handleSelect = () => {
@@ -18,9 +15,12 @@ function MessageItem({ messageData, navigation }) {
     })
   }
 
-  const cloudName = "equiptercrm"
-
-  const url = `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` || ''
+  let url = 'https://image.freepik.com/free-icon/important-person_318-10744.jpg'
+  if (picture) {
+    const { format, publicId } = picture
+    const cloudName = "equiptercrm"
+    url = `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` || ''
+  }
 
   return (
     <TouchableOpacity

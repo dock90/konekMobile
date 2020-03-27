@@ -7,7 +7,9 @@ import { ROOMS_QUERY } from '../gql/RoomQueries'
 import MessageItem from '../components/MessageItem'
 
 function MessagesScreen({ navigation }) {
-  const { loading, error, data } = useQuery(ROOMS_QUERY);
+  const { loading, error, data } = useQuery(ROOMS_QUERY, {
+    pollInterval: 500
+  });
 
   if (loading) {
     return (
