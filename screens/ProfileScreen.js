@@ -6,13 +6,17 @@ import { auth } from '../config/firebase'
 import { ME_QUERY } from '../gql/MeQueries'
 // components
 import Header from '../components/Header'
+import AcceptInvitation from '../components/AcceptInvitation'
 
 function ProfileScreen() {
-  const { loading, error, data } = useQuery(ME_QUERY);
+  const { client, data, error, loading } = useQuery(ME_QUERY, {
+    pollInterval: 1000
+  });
 
   const handleLogout = () => {
     auth
       .signOut()
+      .then(() => client.resetStore())
     console.log('Logout Success')
   }
 
@@ -38,17 +42,21 @@ function ProfileScreen() {
       name,
       city,
       state,
-      picture: {
-        format,
-        publicId
-      },
+      picture,
       cloudinaryInfo: {
         cloudName,
+      },
+      access: {
+        hasContact
       }
     }
   } = data
 
-  const url = `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` || ''
+  let url = 'https://image.freepik.com/free-icon/important-person_318-10744.jpg'
+  if (picture) {
+    const { format, publicId } = picture
+    url = `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` || ''
+  }
 
   return (
     <View style={styles.container}>
@@ -59,6 +67,9 @@ function ProfileScreen() {
       />
       <Text>{name}</Text>
       <Text>{city}, {state}</Text>
+      {!hasContact &&
+        <AcceptInvitation />
+      }
       <Button
         onPress={handleLogout}
         title="Logout"
