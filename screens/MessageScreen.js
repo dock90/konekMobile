@@ -5,6 +5,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -70,18 +71,20 @@ function MessageScreen({ navigation, route }) {
       behavior={Platform.Os == "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <FlatList
-        data={messages.data}
-        renderItem={({ item }) => (
-          <Message
-            key={item.messageId}
-            messageData={item}
-          />
-        )
-        }
-        keyExtractor={item => item.messageId}
-        inverted
-      />
+      <View style={styles.messages}>
+        <FlatList
+          data={messages.data}
+          renderItem={({ item }) => (
+            <Message
+              key={item.messageId}
+              messageData={item}
+            />
+          )
+          }
+          keyExtractor={item => item.messageId}
+          inverted
+        />
+      </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -100,6 +103,10 @@ function MessageScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between'
+  },
+  messages: {
+    maxHeight: '90%',
   },
   inputContainer: {
     flexDirection: 'row',
