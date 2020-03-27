@@ -6,14 +6,23 @@ function ContactItem({
     contactId,
     name,
     picture,
+    profile
   },
   navigation
 }) {
 
-  const handleSelect = () => {
+  const handleSelectContact = () => {
     navigation.navigate('Contact', {
       name,
       contactId
+    })
+  }
+
+  const handleStartConversation = () => {
+    const { roomId } = profile
+    navigation.navigate('Message', {
+      name,
+      roomId
     })
   }
 
@@ -35,11 +44,13 @@ function ContactItem({
       </View>
       <View style={styles.actions}>
         <Button
+          disabled={!profile}
+          onPress={handleStartConversation}
           title="Message"
         />
         <Button
           title="Details"
-          onPress={handleSelect}
+          onPress={handleSelectContact}
         />
       </View>
     </View>
