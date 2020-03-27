@@ -9,7 +9,7 @@ import { auth } from './config/firebase'
 // components
 import AuthContainer from './components/AuthContainer'
 // screens
-import MessagesScreen from './screens/MessagesScreen'
+import MessagesStackScreen from './screens/MessagesStackScreen'
 import ContactsScreen from './screens/ContactsScreen'
 import ProfileScreen from './screens/ProfileScreen'
 
@@ -79,7 +79,7 @@ function App() {
             }}
 
           >
-            <Tab.Screen name="Messages" component={MessagesScreen} />
+            <Tab.Screen name="Messages" component={MessagesStackScreen} />
             <Tab.Screen name="Contacts" component={ContactsScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>
