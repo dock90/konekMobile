@@ -1,5 +1,12 @@
 import React from 'react'
-import { FlatList, View, Text, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useQuery } from '@apollo/client';
 // queries
 import { ROOMS_QUERY } from '../gql/RoomQueries'

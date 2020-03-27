@@ -14,7 +14,7 @@ function MessagesStackScreen() {
       <MessagesStack.Screen
         name="Messages"
         options={{
-          header: ({ scene, previous, navigation }) => {
+          header: () => {
             const title = 'Messages'
             return (
               <Header title={title} />
