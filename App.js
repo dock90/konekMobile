@@ -10,7 +10,7 @@ import { auth } from './config/firebase'
 import AuthContainer from './components/AuthContainer'
 // screens
 import MessagesStackScreen from './screens/MessagesStackScreen'
-import ContactsScreen from './screens/ContactsScreen'
+import ContactsStackScreen from './screens/ContactsStackScreen'
 import ProfileScreen from './screens/ProfileScreen'
 
 // configure gql server link
@@ -80,7 +80,7 @@ function App() {
 
           >
             <Tab.Screen name="Messages" component={MessagesStackScreen} />
-            <Tab.Screen name="Contacts" component={ContactsScreen} />
+            <Tab.Screen name="Contacts" component={ContactsStackScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>
         </NavigationContainer>
