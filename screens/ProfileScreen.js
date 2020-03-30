@@ -22,7 +22,7 @@ function ProfileScreen() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.loadingContainer}>
         <Text>Loading...</Text>
       </View>
     )
@@ -30,7 +30,7 @@ function ProfileScreen() {
 
   if (error) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.errorContainer}>
         <Text>There was an error:</Text>
         <Text>{error.message}</Text>
       </View>
@@ -86,8 +86,21 @@ function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF'
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF'
+  },
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   profileContainer: {
     flex: 1,

@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 50,
-    margin: 20,
+    height: 70,
+    padding: 20,
+    backgroundColor: '#FFFFFF'
   },
   pathContainer: {
     flexDirection: 'row',

@@ -77,7 +77,7 @@ function App() {
               },
             })}
             tabBarOptions={{
-              activeTintColor: 'tomato',
+              activeTintColor: '#5D00D8',
               inactiveTintColor: 'gray',
             }}
 
