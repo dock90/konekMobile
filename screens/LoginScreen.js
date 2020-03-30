@@ -12,8 +12,6 @@ function LoginScreen({ navigation }) {
     // TODO: Handle login errors
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(() => console.log('Authentication Success'))
-      .error(() => console.log('Error'))
   }
 
   return (

@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     // Listen for authentication state to change.
-    auth.onAuthStateChanged((user) => {
+    const runAuthorize = auth.onAuthStateChanged((user) => {
       if (user) {
         console.log('Authentication Success')
         setFbAuth(true)
@@ -50,7 +50,10 @@ function App() {
         setFbAuth(false)
       }
     });
-  });
+    return () => {
+      runAuthorize()
+    }
+  })
 
   if (fbAuth) {
     return (
