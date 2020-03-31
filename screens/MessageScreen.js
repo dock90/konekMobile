@@ -54,7 +54,7 @@ function MessageScreen({ navigation, route }) {
     onChangeText('')
   }
 
-  if (loading) {
+  if (loading || me.loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#323232" />
@@ -62,7 +62,7 @@ function MessageScreen({ navigation, route }) {
     )
   }
 
-  if (error) {
+  if (error || me.error) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>There was an error:</Text>
