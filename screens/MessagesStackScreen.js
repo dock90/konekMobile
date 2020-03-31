@@ -29,7 +29,10 @@ function MessagesStackScreen() {
         }}
         component={MessagesScreen}
       />
-      <MessagesStack.Screen name="Message" component={MessageScreen} />
+      <MessagesStack.Screen
+        name="Message"
+        component={MessageScreen}
+      />
     </MessagesStack.Navigator>
   );
 }

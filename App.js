@@ -82,7 +82,11 @@ function App() {
             }}
 
           >
-            <Tab.Screen name="Messages" component={MessagesStackScreen} />
+            <Tab.Screen
+              name="Messages"
+              // TODO: hide tabs when on message route
+              component={MessagesStackScreen}
+            />
             <Tab.Screen name="Contacts" component={ContactsStackScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>

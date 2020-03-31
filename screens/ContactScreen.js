@@ -82,7 +82,12 @@ function ContactScreen({ navigation, route }) {
                       padding: 5,
                     }}
                   >
-                    <Text style={styles.tagText}>{name}</Text>
+                    <Text
+                      key={`txt${id}`}
+                      style={styles.tagText}
+                    >
+                      {name}
+                    </Text>
                   </View>
                 )
               }

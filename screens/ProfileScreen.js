@@ -1,5 +1,11 @@
 import React from 'react'
-import { Button, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet
+} from 'react-native';
 import { useQuery } from '@apollo/client';
 import { auth } from '../config/firebase'
 // queries

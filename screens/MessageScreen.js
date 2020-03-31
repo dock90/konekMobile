@@ -1,21 +1,24 @@
 import React, { useState } from 'react'
 import {
   ActivityIndicator,
-  Button,
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native'
 import { useQuery, useMutation } from '@apollo/client';
 // queries
 import { MESSAGES_QUERY, SEND_MESSAGE_MUTATION } from '../gql/MessageQueries'
+import { ME_QUERY } from '../gql/MeQueries'
 // components
 import Message from '../components/Message'
+
+import send3x from '../assets/send3x.png'
 
 function MessageScreen({ navigation, route }) {
   const [pendingMessage, onChangeText] = useState('');
@@ -25,6 +28,9 @@ function MessageScreen({ navigation, route }) {
   navigation.setOptions({
     title: name
   });
+
+  // query me
+  const me = useQuery(ME_QUERY)
 
   // query messages
   const { loading, error, data } = useQuery(MESSAGES_QUERY, {
@@ -78,6 +84,7 @@ function MessageScreen({ navigation, route }) {
             <Message
               key={item.messageId}
               messageData={item}
+              me={me}
             />
           )
           }
@@ -89,12 +96,19 @@ function MessageScreen({ navigation, route }) {
         <TextInput
           style={styles.input}
           onChangeText={text => onChangeText(text)}
+          placeholder="Aa"
           value={pendingMessage}
         />
-        <Button
+        <TouchableOpacity
           onPress={handleSendMessage}
-          title="Send"
-        />
+          style={styles.sendContainer}
+        >
+          <Image
+            style={styles.sendIcon}
+            source={send3x}
+          />
+          <Text style={styles.sendText}>send</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   )
@@ -103,20 +117,43 @@ function MessageScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginTop: 10
   },
   messages: {
     maxHeight: '90%',
   },
   inputContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: 'gray',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 5,
+    marginLeft: 20,
+    marginRight: 20,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
   input: {
     flex: 1,
     height: 40,
   },
+  sendContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  sendIcon: {
+    height: 10,
+    width: 10,
+    marginRight: 5
+  },
+  sendText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    color: '#5D00D8'
+  }
 })
 
 export default MessageScreen
