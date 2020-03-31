@@ -1,5 +1,8 @@
 import React from 'react'
-import { Button, Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+
+import chat3x from '../assets/chat3x.png'
+import profile3x from '../assets/profile3x.png'
 
 function ContactItem({
   contactData: {
@@ -37,21 +40,28 @@ function ContactItem({
     <View style={styles.container}>
       <View style={styles.contact}>
         <Image
-          style={{ width: 50, height: 50 }}
+          style={styles.contactImage}
           source={{ uri: url }}
         />
-        <Text>{name}</Text>
+        <Text style={styles.contactTitle}>{name}</Text>
       </View>
       <View style={styles.actions}>
-        <Button
-          disabled={!profile}
-          onPress={handleStartConversation}
-          title="Message"
-        />
-        <Button
-          title="Details"
-          onPress={handleSelectContact}
-        />
+        {profile &&
+          <TouchableOpacity
+            onPress={handleStartConversation}
+          >
+            <Image
+              style={styles.actionIcon}
+              source={chat3x}
+            />
+          </TouchableOpacity>
+        }
+        <TouchableOpacity onPress={handleSelectContact}>
+          <Image
+            style={styles.actionIcon}
+            source={profile3x}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -60,15 +70,32 @@ function ContactItem({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    marginRight: 20,
   },
   contact: {
     flexDirection: 'row',
     alignItems: 'center'
   },
+  contactImage: {
+    height: 45,
+    width: 45,
+    borderRadius: 50,
+    marginRight: 20
+  },
+  contactTitle: {
+    fontSize: 12,
+    fontWeight: 'bold'
+  },
   actions: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  actionIcon: {
+    height: 30,
+    width: 30,
+    marginLeft: 10
   }
 })
 

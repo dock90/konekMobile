@@ -10,7 +10,13 @@ const MessagesStack = createStackNavigator();
 
 function MessagesStackScreen() {
   return (
-    <MessagesStack.Navigator>
+    <MessagesStack.Navigator
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: '#FFFFFF'
+        }
+      }}
+    >
       <MessagesStack.Screen
         name="Messages"
         options={{
@@ -23,7 +29,10 @@ function MessagesStackScreen() {
         }}
         component={MessagesScreen}
       />
-      <MessagesStack.Screen name="Message" component={MessageScreen} />
+      <MessagesStack.Screen
+        name="Message"
+        component={MessageScreen}
+      />
     </MessagesStack.Navigator>
   );
 }

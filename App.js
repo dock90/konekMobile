@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     // Listen for authentication state to change.
-    auth.onAuthStateChanged((user) => {
+    const runAuthorize = auth.onAuthStateChanged((user) => {
       if (user) {
         console.log('Authentication Success')
         setFbAuth(true)
@@ -50,7 +50,10 @@ function App() {
         setFbAuth(false)
       }
     });
-  });
+    return () => {
+      runAuthorize()
+    }
+  })
 
   if (fbAuth) {
     return (
@@ -74,12 +77,26 @@ function App() {
               },
             })}
             tabBarOptions={{
-              activeTintColor: 'tomato',
+              activeTintColor: '#5D00D8',
               inactiveTintColor: 'gray',
             }}
 
           >
-            <Tab.Screen name="Messages" component={MessagesStackScreen} />
+            <Tab.Screen
+              name="Messages"
+              options={({ route }) => {
+                const routeName = route.state
+                  ?
+                  route.state.routes[route.state.index].name
+                  :
+                  route.params?.screen || 'Messages';
+                return ({
+                  tabBarVisible: routeName === 'Message' ? false : true
+                })
+              }}
+              // TODO: hide tabs when on message route
+              component={MessagesStackScreen}
+            />
             <Tab.Screen name="Contacts" component={ContactsStackScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>

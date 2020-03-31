@@ -8,9 +8,15 @@ import Header from '../components/Header'
 
 const ContactsStack = createStackNavigator();
 
-function ContactsStackScreen() {
+function ContactsStackScreen({ navigation }) {
   return (
-    <ContactsStack.Navigator>
+    <ContactsStack.Navigator
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: '#FFFFFF'
+        }
+      }}
+    >
       <ContactsStack.Screen
         name="Contacts"
         options={{
@@ -23,7 +29,14 @@ function ContactsStackScreen() {
         }}
         component={ContactsScreen}
       />
-      <ContactsStack.Screen name="Contact" component={ContactScreen} />
+      <ContactsStack.Screen
+        name="Contact"
+        options={{
+          title: '',
+          headerBackTitleVisible: false,
+        }}
+        component={ContactScreen}
+      />
     </ContactsStack.Navigator>
   );
 }
