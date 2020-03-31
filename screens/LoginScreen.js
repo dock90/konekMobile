@@ -7,11 +7,26 @@ import coloredLogo3x from '../assets/coloredLogo3x.png'
 function LoginScreen({ navigation }) {
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
+  const [emailError, setEmailError] = useState(null)
+  const [passwordError, setPasswordError] = useState(null)
 
   const handleLogin = () => {
-    // TODO: Handle login errors
+    // reset error states
+    setEmailError(null)
+    setPasswordError(null)
+
+    // handle authentication
     auth
       .signInWithEmailAndPassword(email, password)
+      .catch(error => {
+        const errorCode = error.code;
+        if (errorCode === 'auth/invalid-email') {
+          setEmailError('You entered an incorrect email.')
+        }
+        if (errorCode === 'auth/wrong-password') {
+          setPasswordError('You entered an incorrect password.')
+        }
+      })
   }
 
   return (
@@ -29,6 +44,9 @@ function LoginScreen({ navigation }) {
           textContentType="emailAddress"
           value={email}
         />
+        {emailError &&
+          <Text style={styles.error}>{emailError}</Text>
+        }
         <TextInput
           onChangeText={text => onChangePassword(text)}
           placeholder="Password"
@@ -37,6 +55,9 @@ function LoginScreen({ navigation }) {
           textContentType="password"
           value={password}
         />
+        {passwordError &&
+          <Text style={styles.error}>{passwordError}</Text>
+        }
       </View>
       <TouchableOpacity
         onPress={handleLogin}
@@ -94,6 +115,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     textTransform: 'uppercase'
+  },
+  error: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#e83a30'
   },
   resetPasswordContainer: {
     width: 240,
