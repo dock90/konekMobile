@@ -22,6 +22,7 @@ import send3x from '../assets/send3x.png'
 
 function MessageScreen({ navigation, route }) {
   const [pendingMessage, onChangeText] = useState('');
+  const [viewHeight, setViewHeight] = useState(false)
   const { name, roomId } = route.params
 
   // set header title
@@ -92,11 +93,18 @@ function MessageScreen({ navigation, route }) {
           inverted
         />
       </View>
-      <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.inputContainer,
+          { marginBottom: viewHeight ? 70 : 20 }
+        ]}
+      >
         <TextInput
-          style={styles.input}
+          onBlur={() => setViewHeight(false)}
+          onFocus={() => setViewHeight(true)}
           onChangeText={text => onChangeText(text)}
           placeholder="Aa"
+          style={styles.input}
           value={pendingMessage}
         />
         <TouchableOpacity
@@ -121,9 +129,10 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   messages: {
-    maxHeight: '90%',
+    flex: 1,
   },
   inputContainer: {
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
@@ -132,6 +141,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 20,
     marginRight: 20,
+    marginBottom: 20,
     paddingLeft: 12,
     paddingRight: 12,
   },

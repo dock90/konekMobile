@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
   messageContact: {
     fontSize: 12,
     fontWeight: 'bold',
-    // marginBottom: 10
   },
   lastMessage: {
     fontSize: 12
