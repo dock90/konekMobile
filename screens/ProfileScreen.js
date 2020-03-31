@@ -1,5 +1,11 @@
 import React from 'react'
-import { Button, Image, Text, View, StyleSheet } from 'react-native';
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet
+} from 'react-native';
 import { useQuery } from '@apollo/client';
 import { auth } from '../config/firebase'
 // queries
@@ -22,7 +28,7 @@ function ProfileScreen() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.loadingContainer}>
         <Text>Loading...</Text>
       </View>
     )
@@ -30,7 +36,7 @@ function ProfileScreen() {
 
   if (error) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.errorContainer}>
         <Text>There was an error:</Text>
         <Text>{error.message}</Text>
       </View>
@@ -60,27 +66,76 @@ function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Me" />
-      <Image
-        style={{ width: 50, height: 50 }}
-        source={{ uri: url }}
-      />
-      <Text>{name}</Text>
-      <Text>{city}, {state}</Text>
-      {!hasContact &&
-        <AcceptInvitation />
-      }
-      <Button
-        onPress={handleLogout}
-        title="Logout"
-      />
+      <Header image={url} title="Me" />
+      <View style={styles.profileContainer}>
+        <View style={styles.profile}>
+          <Image
+            style={styles.profileImage}
+            source={{ uri: url }}
+          />
+          <Text style={styles.profileTitle}>{name}</Text>
+          <Text style={styles.profileDetails}>{city}, {state}</Text>
+        </View>
+        <View style={styles.profileActions}>
+          {!hasContact &&
+            <AcceptInvitation />
+          }
+          <TouchableOpacity
+            onPress={handleLogout}
+          >
+            <Text style={styles.actionText}>logout</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF'
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF'
+  },
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  profileContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  profile: {
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginBottom: 20
+  },
+  profileTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10
+  },
+  profileDetails: {
+    fontSize: 12
+  },
+  profileActions: {
+    alignItems: 'center'
+  },
+  actionText: {
+    fontSize: 12,
+    color: '#5D00D8'
   }
 })
 

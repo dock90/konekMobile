@@ -1,11 +1,19 @@
 import React from 'react'
-import { TouchableOpacity, Text, Image, StyleSheet } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native'
 
 function MessageItem({ messageData, navigation }) {
   const {
     roomId,
     name,
-    picture
+    picture,
+    readThrough,
+    qtyUnread
   } = messageData
 
   const handleSelect = () => {
@@ -24,14 +32,21 @@ function MessageItem({ messageData, navigation }) {
 
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[
+        styles.container,
+        { backgroundColor: qtyUnread ? '#F5F5F5' : '#FFFFFF' }
+      ]}
       onPress={handleSelect}
     >
       <Image
-        style={{ width: 50, height: 50 }}
+        style={styles.messageImage}
         source={{ uri: url }}
       />
-      <Text>{name}</Text>
+      <View style={styles.messageOverview}>
+        <Text style={styles.messageContact}>{name}</Text>
+        {/* TODO: implement last read */}
+        {/* <Text style={styles.lastMessage}>Last message is displayed here...</Text> */}
+      </View>
     </TouchableOpacity>
   )
 }
@@ -39,7 +54,27 @@ function MessageItem({ messageData, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 75,
+    borderStyle: 'solid',
+    borderBottomWidth: 0.2,
+    borderColor: '#606060',
+  },
+  messageImage: {
+    height: 45,
+    width: 45,
+    borderRadius: 50,
+    marginRight: 20
+  },
+  messageOverview: {},
+  messageContact: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  lastMessage: {
+    fontSize: 12
   }
 })
 

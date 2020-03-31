@@ -7,7 +7,9 @@ import { ALL_CONTACTS_QUERY } from '../gql/ContactQueries'
 import ContactItem from '../components/ContactItem'
 
 function ContactsScreen({ navigation }) {
-  const { data, error, loading } = useQuery(ALL_CONTACTS_QUERY)
+  const { data, error, loading } = useQuery(ALL_CONTACTS_QUERY, {
+    pollInterval: 5000
+  })
 
   if (loading) {
     return (
@@ -30,6 +32,7 @@ function ContactsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Contacts</Text>
       <FlatList
         data={contacts.data}
         renderItem={({ item }) =>
@@ -48,6 +51,13 @@ function ContactsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 10,
+    marginLeft: 20,
+  },
+  title: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 10,
   }
 })
 

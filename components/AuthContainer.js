@@ -14,8 +14,8 @@ function AuthContainer() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="ResetPass" component={ResetPassScreen} />
+        <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+        <Stack.Screen name="ResetPass" options={{ headerShown: false }} component={ResetPassScreen} />
         <Stack.Screen name="ResetPassSuccess" component={ResetPassSuccessScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="SignupConfirm" component={SignupConfirmScreen} />

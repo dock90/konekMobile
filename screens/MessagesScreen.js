@@ -4,7 +4,6 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { useQuery } from '@apollo/client';
@@ -15,7 +14,7 @@ import MessageItem from '../components/MessageItem'
 
 function MessagesScreen({ navigation }) {
   const { loading, error, data } = useQuery(ROOMS_QUERY, {
-    pollInterval: 500
+    pollInterval: 1000
   });
 
   if (loading) {
@@ -50,7 +49,6 @@ function MessagesScreen({ navigation }) {
         }
         keyExtractor={item => item.roomId}
       />
-      <TextInput />
     </View>
   );
 }
