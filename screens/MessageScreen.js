@@ -96,7 +96,7 @@ function MessageScreen({ navigation, route }) {
       <View
         style={[
           styles.inputContainer,
-          { marginBottom: viewHeight ? 70 : 20 }
+          { marginBottom: viewHeight ? 75 : 20 }
         ]}
       >
         <TextInput
