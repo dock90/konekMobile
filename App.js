@@ -94,7 +94,6 @@ function App() {
                   tabBarVisible: routeName === 'Message' ? false : true
                 })
               }}
-              // TODO: hide tabs when on message route
               component={MessagesStackScreen}
             />
             <Tab.Screen name="Contacts" component={ContactsStackScreen} />

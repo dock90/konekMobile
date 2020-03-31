@@ -39,7 +39,8 @@ function ContactsStackScreen() {
           title: '',
           headerBackTitleVisible: false,
           headerStyle: {
-            height: 70
+            height: 70,
+            shadowColor: 'transparent'
           },
           headerBackImage: () => (
             <TouchableOpacity style={styles.backContainer}>
