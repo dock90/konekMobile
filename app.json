@@ -30,7 +30,8 @@
     },
     "android": {
       "package": "app.konek.me",
-      "versionCode": 1
+      "versionCode": "1.1.1",
+      "permissions": []
     },
     "description": ""
   }
