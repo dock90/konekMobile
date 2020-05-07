@@ -9,6 +9,26 @@ import {
 } from 'react-native';
 import { auth } from '../config/firebase';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
+import { InputStyles } from '../styles/InputStyles';
+import { LogoStyles } from '../styles/LogoStyles';
+import { TextStyles } from '../styles/TextStyles';
+import { ButtonStyles } from '../styles/ButtonStyles';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  resetPasswordContainer: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 function LoginScreen({ navigation }) {
   const [email, onChangeEmail] = useState('');
@@ -35,96 +55,41 @@ function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image source={coloredLogo3x} style={styles.logo} />
+      <Image
+        source={coloredLogo3x}
+        style={[LogoStyles.fullSize, { marginBottom: 80 }]}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           keyboardType="email-address"
           onChangeText={(text) => onChangeEmail(text)}
           placeholder="Email"
-          style={styles.input}
+          style={InputStyles.base}
           textContentType="emailAddress"
           value={email}
         />
-        {emailError && <Text style={styles.error}>{emailError}</Text>}
+        {emailError && <Text style={TextStyles.error}>{emailError}</Text>}
         <TextInput
           onChangeText={(text) => onChangePassword(text)}
           placeholder="Password"
           secureTextEntry
-          style={styles.input}
+          style={InputStyles.base}
           textContentType="password"
           value={password}
         />
-        {passwordError && <Text style={styles.error}>{passwordError}</Text>}
+        {passwordError && <Text style={TextStyles.error}>{passwordError}</Text>}
       </View>
-      <TouchableOpacity onPress={handleLogin} style={styles.loginContainer}>
-        <Text style={styles.loginText}>login</Text>
+      <TouchableOpacity onPress={handleLogin} style={ButtonStyles.baseButton}>
+        <Text style={TextStyles.button}>login</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('ResetPass')}
         style={styles.resetPasswordContainer}
       >
-        <Text style={styles.resetPassword}>Forgot Your Password?</Text>
+        <Text style={TextStyles.link}>Forgot Your Password?</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 153,
-    height: 36,
-    marginBottom: 80,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  input: {
-    // width: '70%',
-    width: 240,
-    height: 40,
-    borderStyle: 'solid',
-    borderWidth: 0.5,
-    borderColor: '#606060',
-    borderRadius: 3,
-    padding: 10,
-    marginBottom: 10,
-    fontSize: 12,
-  },
-  loginContainer: {
-    // width: '70%',
-    width: 240,
-    height: 40,
-    backgroundColor: '#5D00D8',
-    borderRadius: 3,
-    marginBottom: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loginText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    textTransform: 'uppercase',
-  },
-  error: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#e83a30',
-  },
-  resetPasswordContainer: {
-    width: 240,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  resetPassword: {
-    color: '#606060',
-  },
-});
 
 export default LoginScreen;
