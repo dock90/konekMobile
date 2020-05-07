@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["es6"],
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "noEmit": false,
+    "strict": true,
+    "target": "esnext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "web-build",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js",
+    "./App.js"
+  ]
+}

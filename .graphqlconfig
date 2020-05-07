@@ -1,0 +1,16 @@
+{
+  "name": "Staging GraphQL Schema",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "https://equipter-crm-staging.herokuapp.com/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Dev-Profile-Id":"5e1cc0d41c9d4400005a548c"
+        },
+        "introspect": false
+      }
+    }
+  }
+}

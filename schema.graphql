@@ -1,0 +1,647 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+interface EntryTypeInterface {
+    access: EntryAccessType!
+    "The contact that this entry is related to."
+    contact: Contact!
+    createdAt: DateTime!
+    "The profile that created this entry."
+    createdBy: Profile!
+    entryId: ID!
+    pinned: Boolean!
+    tags: [Tag!]!
+    title: String!
+}
+
+"Exposes info about what features of the app the profile can access"
+type Access {
+    contacts: Boolean!
+    groups: Boolean!
+    hasContact: Boolean!
+    messages: Boolean!
+    timeline: Boolean!
+}
+
+type AlgoliaInfo {
+    appId: String!
+    "Key for searching. Will be null if contact does not have access to anything"
+    searchKey: String
+}
+
+type Asset {
+    format: String
+    "If the asset is audio only. Only applicable to the \"video\" resource type."
+    isAudio: Boolean!
+    originalFilename: String
+    publicId: String!
+    resourceType: String!
+    type: String!
+}
+
+type CloudinaryInfo {
+    apiKey: String!
+    cloudName: String!
+}
+
+"A CRM contact record."
+type Contact {
+    "Folder where all contact specific assets should be stored. (This includes note assets.)"
+    assetFolderId: String!
+    "A brief description of the contact for quick reference."
+    bio: String
+    city: String
+    contactId: ID!
+    country: String
+    emails: [Email!]!
+    entryList(
+        "Cursor from previous query"
+        after: String,
+        first: Float = 10.0,
+        type: EntryTypes
+    ): EntryList!
+    fbProfile: String
+    gender: Gender
+    groups: [ContactGroup!]!
+    invitationCode: String
+    language: String
+    legalName: String
+    name: String!
+    phones: [Phone!]!
+    picture: Asset
+    "Will return a max of 50 entries."
+    pinnedEntries: [EntryTypeInterface!]!
+    postalCode: String
+    profile: Profile
+    state: String
+    tags: [Tag!]
+}
+
+type ContactGroup {
+    group: Group!
+    memberId: String!
+    role: Role!
+}
+
+type ContactList {
+    data: [Contact!]!
+    pageInfo: PageInfo!
+}
+
+"Record of messages sent in a room."
+type Conversation implements EntryTypeInterface {
+    access: EntryAccessType!
+    contact: Contact!
+    createdAt: DateTime!
+    createdBy: Profile!
+    endDate: DateTime
+    entryId: ID!
+    "List of messages in the conversation sorted with the most recent first."
+    messages: [Message!]!
+    pinned: Boolean!
+    room: Room!
+    startDate: DateTime!
+    tags: [Tag!]!
+    title: String!
+}
+
+type Email {
+    email: String!
+    label: String
+}
+
+type EntryList {
+    data: [EntryTypeInterface!]!
+    pageInfo: PageInfo!
+}
+
+"A group to which contacts can be added."
+type Group {
+    "List of ancestor groups."
+    ancestors: [Group!]
+    "If the current profile has permission to manage the group."
+    canManage: Boolean!
+    "Default role for new members of this group."
+    defaultRole: Role
+    description: String
+    groupId: ID!
+    members: [Member!]!
+    name: String!
+    picture: Asset
+    roomId: ID!
+}
+
+type Me {
+    access: Access!
+    algoliaInfo: AlgoliaInfo!
+    "Folder where all profile specific assets should be stored."
+    assetFolderId: String!
+    city: String
+    cloudinaryInfo: CloudinaryInfo!
+    country: String
+    emails: [Email!]!
+    gender: Gender
+    groups: [ContactGroup!]
+    language: String
+    name: String!
+    phones: [Phone!]!
+    picture: Asset
+    postalCode: String
+    pubNubInfo: PubNubInfo!
+    state: String
+}
+
+type Member {
+    "Preferred contact for DMs and group contact in groups."
+    contact: Contact
+    "Unique ID of member inside the group."
+    memberId: ID!
+    "Name of contact to show in the chat UI. If the current user has permission to view the contact, the contact's name will be shown. If the member is an anonymous member, a random name will be shown otherwise the member's profile name."
+    name: String!
+    picture: Asset
+    profile: Profile
+    "Role is only defined in groups."
+    role: Role
+}
+
+type Message {
+    asset: Asset
+    author: Member!
+    body: String
+    createdAt: DateTime!
+    messageId: ID!
+}
+
+type MessageList {
+    data: [Message!]!
+    pageInfo: PageInfo!
+}
+
+type Mutation {
+    "Associate profile with a contact via invitation code. A null response indicates that no matching invitation code was found."
+    acceptInvitation(code: String!): Me
+    "Adds a group to a contact"
+    addContactGroup(input: AddContactGroupInput!): Contact
+    "Associates an orphan profile to a contact."
+    associateProfile(input: AssociateProfileInput!): Profile
+    "Creates a new contact record."
+    createContact(input: CreateContactInput!): Contact
+    createConversation(input: CreateConversationInput!): Conversation!
+    "Creates a new Group."
+    createGroup(input: CreateGroupInput!): Group
+    createNote(input: CreateNoteInput!): Note!
+    "Creates a new tag."
+    createTag(input: CreateTagInput!): Tag
+    deleteEntry(entryId: ID!): Boolean!
+    generateInvitationCode(input: GenerateInvitationCodeInput!): String
+    "Removes a group from a contact."
+    removeContactGroup(input: RemoveContactGroupInput!): Contact
+    "Sends a message and sets it as the most recently read for the sender."
+    sendMessage(input: SendMessageInput!): Message!
+    setNotificationPreference(input: SetNotificationPreferenceInput!): Room!
+    setPreferredContact(input: SetPreferredContactInput!): Profile!
+    setReadThrough(input: SetReadThroughInput!): Room!
+    signUpload(argToSign: ParamsToSign!): String!
+    "Updates a contact record."
+    updateContact(input: UpdateContactInput!): Contact!
+    "Updates a contact's group membership."
+    updateContactGroup(input: UpdateContactGroupInput!): Contact!
+    updateConversation(input: UpdateConversationInput!): Conversation
+    updateGroup(input: UpdateGroupInput!): Group
+    updateMe(input: UpdateMeInput!): Me!
+    updateNote(input: UpdateNoteInput!): Note
+    "Updates an existing tag."
+    updateTag(input: UpdateTagInput!): Tag
+}
+
+type Note implements EntryTypeInterface {
+    access: EntryAccessType!
+    assets: [NoteAsset!]
+    contact: Contact!
+    createdAt: DateTime!
+    createdBy: Profile!
+    entryId: ID!
+    message: String!
+    pinned: Boolean!
+    tags: [Tag!]!
+    title: String!
+}
+
+type NoteAsset {
+    asset: Asset!
+    description: String
+}
+
+"Information for results paging."
+type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean!
+}
+
+type Phone {
+    label: String
+    number: String!
+}
+
+type Profile {
+    city: String
+    contacts: [Contact!]!
+    country: String
+    dateCreated: DateTime
+    emails: [Email!]
+    gender: Gender
+    "If I am the owner of this entry or not."
+    isMe: Boolean!
+    language: String
+    name: String!
+    phones: [Phone!]
+    picture: Asset
+    postalCode: String
+    "Will be null when there is no preference set and there are either no or multiple contacts associated with the profile. If only a single contact exists, it will automatically be set as the preference."
+    preferredContact: Contact
+    profileId: ID!
+    "Room ID for direct messaging."
+    roomId: ID!
+    state: String
+}
+
+type PubNubInfo {
+    "`authKey` used when initializing PubNub. A new key will be generated when close to expiration."
+    authKey: String!
+    "Channel group to subscribe to."
+    channelGroup: String!
+    "New keys are valid for 5 days."
+    expires: DateTime!
+    "`subscribeKey` used when initializing PubNub"
+    subscribeKey: String!
+}
+
+type Query {
+    "Load a single contact"
+    contact(contactId: ID!): Contact
+    "All available contacts"
+    contacts(
+        "Cursor from previous query."
+        after: String,
+        "How many results to return, max of 100."
+        first: Float = 25.0,
+        "Limit the contacts to certain tags."
+        tags: [ID!]
+    ): ContactList!
+    entries(
+        "Cursor from previous query"
+        after: String,
+        contactId: ID!,
+        first: Float = 10.0,
+        type: EntryTypes
+    ): EntryList!
+    entry(entryId: ID!): EntryTypeInterface
+    group(groupId: ID!): Group!
+    groups: [Group!]!
+    me: Me!
+    member(input: MemberType!): Member!
+    "List of messages sorted in descending order so the most recent messages are first."
+    messages(input: MessagesInput!): MessageList!
+    orphanProfiles: [Profile!]!
+    roles: [Role!]!
+    "Info about a group or DM chat room."
+    room(roomId: ID!): Room!
+    "Rooms that current profile has messaged in, sorted by most recent first."
+    rooms: [Room!]!
+    "List of all tags ordered by name."
+    tags: [Tag!]!
+}
+
+type Role {
+    name: String!
+    roleId: ID!
+}
+
+type Room {
+    "Date of most recent message in room."
+    lastMessage: DateTime!
+    "Own member ID in room"
+    memberId: String!
+    members: [Member!]!
+    "Name of the room to show in the UI"
+    name: String!
+    notificationPreference: NotificationPreference!
+    picture: Asset
+    qtyUnread: Float!
+    "ID of the last message read."
+    readThrough: ID
+    roomId: ID!
+}
+
+"Tag to be added to a contact or action."
+type Tag {
+    access: TagAccessType!
+    "Color of the tag in the UI."
+    color: String!
+    "If the tag should be unavailable for adding to an entity. (It may still exist where previously used.)"
+    hidden: Boolean!
+    "If I own the current tag and can therefore toggle the access or not."
+    isMine: Boolean!
+    name: String!
+    tagId: ID!
+}
+
+enum EntryAccessType {
+    PRIVATE
+    SHARED
+}
+
+enum EntryTypes {
+    Conversation
+    Note
+}
+
+"Use `UNDEFINED` to un-set a previous value."
+enum Gender {
+    FEMALE
+    MALE
+    UNDEFINED
+}
+
+"Group notification preference options."
+enum NotificationPreference {
+    ALL
+    MENTIONS
+    NONE
+}
+
+enum TagAccessType {
+    PRIVATE
+    SHARED
+}
+
+input AddContactGroupInput {
+    contactId: ID!
+    groupId: ID!
+    roleId: ID!
+}
+
+input AssetInput {
+    format: String
+    isAudio: Boolean = false
+    originalFilename: String
+    publicId: String!
+    resourceType: String!
+    type: String!
+}
+
+input AssociateProfileInput {
+    contactId: ID!
+    profileId: ID!
+}
+
+input BaseEntryInput {
+    tags: [ID!]
+}
+
+input ContactGroupInput {
+    groupId: ID!
+    roleId: ID!
+}
+
+input ContactInput {
+    bio: String
+    city: String
+    country: String
+    emails: [EmailInput!]
+    fbProfile: String
+    gender: Gender
+    language: String
+    legalName: String
+    name: String
+    phones: [PhoneInput!]
+    picture: AssetInput
+    postalCode: String
+    state: String
+    "Tags to assign to user."
+    tags: [ID!]
+}
+
+input CreateContactInput {
+    bio: String
+    city: String
+    country: String
+    emails: [EmailInput!]
+    fbProfile: String
+    gender: Gender
+    "Groups to which this user is assigned."
+    groups: [ContactGroupInput!]!
+    language: String
+    legalName: String
+    name: String!
+    phones: [PhoneInput!]
+    picture: AssetInput
+    postalCode: String
+    state: String
+    "Tags to assign to user."
+    tags: [ID!]
+}
+
+input CreateConversationInput {
+    access: EntryAccessType = PRIVATE
+    contactId: ID!
+    endDate: DateTime!
+    pinned: Boolean = false
+    roomId: ID!
+    startDate: DateTime!
+    tags: [ID!]
+    title: String!
+}
+
+input CreateEntryInput {
+    access: EntryAccessType = PRIVATE
+    contactId: ID!
+    pinned: Boolean = false
+    tags: [ID!]
+    title: String!
+}
+
+input CreateGroupInput {
+    "Default role for new members of this group."
+    defaultRoleId: ID!
+    description: String
+    name: String!
+    "The group to assign as parent."
+    parentGroupId: ID!
+    picture: AssetInput
+}
+
+input CreateNoteInput {
+    access: EntryAccessType = PRIVATE
+    assets: [NoteAssetInput!]
+    contactId: ID!
+    message: String!
+    pinned: Boolean = false
+    tags: [ID!]
+    title: String!
+}
+
+input CreateTagInput {
+    access: TagAccessType = PRIVATE
+    "Color of the tag in the UI."
+    color: String!
+    "If the tag should be hidden when adding tags to an item."
+    hidden: Boolean = false
+    "Visible name of the tag in the UI."
+    name: String!
+}
+
+input EmailInput {
+    email: String!
+    label: String
+}
+
+input GenerateInvitationCodeInput {
+    contactId: ID!
+}
+
+input MemberType {
+    memberId: ID!
+    roomId: ID!
+}
+
+input MessagesInput {
+    after: String
+    first: Float = 25.0
+    roomId: ID!
+}
+
+input NoteAssetInput {
+    asset: AssetInput!
+    description: String
+}
+
+input PhoneInput {
+    label: String
+    number: String!
+}
+
+input RemoveContactGroupInput {
+    contactId: ID!
+    "ID of the group to remove."
+    groupId: ID!
+}
+
+input SendMessageInput {
+    asset: AssetInput
+    body: String
+    roomId: ID!
+}
+
+input SetNotificationPreferenceInput {
+    notificationPreference: NotificationPreference!
+    roomId: ID!
+}
+
+input SetPreferredContactInput {
+    contactId: ID!
+    profileId: ID!
+}
+
+input SetReadThroughInput {
+    messageId: ID!
+    roomId: ID!
+}
+
+input UpdateContactGroupInput {
+    contactId: ID!
+    groupId: ID!
+    roleId: ID
+}
+
+input UpdateContactInput {
+    bio: String
+    city: String
+    "The id of the contact to update."
+    contactId: ID!
+    country: String
+    emails: [EmailInput!]
+    fbProfile: String
+    gender: Gender
+    language: String
+    legalName: String
+    name: String
+    phones: [PhoneInput!]
+    picture: AssetInput
+    postalCode: String
+    state: String
+    "Tags to assign to user."
+    tags: [ID!]
+}
+
+input UpdateConversationInput {
+    access: EntryAccessType
+    endDate: DateTime!
+    entryId: ID!
+    pinned: Boolean
+    startDate: DateTime!
+    tags: [ID!]
+    title: String
+}
+
+input UpdateEntryInput {
+    access: EntryAccessType
+    entryId: ID!
+    pinned: Boolean
+    tags: [ID!]
+    title: String
+}
+
+input UpdateGroupInput {
+    "Default role for new members of this group."
+    defaultRoleId: ID
+    description: String
+    groupId: ID!
+    name: String
+    "The group to assign as parent."
+    parentGroupId: ID
+    picture: AssetInput
+}
+
+input UpdateMeInput {
+    city: String
+    country: String
+    emails: [EmailInput!]
+    gender: Gender
+    language: String
+    name: String
+    phones: [PhoneInput!]
+    picture: AssetInput
+    postalCode: String
+    state: String
+}
+
+input UpdateNoteInput {
+    access: EntryAccessType
+    "If this field is included, it will replace all previous values."
+    assets: [NoteAssetInput!]
+    entryId: ID!
+    message: String
+    pinned: Boolean
+    tags: [ID!]
+    title: String
+}
+
+input UpdateTagInput {
+    access: TagAccessType
+    color: String
+    hidden: Boolean
+    name: String
+    tagId: ID!
+}
+
+
+"The javascript `Date` as string. Type represents date and time as the ISO Date string."
+scalar DateTime
+
+"List of asset upload params to sign"
+scalar ParamsToSign
