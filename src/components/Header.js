@@ -14,9 +14,6 @@ function Header({ title, image }) {
         <Image source={{ uri: url }} style={styles.profileImage} />
         <Text style={styles.pathTitle}>{title}</Text>
       </View>
-      <TouchableOpacity>
-        <Image source={group3x} style={styles.menu} />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -43,10 +40,6 @@ const styles = StyleSheet.create({
   pathTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  menu: {
-    height: 15,
-    width: 15,
   },
 });
 

@@ -45,11 +45,6 @@ function ContactsStackScreen() {
               <Feather name="arrow-left" style={styles.backIcon} />
             </TouchableOpacity>
           ),
-          headerRight: () => (
-            <TouchableOpacity>
-              <Image source={group3x} style={styles.menu} />
-            </TouchableOpacity>
-          ),
         }}
         component={ContactScreen}
       />
@@ -67,12 +62,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     paddingLeft: 20,
     paddingTop: 10,
-  },
-  menu: {
-    height: 15,
-    width: 15,
-    marginRight: 20,
-    marginBottom: 20,
   },
 });
 

@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint . --ext .js --ext .ts"
+    "lint": "eslint . --ext .js --ext .ts",
+    "codegen:graphql_types": "apollo client:codegen src/queries/types --target=typescript --localSchemaFile=.\\schema.graphql --outputFlat --no-addTypename --tsFileExtension=d.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.44",

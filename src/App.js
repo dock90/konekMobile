@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AppRegistry } from 'react-native';
-import {
-  ApolloClient,
-  ApolloProvider,
-  createHttpLink,
-  InMemoryCache,
-} from '@apollo/client';
-import { setContext } from '@apollo/link-context';
+import { ApolloProvider } from '@apollo/client';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
+import { client } from './config/Apollo';
 import { auth } from './config/firebase';
 // components
 import AuthContainer from './components/AuthContainer';
@@ -18,28 +13,6 @@ import MessagesStackScreen from './screens/MessagesStackScreen';
 import ContactsStackScreen from './screens/ContactsStackScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
-// configure gql server link
-const httpLink = createHttpLink({
-  uri: 'https://equipter-crm-staging.herokuapp.com/graphql',
-});
-
-const authLink = setContext(async (_, { headers }) => {
-  const token = await auth.currentUser.getIdToken();
-
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
-
-// configure apollo client
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: authLink.concat(httpLink),
-});
-
 const Tab = createBottomTabNavigator();
 
 function App() {
@@ -47,7 +20,7 @@ function App() {
 
   useEffect(() => {
     // Listen for authentication state to change.
-    const runAuthorize = auth.onAuthStateChanged((user) => {
+    return auth.onAuthStateChanged((user) => {
       if (user) {
         console.log('Authentication Success');
         setFbAuth(true);
@@ -55,7 +28,6 @@ function App() {
         setFbAuth(false);
       }
     });
-    return runAuthorize;
   });
 
   if (fbAuth) {

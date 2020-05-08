@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "noEmit": false,
+    "noImplicitReturns": true,
     "strict": true,
     "target": "esnext",
     "outDir": "./dist",
