@@ -23,12 +23,21 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
-  rules: {},
+  rules: {
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    'react/display-name': 'off',
+  },
   overrides: [
     {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 'off',
+      },
+    },
+    {
+      files: ['*.tsx'],
+      rules: {
+        'react/prop-types': 'off',
       },
     },
   ],

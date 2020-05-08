@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 // screens
-import MessagesScreen from './MessagesScreen';
+import RoomsScreen from './RoomsScreen';
 import MessageScreen from './MessageScreen';
 // components
 import Header from '../components/Header';
@@ -22,9 +22,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const MessagesStack = createStackNavigator();
+export type MessagesStackParamList = {
+  Rooms: undefined;
+  Message: {
+    name: string;
+    roomId: string;
+  };
+};
 
-function MessagesStackScreen() {
+const MessagesStack = createStackNavigator<MessagesStackParamList>();
+
+const MessagesStackScreen: React.FC = () => {
   return (
     <MessagesStack.Navigator
       screenOptions={{
@@ -34,14 +42,11 @@ function MessagesStackScreen() {
       }}
     >
       <MessagesStack.Screen
-        name="Messages"
+        name="Rooms"
         options={{
-          header: () => {
-            const title = 'Messages';
-            return <Header title={title} />;
-          },
+          header: () => <Header title="messages" />,
         }}
-        component={MessagesScreen}
+        component={RoomsScreen}
       />
       <MessagesStack.Screen
         name="Message"
@@ -63,6 +68,6 @@ function MessagesStackScreen() {
       />
     </MessagesStack.Navigator>
   );
-}
+};
 
 export default MessagesStackScreen;

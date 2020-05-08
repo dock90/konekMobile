@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -7,20 +8,30 @@ import {
   View,
 } from 'react-native';
 import { useQuery } from '@apollo/client';
-// queries
-import { ROOMS_QUERY } from '../gql/RoomQueries';
-// components
-import MessageItem from '../components/MessageItem';
+import { ROOMS_QUERY, RoomsQuery } from '../queries/RoomQueries';
+import RoomItem from '../components/RoomItem';
+import { PRIMARY } from '../styles/Colors';
+import { MessagesStackParamList } from './MessagesStackScreen';
 
-function MessagesScreen({ navigation }) {
-  const { loading, error, data } = useQuery(ROOMS_QUERY, {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+
+type Props = {
+  navigation: StackNavigationProp<MessagesStackParamList, 'Rooms'>;
+};
+
+const RoomsScreen: React.FC<Props> = ({ navigation }) => {
+  const { loading, error, data } = useQuery<RoomsQuery>(ROOMS_QUERY, {
     pollInterval: 1000,
   });
 
-  if (loading) {
+  if (loading || !data) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#323232" />
+        <ActivityIndicator size="large" color={PRIMARY} />
       </View>
     );
   }
@@ -34,14 +45,12 @@ function MessagesScreen({ navigation }) {
     );
   }
 
-  const { rooms } = data;
-
   return (
     <View style={styles.container}>
       <FlatList
-        data={rooms}
+        data={data.rooms}
         renderItem={({ item }) => (
-          <MessageItem
+          <RoomItem
             key={item.roomId}
             messageData={item}
             navigation={navigation}
@@ -51,12 +60,6 @@ function MessagesScreen({ navigation }) {
       />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
-export default MessagesScreen;
+export default RoomsScreen;

@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { AppRegistry } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
@@ -12,6 +13,7 @@ import AuthContainer from './components/AuthContainer';
 import MessagesStackScreen from './screens/MessagesStackScreen';
 import ContactsStackScreen from './screens/ContactsStackScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import { PRIMARY } from './styles/Colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,14 +45,14 @@ function App() {
                   iconName = focused ? 'message-square' : 'message-square';
                 } else if (route.name === 'Contacts') {
                   iconName = focused ? 'book' : 'book';
-                } else if (route.name == 'Profile') {
+                } else if (route.name === 'Profile') {
                   iconName = focused ? 'user' : 'user';
                 }
                 return <Feather name={iconName} size={size} color={color} />;
               },
             })}
             tabBarOptions={{
-              activeTintColor: '#5D00D8',
+              activeTintColor: PRIMARY,
               inactiveTintColor: 'gray',
             }}
           >
@@ -61,7 +63,7 @@ function App() {
                   ? route.state.routes[route.state.index].name
                   : route.params?.screen || 'Messages';
                 return {
-                  tabBarVisible: routeName === 'Message' ? false : true,
+                  tabBarVisible: routeName !== 'Message',
                 };
               }}
               component={MessagesStackScreen}

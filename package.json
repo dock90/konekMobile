@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint . --ext .js --ext .ts",
+    "lint": "eslint . --ext .js,.ts,.tsx",
     "codegen:graphql_types": "apollo client:codegen src/queries/types --target=typescript --localSchemaFile=.\\schema.graphql --outputFlat --no-addTypename --tsFileExtension=d.ts"
   },
   "dependencies": {
@@ -26,10 +26,12 @@
     "global": "^4.4.0",
     "graphql": "^15.0.0",
     "prop-types": "^15.7.2",
+    "pubnub": "^4.27.6",
     "react": "~16.9.0",
     "react-dom": "~16.13.0",
     "react-native": "~0.61.5",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-push-notifications": "^3.0.10",
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-web": "^0.12.2",

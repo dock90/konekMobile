@@ -7,9 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useQuery } from '@apollo/client';
-// queries
-import { ALL_CONTACTS_QUERY } from '../gql/ContactQueries';
-// components
+import { ALL_CONTACTS_QUERY } from '../queries/ContactQueries';
 import ContactItem from '../components/ContactItem';
 
 function ContactsScreen({ navigation }) {

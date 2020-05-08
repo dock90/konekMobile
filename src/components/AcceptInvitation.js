@@ -8,49 +8,9 @@ import {
   View,
 } from 'react-native';
 import { useMutation } from '@apollo/client';
-// queries
-import { ACCEPT_INVITATION_MUTATION } from '../gql/InvitationQueries';
+import { ACCEPT_INVITATION_MUTATION } from '../queries/InvitationQueries';
 
 import send3x from '../../assets/send3x.png';
-
-function AcceptInvitation() {
-  const [inviteCode, setInviteCode] = useState();
-  const [viewHeight, setViewHeight] = useState(false);
-  const [acceptInvitation] = useMutation(ACCEPT_INVITATION_MUTATION);
-
-  const handleAcceptInvitation = (inviteCode) => {
-    acceptInvitation({
-      variables: {
-        code: inviteCode,
-      },
-    }).then(() => setInviteCode(''));
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.codeHeader}>Input Invite Code Here</Text>
-      <View
-        style={[styles.inputContainer, { marginBottom: viewHeight ? 75 : 20 }]}
-      >
-        <TextInput
-          onBlur={() => setViewHeight(false)}
-          onFocus={() => setViewHeight(true)}
-          style={styles.input}
-          onChangeText={(text) => setInviteCode(text)}
-          placeholder="Code"
-          value={inviteCode}
-        />
-        <TouchableOpacity
-          onPress={() => handleAcceptInvitation(inviteCode)}
-          style={styles.sendContainer}
-        >
-          <Image style={styles.sendIcon} source={send3x} />
-          <Text style={styles.sendText}>link</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -94,5 +54,44 @@ const styles = StyleSheet.create({
     color: '#5D00D8',
   },
 });
+
+function AcceptInvitation() {
+  const [inviteCode, setInviteCode] = useState();
+  const [viewHeight, setViewHeight] = useState(false);
+  const [acceptInvitation] = useMutation(ACCEPT_INVITATION_MUTATION);
+
+  const handleAcceptInvitation = (inviteCode) => {
+    acceptInvitation({
+      variables: {
+        code: inviteCode,
+      },
+    }).then(() => setInviteCode(''));
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.codeHeader}>Input Invite Code Here</Text>
+      <View
+        style={[styles.inputContainer, { marginBottom: viewHeight ? 75 : 20 }]}
+      >
+        <TextInput
+          onBlur={() => setViewHeight(false)}
+          onFocus={() => setViewHeight(true)}
+          style={styles.input}
+          onChangeText={(text) => setInviteCode(text)}
+          placeholder="Code"
+          value={inviteCode}
+        />
+        <TouchableOpacity
+          onPress={() => handleAcceptInvitation(inviteCode)}
+          style={styles.sendContainer}
+        >
+          <Image style={styles.sendIcon} source={send3x} />
+          <Text style={styles.sendText}>link</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
 
 export default AcceptInvitation;

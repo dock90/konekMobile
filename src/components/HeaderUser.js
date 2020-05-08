@@ -1,8 +1,7 @@
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
-// gql
-import { ROOM_QUERY } from '../gql/RoomQueries';
+import { ROOM_QUERY } from '../queries/RoomQueries';
 
 function HeaderUser({ route }) {
   const {

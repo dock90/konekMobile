@@ -3,6 +3,34 @@ import PropTypes from 'prop-types';
 import { Image, View, Text, StyleSheet } from 'react-native';
 import formatDateTime from '../utils/formatDate';
 
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 35,
+  },
+  profileImg: {
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  contactName: {
+    fontSize: 8,
+    marginBottom: 5,
+  },
+  message: {
+    fontSize: 12,
+    padding: 12,
+    color: '#FFFFFF',
+  },
+  timestamp: {
+    fontSize: 8,
+    color: '#ADADAD',
+  },
+});
+
 function Message({ messageData, me }) {
   const {
     author: { name, picture },
@@ -51,34 +79,6 @@ function Message({ messageData, me }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 35,
-  },
-  profileImg: {
-    width: 20,
-    height: 20,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  contactName: {
-    fontSize: 8,
-    marginBottom: 5,
-  },
-  message: {
-    fontSize: 12,
-    padding: 12,
-    color: '#FFFFFF',
-  },
-  timestamp: {
-    fontSize: 8,
-    color: '#ADADAD',
-  },
-});
 
 Message.propTypes = {
   messageData: PropTypes.shape({

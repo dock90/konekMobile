@@ -8,9 +8,48 @@ import {
   View,
 } from 'react-native';
 import { useQuery } from '@apollo/client';
-// queries
-import { CONTACT_QUERY } from '../gql/ContactQueries';
+import { CONTACT_QUERY } from '../queries/ContactQueries';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contactContainer: {
+    width: 200,
+    alignItems: 'center',
+  },
+  contact: {
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  contactImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  contactTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  contactActions: {},
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 20,
+  },
+  tagText: {
+    color: '#FFFFFF',
+  },
+  conversationAction: {
+    fontSize: 12,
+    color: '#5D00D8',
+    textTransform: 'capitalize',
+  },
+});
 function ContactScreen({ navigation, route }) {
   const { contactId } = route.params;
   const { data, error, loading } = useQuery(CONTACT_QUERY, {
@@ -102,46 +141,5 @@ function ContactScreen({ navigation, route }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contactContainer: {
-    width: 200,
-    alignItems: 'center',
-  },
-  contact: {
-    alignItems: 'center',
-    marginBottom: 50,
-  },
-  contactImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-  contactTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  contactActions: {},
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 20,
-  },
-  tagText: {
-    color: '#FFFFFF',
-  },
-  conversationAction: {
-    fontSize: 12,
-    color: '#5D00D8',
-    textTransform: 'capitalize',
-  },
-});
 
 export default ContactScreen;

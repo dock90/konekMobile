@@ -1,22 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
-
-import group3x from '../../assets/group3x.png';
-
-function Header({ title, image }) {
-  const url = image
-    ? image
-    : 'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.pathContainer}>
-        <Image source={{ uri: url }} style={styles.profileImage} />
-        <Text style={styles.pathTitle}>{title}</Text>
-      </View>
-    </View>
-  );
-}
+import PropTypes from 'prop-types';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -42,5 +26,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+function Header({ title, image }) {
+  const url = image
+    ? image
+    : 'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.pathContainer}>
+        <Image source={{ uri: url }} style={styles.profileImage} />
+        <Text style={styles.pathTitle}>{title}</Text>
+      </View>
+    </View>
+  );
+}
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+  image: PropTypes.string,
+};
 
 export default Header;

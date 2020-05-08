@@ -2,11 +2,57 @@ import React from 'react';
 import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { auth } from '../config/firebase';
-// queries
-import { ME_QUERY } from '../gql/MeQueries';
-// components
+import { ME_QUERY } from '../queries/MeQueries';
 import Header from '../components/Header';
 import AcceptInvitation from '../components/AcceptInvitation';
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  profileContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  profile: {
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  profileTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  profileDetails: {
+    fontSize: 12,
+  },
+  profileActions: {
+    alignItems: 'center',
+  },
+  actionText: {
+    fontSize: 12,
+    color: '#5D00D8',
+  },
+});
 
 function ProfileScreen() {
   const { client, data, error, loading } = useQuery(ME_QUERY, {
@@ -76,53 +122,5 @@ function ProfileScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  errorContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  profileContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  profile: {
-    alignItems: 'center',
-    marginBottom: 50,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-  profileTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  profileDetails: {
-    fontSize: 12,
-  },
-  profileActions: {
-    alignItems: 'center',
-  },
-  actionText: {
-    fontSize: 12,
-    color: '#5D00D8',
-  },
-});
 
 export default ProfileScreen;
