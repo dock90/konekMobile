@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useQuery } from '@apollo/client';
 import {
   ALL_CONTACTS_QUERY,
@@ -41,7 +41,6 @@ const ContactsScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Contacts</Text>
       <FlatList
         data={data.contacts.data}
         renderItem={({ item }) => (
