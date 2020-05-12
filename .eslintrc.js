@@ -1,7 +1,8 @@
 module.exports = {
   env: {
-    browser: true,
-    es6: true,
+    browser: false,
+    es6: false,
+    node: true,
   },
   extends: [
     'plugin:@typescript-eslint/recommended',
@@ -9,6 +10,8 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
   ],
   globals: {
     Atomics: 'readonly',
@@ -22,7 +25,6 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     'react/display-name': 'off',
@@ -41,4 +43,9 @@ module.exports = {
       },
     },
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };

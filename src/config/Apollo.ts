@@ -5,7 +5,7 @@ import { auth } from './firebase';
 import {
   ROOM_FIELDS,
   ROOM_QUERY,
-  RoomFields,
+  RoomFieldsInterface,
   ROOMS_QUERY,
 } from '../queries/RoomQueries';
 
@@ -91,7 +91,7 @@ export const client = new ApolloClient({
         // Check if the current room list includes have the room we're searching for.
         // This can happen if the "rooms" (plural) query hasn't completed yet when the "room" (singular) is queried.
         const match = roomList.rooms.find(
-          (r: RoomFields) => r.roomId === args.roomId
+          (r: RoomFieldsInterface) => r.roomId === args.roomId
         );
 
         if (match) {

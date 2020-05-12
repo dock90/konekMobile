@@ -1,7 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { RoomFields } from '../queries/RoomQueries';
+import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { MessagesStackParamList } from '../screens/MessagesStackScreen';
 
 const styles = StyleSheet.create({
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  messageData: RoomFields;
+  messageData: RoomFieldsInterface;
   navigation: StackNavigationProp<MessagesStackParamList, 'Rooms'>;
 };
 

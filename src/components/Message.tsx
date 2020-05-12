@@ -1,6 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import { Image, View, Text, StyleSheet } from 'react-native';
+import { MeContext } from '../contexts/MeContext';
+import { MeFieldsInterface } from '../queries/MeQueries';
+import { MessageFieldsInterface } from '../queries/MessageQueries';
 import formatDateTime from '../utils/formatDate';
 
 const styles = StyleSheet.create({
@@ -31,16 +33,19 @@ const styles = StyleSheet.create({
   },
 });
 
-function Message({ messageData, me }) {
+type Props = {
+  messageData: MessageFieldsInterface;
+};
+
+const Message: React.FC<Props> = ({ messageData }) => {
+  const me = useContext(MeContext) as MeFieldsInterface;
   const {
     author: { name, picture },
     body,
     createdAt,
   } = messageData;
 
-  const { data } = me;
-
-  const notMe = data.me.name !== name;
+  const notMe = me.name !== name;
 
   let url =
     'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
@@ -78,19 +83,6 @@ function Message({ messageData, me }) {
       </View>
     </View>
   );
-}
-
-Message.propTypes = {
-  messageData: PropTypes.shape({
-    author: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      picture: PropTypes.shape({
-        format: PropTypes.string.isRequired,
-        publicId: PropTypes.string.isRequired,
-      }),
-    }),
-    body: PropTypes.string.isRequired,
-  }),
 };
 
 export default Message;

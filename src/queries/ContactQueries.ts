@@ -2,6 +2,16 @@ import { gql } from '@apollo/client';
 import { TAG_FIELDS } from './TagQueries';
 import { ASSET_FIELDS } from './AssetQueries';
 
+export interface EmailsFields {
+  email: string;
+  label: string | null;
+}
+
+export interface PhonesFields {
+  number: string;
+  label: string | null;
+}
+
 const CONTACT_SUMMARY_FIELDS = gql`
   fragment ContactSummaryFields on Contact {
     __typename

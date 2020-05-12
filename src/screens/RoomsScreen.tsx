@@ -1,16 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useQuery } from '@apollo/client';
+import Error from '../components/Error';
+import Loading from '../components/Loading';
 import { ROOMS_QUERY, RoomsQuery } from '../queries/RoomQueries';
 import RoomItem from '../components/RoomItem';
-import { PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
 
 const styles = StyleSheet.create({
@@ -29,20 +24,11 @@ const RoomsScreen: React.FC<Props> = ({ navigation }) => {
   });
 
   if (loading || !data) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={PRIMARY} />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>There was an error:</Text>
-        <Text>{error.message}</Text>
-      </View>
-    );
+    return <Error error={error} />;
   }
 
   return (

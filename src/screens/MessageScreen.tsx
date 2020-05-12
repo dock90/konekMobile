@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -13,14 +12,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import Error from '../components/Error';
+import Loading from '../components/Loading';
 import {
+  MessageQueryVariables,
   MESSAGES_QUERY,
-  SEND_MESSAGE_MUTATION,
+  MessagesQueryInterface,
 } from '../queries/MessageQueries';
-import { ME_QUERY } from '../queries/MeQueries';
 import Message from '../components/Message';
 import send3x from '../../assets/send3x.png';
+import { sendMessage } from '../service/Messages';
+import { PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
 
 const styles = StyleSheet.create({
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     textTransform: 'uppercase',
-    color: '#5D00D8',
+    color: PRIMARY,
   },
 });
 
@@ -82,48 +85,29 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     title: name,
   });
 
-  // query me
-  const me = useQuery(ME_QUERY);
-
   // query messages
-  const { loading, error, data } = useQuery(MESSAGES_QUERY, {
-    variables: { roomId },
+  const { loading, error, data } = useQuery<
+    MessagesQueryInterface,
+    MessageQueryVariables
+  >(MESSAGES_QUERY, {
+    variables: { roomId, after: null },
     skip: !roomId,
-    pollInterval: 500,
   });
-
-  // send message mutation
-  const [sendMessage] = useMutation(SEND_MESSAGE_MUTATION);
 
   // handle message send
   const handleSendMessage = async () => {
-    await sendMessage({
-      variables: {
-        roomId,
-        body: pendingMessage,
-      },
-    });
+    const body = pendingMessage;
     setPendingMessage('');
+    await sendMessage(roomId, body);
   };
 
-  if (loading || me.loading) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#323232" />
-      </View>
-    );
+  if (loading || !data) {
+    return <Loading />;
   }
 
-  if (error || me.error) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>There was an error:</Text>
-        <Text>{error && error.message}</Text>
-      </View>
-    );
+  if (error) {
+    return <Error error={error} />;
   }
-
-  const { messages } = data;
 
   return (
     <KeyboardAvoidingView
@@ -132,9 +116,9 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     >
       <View style={styles.messages}>
         <FlatList
-          data={messages.data}
+          data={data.messages.data}
           renderItem={({ item }) => (
-            <Message key={item.messageId} messageData={item} me={me} />
+            <Message key={item.messageId} messageData={item} />
           )}
           keyExtractor={(item) => item.messageId}
           inverted

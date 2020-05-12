@@ -9,6 +9,7 @@ import {
 import { useQuery } from '@apollo/client';
 import { ALL_CONTACTS_QUERY } from '../queries/ContactQueries';
 import ContactItem from '../components/ContactItem';
+import { PRIMARY } from '../styles/Colors';
 
 function ContactsScreen({ navigation }) {
   const { data, error, loading } = useQuery(ALL_CONTACTS_QUERY, {
@@ -18,7 +19,7 @@ function ContactsScreen({ navigation }) {
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#323232" />
+        <ActivityIndicator size="large" color={PRIMARY} />
       </View>
     );
   }

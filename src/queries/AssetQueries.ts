@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client';
 
-export interface AssetFields {
-  __typename: 'Asset';
+export interface AssetInterface {
   format: string | null;
   publicId: string;
   resourceType: string;
@@ -11,6 +10,10 @@ export interface AssetFields {
    * If the asset is audio only. Only applicable to the "video" resource type.
    */
   isAudio: boolean;
+}
+
+export interface AssetFieldsInterface extends AssetInterface {
+  __typename: 'Asset';
 }
 export const ASSET_FIELDS = gql`
   fragment AssetFields on Asset {

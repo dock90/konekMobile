@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
-import { ASSET_FIELDS, AssetFields } from './AssetQueries';
+import { ASSET_FIELDS, AssetFieldsInterface } from './AssetQueries';
 
-export interface RoomFields {
+export interface RoomFieldsInterface {
   __typename: 'Room';
   roomId: string;
   /**
@@ -17,7 +17,7 @@ export interface RoomFields {
    * ID of the last message read.
    */
   readThrough: string | null;
-  picture: AssetFields | null;
+  picture: AssetFieldsInterface | null;
 }
 export const ROOM_FIELDS = gql`
   fragment RoomFields on Room {
@@ -35,7 +35,7 @@ export const ROOM_FIELDS = gql`
 `;
 
 export interface RoomsQuery {
-  rooms: Array<RoomFields>;
+  rooms: Array<RoomFieldsInterface>;
 }
 export const ROOMS_QUERY = gql`
   query ROOMS_QUERY {
@@ -47,7 +47,7 @@ export const ROOMS_QUERY = gql`
 `;
 
 export interface RoomQuery {
-  room: RoomFields;
+  room: RoomFieldsInterface;
 }
 export const ROOM_QUERY = gql`
   query ROOM_QUERY($roomId: ID!) {

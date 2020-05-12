@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { CONTACT_QUERY } from '../queries/ContactQueries';
+import { PRIMARY } from '../styles/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -68,7 +69,7 @@ function ContactScreen({ navigation, route }) {
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#323232" />
+        <ActivityIndicator size="large" color={PRIMARY} />
       </View>
     );
   }
