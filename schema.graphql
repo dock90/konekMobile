@@ -314,6 +314,7 @@ type Query {
     rooms: [Room!]!
     "List of all tags ordered by name."
     tags: [Tag!]!
+    pnConnected: Boolean
 }
 
 type Role {

@@ -1,11 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-// screens
+import { MaterialIcons } from '@expo/vector-icons';
 import RoomsScreen from './RoomsScreen';
 import MessageScreen from './MessageScreen';
-// components
 import Header from '../components/Header';
 import HeaderUser from '../components/HeaderUser';
 
@@ -17,7 +15,7 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     fontSize: 25,
-    paddingLeft: 20,
+    paddingLeft: 0,
     paddingTop: 10,
   },
 });
@@ -44,7 +42,7 @@ const MessagesStackScreen: React.FC = () => {
       <MessagesStack.Screen
         name="Rooms"
         options={{
-          header: () => <Header title="messages" />,
+          header: () => <Header title="Messages" />,
         }}
         component={RoomsScreen}
       />
@@ -58,7 +56,7 @@ const MessagesStackScreen: React.FC = () => {
           },
           headerBackImage: () => (
             <TouchableOpacity style={styles.backContainer}>
-              <Feather name="arrow-left" style={styles.backIcon} />
+              <MaterialIcons name="arrow-back" style={styles.backIcon} />
             </TouchableOpacity>
           ),
           headerTitle: () => <HeaderUser route={route} />,

@@ -1,15 +1,15 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
-} from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { StyleSheet, TouchableOpacity, Text, View, Route } from 'react-native';
 import { useQuery } from '@apollo/client';
-import { CONTACT_QUERY } from '../queries/ContactQueries';
-import { PRIMARY } from '../styles/Colors';
+import Avatar from '../components/Avatar';
+import {
+  CONTACT_QUERY,
+  ContactsQueryResults,
+  ContactsQueryVariables,
+} from '../queries/ContactQueries';
+import Loading from '../components/Loading';
+import Error from '../components/Error';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,9 +26,6 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   contactImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
     marginBottom: 20,
   },
   contactTitle: {
@@ -51,62 +48,44 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
 });
-function ContactScreen({ navigation, route }) {
+type Props = {
+  navigation: StackNavigationProp<any>;
+  route: Route;
+};
+
+const ContactScreen: React.FC<Props> = ({ navigation, route }) => {
   const { contactId } = route.params;
-  const { data, error, loading } = useQuery(CONTACT_QUERY, {
+  const { data, error, loading } = useQuery<
+    ContactsQueryResults,
+    ContactsQueryVariables
+  >(CONTACT_QUERY, {
     variables: { contactId },
-    pollInterval: 5000,
   });
 
-  const handleStartConversation = () => {
-    const { roomId } = profile;
-    navigation.navigate('Message', {
-      name,
-      roomId,
-    });
-  };
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={PRIMARY} />
-      </View>
-    );
+  if (error) {
+    return <Error error={error} />;
   }
 
-  if (error) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>There was an error:</Text>
-        <Text>{error.message}</Text>
-      </View>
-    );
+  if (loading || !data) {
+    return <Loading />;
   }
 
   const {
     contact: { name, picture, bio, tags, profile },
   } = data;
 
-  // "color": "00ff00",
-  // "hidden": false,
-  // "name": "Animal 🐻",
-  // "tagId": "5e69065c584cee00044e56b6",
-
-  let url =
-    'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-  if (picture) {
-    const { format, publicId } = picture;
-    const cloudName = 'equiptercrm';
-    url =
-      `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` ||
-      '';
-  }
+  const handleStartConversation = () => {
+    navigation.navigate('Message', {
+      name: data.contact.name,
+      roomId: data.contact.profile.roomId,
+    });
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.contactContainer}>
         <View style={styles.contact}>
-          <Image source={{ uri: url }} style={styles.contactImage} />
+          <Avatar picture={picture} size={80} style={styles.contactImage} />
           <Text style={styles.contactTitle}>{name}</Text>
           <Text>{bio}</Text>
         </View>
@@ -114,19 +93,17 @@ function ContactScreen({ navigation, route }) {
           {tags && (
             <View style={styles.tagsContainer}>
               {tags.map((tag) => {
-                const { color, id, name } = tag;
+                const { color, tagId, name } = tag;
                 return (
                   <View
-                    key={id}
+                    key={tagId}
                     style={{
                       backgroundColor: `#${color}`,
                       marginRight: 10,
                       padding: 5,
                     }}
                   >
-                    <Text key={`txt${id}`} style={styles.tagText}>
-                      {name}
-                    </Text>
+                    <Text style={styles.tagText}>{name}</Text>
                   </View>
                 );
               })}
@@ -141,6 +118,6 @@ function ContactScreen({ navigation, route }) {
       </View>
     </View>
   );
-}
+};
 
 export default ContactScreen;

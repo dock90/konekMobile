@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, YellowBox } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './components/MainNavContainer';
 import { client } from './config/Apollo';
@@ -10,6 +10,8 @@ import AuthContainer from './components/AuthContainer';
 import './config/PubNub';
 
 enableScreens();
+// PubNub causes this warning, we can disable it.
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 function App() {
   const [isAuthorized, setAuthorized] = useState(false);

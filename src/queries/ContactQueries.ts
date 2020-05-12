@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client';
-import { TAG_FIELDS } from './TagQueries';
-import { ASSET_FIELDS } from './AssetQueries';
+import { Gender, PageInfo } from './GlobalTypes';
+import { RoleFieldsInterface } from './RoleQueries';
+import { TAG_FIELDS, TagFieldsInterface } from './TagQueries';
+import { ASSET_FIELDS, AssetFieldsInterface } from './AssetQueries';
 
 export interface EmailsFields {
   email: string;
@@ -12,6 +14,15 @@ export interface PhonesFields {
   label: string | null;
 }
 
+export interface ContactSummaryFieldsInterface {
+  __typename: 'Contact';
+  contactId: string;
+  name: string;
+  country: string | null;
+  picture: AssetFieldsInterface | null;
+  tags: TagFieldsInterface[] | null;
+  profile: { roomId: string | null } | null;
+}
 const CONTACT_SUMMARY_FIELDS = gql`
   fragment ContactSummaryFields on Contact {
     __typename
@@ -24,11 +35,51 @@ const CONTACT_SUMMARY_FIELDS = gql`
     tags {
       ...TagFields
     }
+    profile {
+      roomId
+    }
   }
   ${ASSET_FIELDS}
   ${TAG_FIELDS}
 `;
-
+export interface ContactFieldsGroups {
+  group: {
+    __typename: 'Group';
+    groupId: string;
+    name: string;
+  };
+  role: RoleFieldsInterface;
+}
+export interface ContactFields {
+  __typename: 'Contact';
+  contactId: string;
+  name: string;
+  legalName: string | null;
+  picture: AssetFieldsInterface | null;
+  /**
+   * Folder where all contact specific assets should be stored. (This includes note assets.)
+   */
+  assetFolderId: string;
+  /**
+   * A brief description of the contact for quick reference.
+   */
+  bio: string | null;
+  city: string | null;
+  state: string | null;
+  postalCode: string | null;
+  country: string | null;
+  gender: Gender | null;
+  language: string | null;
+  invitationCode: string | null;
+  tags: TagFieldsInterface[] | null;
+  fbProfile: string | null;
+  emails: EmailsFields[];
+  phones: PhonesFields[];
+  groups: ContactFieldsGroups[];
+  profile: {
+    roomId: string;
+  };
+}
 const CONTACT_FIELDS = gql`
   fragment ContactFields on Contact {
     __typename
@@ -70,11 +121,26 @@ const CONTACT_FIELDS = gql`
         roleId
       }
     }
+    profile {
+      roomId
+    }
   }
   ${TAG_FIELDS}
   ${ASSET_FIELDS}
-  ${CONTACT_SUMMARY_FIELDS}
 `;
+
+export interface AllContactsQueryResults {
+  /**
+   * All available contacts
+   */
+  contacts: {
+    data: ContactSummaryFieldsInterface[];
+    pageInfo: PageInfo;
+  };
+}
+export interface AllContactsQueryVariables {
+  tags?: string[] | null;
+}
 
 export const ALL_CONTACTS_QUERY = gql`
   query ALL_CONTACTS_QUERY($tags: [ID!]) {
@@ -90,6 +156,16 @@ export const ALL_CONTACTS_QUERY = gql`
   }
   ${CONTACT_SUMMARY_FIELDS}
 `;
+
+export interface ContactsQueryResults {
+  /**
+   * Load a single contact
+   */
+  contact: ContactFields;
+}
+export interface ContactsQueryVariables {
+  contactId: string;
+}
 
 export const CONTACT_QUERY = gql`
   query CONTACT_QUERY($contactId: ID!) {

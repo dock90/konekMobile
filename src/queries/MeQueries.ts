@@ -45,7 +45,7 @@ export interface Access {
 export interface MeFieldsInterface {
   __typename: 'Me';
   name: string;
-  picture: AssetFieldsInterface | null;
+  picture?: AssetFieldsInterface | null;
   /**
    * Folder where all profile specific assets should be stored.
    */

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -9,8 +8,8 @@ import {
 } from 'react-native';
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_MUTATION } from '../queries/InvitationQueries';
-
-import send3x from '../../assets/send3x.png';
+import { MaterialIcons } from '@expo/vector-icons';
+import { PRIMARY } from '../styles/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,15 +42,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendIcon: {
-    height: 10,
-    width: 10,
+    color: PRIMARY,
     marginRight: 5,
   },
   sendText: {
     fontSize: 12,
     fontWeight: 'bold',
     textTransform: 'uppercase',
-    color: '#5D00D8',
+    color: PRIMARY,
   },
 });
 
@@ -86,7 +84,7 @@ function AcceptInvitation() {
           onPress={() => handleAcceptInvitation(inviteCode)}
           style={styles.sendContainer}
         >
-          <Image style={styles.sendIcon} source={send3x} />
+          <MaterialIcons name="send" style={styles.sendIcon} />
           <Text style={styles.sendText}>link</Text>
         </TouchableOpacity>
       </View>

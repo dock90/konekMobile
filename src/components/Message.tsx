@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { Image, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { MeContext } from '../contexts/MeContext';
 import { MeFieldsInterface } from '../queries/MeQueries';
 import { MessageFieldsInterface } from '../queries/MessageQueries';
 import formatDateTime from '../utils/formatDate';
+import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,9 +14,6 @@ const styles = StyleSheet.create({
     marginBottom: 35,
   },
   profileImg: {
-    width: 20,
-    height: 20,
-    borderRadius: 20,
     marginRight: 10,
   },
   contactName: {
@@ -47,16 +45,6 @@ const Message: React.FC<Props> = ({ messageData }) => {
 
   const notMe = me.name !== name;
 
-  let url =
-    'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-  if (picture) {
-    const { format, publicId } = picture;
-    const cloudName = 'equiptercrm';
-    url =
-      `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` ||
-      '';
-  }
-
   return (
     <View
       style={[
@@ -64,7 +52,9 @@ const Message: React.FC<Props> = ({ messageData }) => {
         { justifyContent: notMe ? 'flex-start' : 'flex-end' },
       ]}
     >
-      {notMe && <Image style={styles.profileImg} source={{ uri: url }} />}
+      {notMe && (
+        <Avatar picture={picture} size={25} style={styles.profileImg} />
+      )}
       <View>
         {notMe && <Text style={styles.contactName}>{name}</Text>}
         <View

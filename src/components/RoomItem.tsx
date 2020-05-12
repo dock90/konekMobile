@@ -1,8 +1,9 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { MessagesStackParamList } from '../screens/MessagesStackScreen';
+import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,13 +16,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.2,
     borderColor: '#606060',
   },
-  messageImage: {
-    height: 45,
-    width: 45,
-    borderRadius: 50,
-    marginRight: 20,
-  },
-  messageOverview: {},
   messageContact: {
     fontSize: 12,
     fontWeight: 'bold',
@@ -34,7 +28,7 @@ type Props = {
 };
 
 const RoomItem: React.FC<Props> = ({ messageData, navigation }) => {
-  const { roomId, name, picture, qtyUnread } = messageData;
+  const { roomId, name } = messageData;
 
   const handleSelect = () => {
     navigation.navigate('Message', {
@@ -43,26 +37,16 @@ const RoomItem: React.FC<Props> = ({ messageData, navigation }) => {
     });
   };
 
-  let url =
-    'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-  if (picture) {
-    const { format, publicId } = picture;
-    const cloudName = 'equiptercrm';
-    url =
-      `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` ||
-      '';
-  }
-
   return (
     <TouchableOpacity
       style={[
         styles.container,
-        { backgroundColor: qtyUnread ? '#F5F5F5' : '#FFFFFF' },
+        { backgroundColor: messageData.qtyUnread ? '#F5F5F5' : '#FFFFFF' },
       ]}
       onPress={handleSelect}
     >
-      <Image style={styles.messageImage} source={{ uri: url }} />
-      <View style={styles.messageOverview}>
+      <Avatar style={{ marginRight: 20 }} picture={messageData.picture} />
+      <View>
         <Text style={styles.messageContact}>{name}</Text>
       </View>
     </TouchableOpacity>

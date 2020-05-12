@@ -1,10 +1,11 @@
-import React from 'react';
-import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { useQuery } from '@apollo/client';
+import React, { useContext } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { auth } from '../config/firebase';
-import { ME_QUERY } from '../queries/MeQueries';
+import { MeFieldsInterface } from '../queries/MeQueries';
 import Header from '../components/Header';
 import AcceptInvitation from '../components/AcceptInvitation';
+import Avatar from '../components/Avatar';
+import { MeContext } from '../contexts/MeContext';
 
 const styles = StyleSheet.create({
   loadingContainer: {
@@ -55,65 +56,27 @@ const styles = StyleSheet.create({
 });
 
 function ProfileScreen() {
-  const { client, data, error, loading } = useQuery(ME_QUERY, {
-    pollInterval: 1000,
-  });
+  const me = useContext(MeContext) as MeFieldsInterface;
 
   const handleLogout = () => {
-    auth.signOut().then(() => client.resetStore());
-    console.log('Logout Success');
+    auth.signOut().then(() => {
+      console.log('Logout Success');
+    });
   };
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text>There was an error:</Text>
-        <Text>{error.message}</Text>
-      </View>
-    );
-  }
-
-  const {
-    me: {
-      name,
-      city,
-      state,
-      picture,
-      cloudinaryInfo: { cloudName },
-      access: { hasContact },
-    },
-  } = data;
-
-  let url =
-    'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-  if (picture) {
-    const { format, publicId } = picture;
-    url =
-      `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` ||
-      '';
-  }
 
   return (
     <View style={styles.container}>
-      <Header image={url} title="Me" />
+      <Header title="Profile" />
       <View style={styles.profileContainer}>
         <View style={styles.profile}>
-          <Image style={styles.profileImage} source={{ uri: url }} />
-          <Text style={styles.profileTitle}>{name}</Text>
+          <Avatar picture={me.picture} size={80} style={styles.profileImage} />
+          <Text style={styles.profileTitle}>{me.name}</Text>
           <Text style={styles.profileDetails}>
-            {city}, {state}
+            {me.city}, {me.state}
           </Text>
         </View>
         <View style={styles.profileActions}>
-          {!hasContact && <AcceptInvitation />}
+          {!me.access.hasContact && <AcceptInvitation />}
           <TouchableOpacity onPress={handleLogout}>
             <Text style={styles.actionText}>logout</Text>
           </TouchableOpacity>

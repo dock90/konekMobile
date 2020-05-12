@@ -1,57 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-import chat3x from '../../assets/chat3x.png';
-import profile3x from '../../assets/profile3x.png';
-
-function ContactItem({
-  contactData: { contactId, name, picture, profile },
-  navigation,
-}) {
-  const handleSelectContact = () => {
-    navigation.navigate('Contact', {
-      name,
-      contactId,
-    });
-  };
-
-  const handleStartConversation = () => {
-    const { roomId } = profile;
-    navigation.navigate('Message', {
-      name,
-      roomId,
-    });
-  };
-
-  let url =
-    'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-  if (picture) {
-    const { format, publicId } = picture;
-    const cloudName = 'equiptercrm';
-    url =
-      `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` ||
-      '';
-  }
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.contact}>
-        <Image style={styles.contactImage} source={{ uri: url }} />
-        <Text style={styles.contactTitle}>{name}</Text>
-      </View>
-      <View style={styles.actions}>
-        {profile && (
-          <TouchableOpacity onPress={handleStartConversation}>
-            <Image style={styles.actionIcon} source={chat3x} />
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity onPress={handleSelectContact}>
-          <Image style={styles.actionIcon} source={profile3x} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
   container: {
@@ -82,7 +33,46 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     marginLeft: 10,
+    fontSize: 30,
   },
 });
+
+function ContactItem({ contactData: { contactId, name, picture, profile } }) {
+  const navigation = useNavigation();
+
+  const handleSelectContact = () => {
+    navigation.navigate('Contact', {
+      name,
+      contactId,
+    });
+  };
+
+  const handleStartConversation = () => {
+    const { roomId } = profile;
+    navigation.navigate('Message', {
+      name,
+      roomId,
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.contact}>
+        <Avatar picture={picture} style={styles.contactImage} />
+        <Text style={styles.contactTitle}>{name}</Text>
+      </View>
+      <View style={styles.actions}>
+        {profile && (
+          <TouchableOpacity onPress={handleStartConversation}>
+            <MaterialIcons name="chat" style={styles.actionIcon} />
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity onPress={handleSelectContact}>
+          <MaterialIcons name="person" style={styles.actionIcon} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
 
 export default ContactItem;

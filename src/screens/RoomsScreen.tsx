@@ -19,9 +19,7 @@ type Props = {
 };
 
 const RoomsScreen: React.FC<Props> = ({ navigation }) => {
-  const { loading, error, data } = useQuery<RoomsQuery>(ROOMS_QUERY, {
-    pollInterval: 1000,
-  });
+  const { loading, error, data } = useQuery<RoomsQuery>(ROOMS_QUERY);
 
   if (loading || !data) {
     return <Loading />;

@@ -2,7 +2,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import {
   FlatList,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Route,
@@ -12,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/client';
 import Error from '../components/Error';
 import Loading from '../components/Loading';
@@ -21,7 +21,6 @@ import {
   MessagesQueryInterface,
 } from '../queries/MessageQueries';
 import Message from '../components/Message';
-import send3x from '../../assets/send3x.png';
 import { sendMessage } from '../service/Messages';
 import { PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
@@ -58,9 +57,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendIcon: {
-    height: 10,
-    width: 10,
     marginRight: 5,
+    color: PRIMARY,
   },
   sendText: {
     fontSize: 12,
@@ -139,7 +137,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
           onPress={handleSendMessage}
           style={styles.sendContainer}
         >
-          <Image style={styles.sendIcon} source={send3x} />
+          <MaterialIcons name="send" style={styles.sendIcon} />
           <Text style={styles.sendText}>send</Text>
         </TouchableOpacity>
       </View>

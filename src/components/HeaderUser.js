@@ -1,7 +1,28 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { ROOM_QUERY } from '../queries/RoomQueries';
+import Loading from './Loading';
+import Error from './Error';
+import Avatar from './Avatar';
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginLeft: -10,
+  },
+  roomPicture: {
+    height: 30,
+    width: 30,
+    marginRight: 10,
+  },
+  roomName: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+});
 
 function HeaderUser({ route }) {
   const {
@@ -15,58 +36,19 @@ function HeaderUser({ route }) {
   });
 
   if (loading) {
-    // TODO: render ghost image while loading
-    return null;
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>There was an error:</Text>
-        <Text>{error.message}</Text>
-      </View>
-    );
-  }
-
-  const {
-    room: { picture },
-  } = data;
-
-  let url =
-    'https://image.freepik.com/free-icon/important-person_318-10744.jpg';
-  if (picture) {
-    const { format, publicId } = picture;
-    const cloudName = 'equiptercrm';
-    url =
-      `https://res.cloudinary.com/${cloudName}/image/upload/v1/${publicId}.${format}` ||
-      '';
+    return <Error error={error} />;
   }
 
   return (
     <View style={styles.container}>
-      <Image style={styles.roomPicture} source={{ url: url }} />
+      <Avatar picture={data.room.picture} style={styles.roomPicture} />
       <Text style={styles.roomName}>{name}</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-    marginLeft: -10,
-  },
-  roomPicture: {
-    height: 30,
-    width: 30,
-    borderRadius: 50,
-    marginRight: 10,
-  },
-  roomName: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-});
 
 export default HeaderUser;
