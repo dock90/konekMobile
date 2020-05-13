@@ -34,11 +34,7 @@ const RoomsScreen: React.FC<Props> = ({ navigation }) => {
       <FlatList
         data={data.rooms}
         renderItem={({ item }) => (
-          <RoomItem
-            key={item.roomId}
-            messageData={item}
-            navigation={navigation}
-          />
+          <RoomItem key={item.roomId} room={item} navigation={navigation} />
         )}
         keyExtractor={(item) => item.roomId}
       />

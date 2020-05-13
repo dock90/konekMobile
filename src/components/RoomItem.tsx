@@ -1,8 +1,9 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { MessagesStackParamList } from '../screens/MessagesStackScreen';
+import { BORDER } from '../styles/Colors';
 import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
@@ -11,10 +12,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 20,
     paddingRight: 20,
-    height: 75,
+    height: 70,
     borderStyle: 'solid',
-    borderBottomWidth: 0.2,
-    borderColor: '#606060',
+    borderBottomWidth: 0.5,
+    borderColor: BORDER,
   },
   messageContact: {
     fontSize: 12,
@@ -23,32 +24,25 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  messageData: RoomFieldsInterface;
+  room: RoomFieldsInterface;
   navigation: StackNavigationProp<MessagesStackParamList, 'Rooms'>;
 };
 
-const RoomItem: React.FC<Props> = ({ messageData, navigation }) => {
-  const { roomId, name } = messageData;
-
+const RoomItem: React.FC<Props> = ({ room, navigation }) => {
   const handleSelect = () => {
-    navigation.navigate('Message', {
-      name,
-      roomId,
-    });
+    navigation.navigate('Message', { room });
   };
 
   return (
     <TouchableOpacity
       style={[
         styles.container,
-        { backgroundColor: messageData.qtyUnread ? '#F5F5F5' : '#FFFFFF' },
+        { backgroundColor: room.qtyUnread ? '#F5F5F5' : '#FFFFFF' },
       ]}
       onPress={handleSelect}
     >
-      <Avatar style={{ marginRight: 20 }} picture={messageData.picture} />
-      <View>
-        <Text style={styles.messageContact}>{name}</Text>
-      </View>
+      <Avatar style={{ marginRight: 20 }} picture={room.picture} />
+      <Text style={styles.messageContact}>{room.name}</Text>
     </TouchableOpacity>
   );
 };

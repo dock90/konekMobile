@@ -4,13 +4,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ME_QUERY, MeQueryInterface } from '../queries/MeQueries';
-import { PRIMARY } from '../styles/Colors';
-import MessagesStackScreen from '../screens/MessagesStackScreen';
-import ContactsStackScreen from '../screens/ContactsStackScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import { BORDER, PRIMARY } from '../styles/Colors';
+import MessagesStackScreen from './MessagesStackScreen';
+import ContactsStackScreen from './ContactsStackScreen';
+import ProfileScreen from './ProfileScreen';
 import { MeContext } from '../contexts/MeContext';
-import Error from './Error';
-import Loading from './Loading';
+import Error from '../components/Error';
+import Loading from '../components/Loading';
 
 export type TabNavParamList = {
   Messages: undefined;
@@ -26,33 +26,18 @@ const MainNavContainer: React.FC = () => {
   if (loading || !data) {
     return <Loading />;
   }
-
   if (error) {
     return <Error error={error} />;
   }
+
   return (
     <MeContext.Provider value={data.me}>
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Messages"
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ color, size }) => {
-              let iconName = '';
-              if (route.name === 'Messages') {
-                iconName = 'chat';
-              } else if (route.name === 'Contacts') {
-                iconName = 'people';
-              } else if (route.name === 'Profile') {
-                iconName = 'person';
-              }
-              return (
-                <MaterialIcons name={iconName} size={size} color={color} />
-              );
-            },
-          })}
           tabBarOptions={{
             activeTintColor: PRIMARY,
-            inactiveTintColor: 'gray',
+            inactiveTintColor: BORDER,
           }}
         >
           <Tab.Screen
@@ -65,15 +50,32 @@ const MainNavContainer: React.FC = () => {
               const routeName = route.state ? route.state.routes[route.state.index].name : route.params?.screen || 'Messages';
 
               return {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                // @ts-ignore
                 tabBarVisible: routeName !== 'Message',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialIcons name="chat" size={size} color={color} />
+                ),
               };
             }}
             component={MessagesStackScreen}
           />
-          <Tab.Screen name="Contacts" component={ContactsStackScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen
+            name="Contacts"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialIcons name="people" size={size} color={color} />
+              ),
+            }}
+            component={ContactsStackScreen}
+          />
+          <Tab.Screen
+            name="Profile"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialIcons name="person" size={size} color={color} />
+              ),
+            }}
+            component={ProfileScreen}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </MeContext.Provider>

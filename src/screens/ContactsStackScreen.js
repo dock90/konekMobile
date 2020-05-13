@@ -2,11 +2,21 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-// screens
 import ContactsScreen from './ContactsScreen';
 import ContactScreen from './ContactScreen';
-// components
-import Header from '../components/Header';
+
+const styles = StyleSheet.create({
+  backContainer: {
+    width: 60,
+    height: 40,
+    marginBottom: 20,
+  },
+  backIcon: {
+    fontSize: 25,
+    paddingLeft: 20,
+    paddingTop: 10,
+  },
+});
 
 const ContactsStack = createStackNavigator();
 
@@ -19,16 +29,7 @@ function ContactsStackScreen() {
         },
       }}
     >
-      <ContactsStack.Screen
-        name="Contacts"
-        options={{
-          header: () => {
-            const title = 'Contacts';
-            return <Header title={title} />;
-          },
-        }}
-        component={ContactsScreen}
-      />
+      <ContactsStack.Screen name="Contacts" component={ContactsScreen} />
       <ContactsStack.Screen
         name="Contact"
         options={{
@@ -49,18 +50,5 @@ function ContactsStackScreen() {
     </ContactsStack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  backContainer: {
-    width: 60,
-    height: 40,
-    marginBottom: 20,
-  },
-  backIcon: {
-    fontSize: 25,
-    paddingLeft: 20,
-    paddingTop: 10,
-  },
-});
 
 export default ContactsStackScreen;

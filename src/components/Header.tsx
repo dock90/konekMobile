@@ -1,23 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  StyleProp,
+  StyleSheet,
+  Text,
+  ViewStyle,
+} from 'react-native';
+import { AssetFieldsInterface } from '../queries/AssetQueries';
+import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 70,
-    padding: 20,
-    backgroundColor: '#FFFFFF',
+    // height: 40,
   },
-  pathContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileImage: {
+  picture: {
     marginRight: 10,
   },
-  pathTitle: {
+  title: {
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -25,14 +27,15 @@ const styles = StyleSheet.create({
 
 type Props = {
   title: string;
+  picture?: AssetFieldsInterface | null;
+  style?: StyleProp<ViewStyle>;
 };
 
-const Header: React.FC<Props> = ({ title }) => (
-  <View style={styles.container}>
-    <View style={styles.pathContainer}>
-      <Text style={styles.pathTitle}>{title}</Text>
-    </View>
-  </View>
+const Header: React.FC<Props> = ({ title, picture, style }) => (
+  <SafeAreaView style={[styles.container, style]}>
+    {picture && <Avatar picture={picture} size={30} style={styles.picture} />}
+    <Text style={styles.title}>{title}</Text>
+  </SafeAreaView>
 );
 
 export default Header;

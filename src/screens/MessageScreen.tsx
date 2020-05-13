@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -14,6 +14,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/client';
 import Error from '../components/Error';
+import Header from '../components/Header';
 import Loading from '../components/Loading';
 import {
   MessageQueryVariables,
@@ -21,6 +22,7 @@ import {
   MessagesQueryInterface,
 } from '../queries/MessageQueries';
 import Message from '../components/Message';
+import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { sendMessage } from '../service/Messages';
 import { PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
@@ -76,27 +78,35 @@ type Props = {
 const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   const [pendingMessage, setPendingMessage] = useState('');
   const [viewHeight, setViewHeight] = useState(false);
-  const { name, roomId } = route.params;
 
-  // set header title
-  navigation.setOptions({
-    title: name,
-  });
+  const room: RoomFieldsInterface = route.params.room;
 
   // query messages
   const { loading, error, data } = useQuery<
     MessagesQueryInterface,
     MessageQueryVariables
   >(MESSAGES_QUERY, {
-    variables: { roomId, after: null },
-    skip: !roomId,
+    variables: { roomId: room.roomId, after: null },
   });
+
+  useEffect(() => {
+    // set header title
+    navigation.setOptions({
+      headerTitle: () => (
+        <Header
+          style={{ marginLeft: -15 }}
+          title={room.name}
+          picture={room.picture}
+        />
+      ),
+    });
+  }, [room]);
 
   // handle message send
   const handleSendMessage = async () => {
     const body = pendingMessage;
     setPendingMessage('');
-    await sendMessage(roomId, body);
+    await sendMessage(room.roomId, body);
   };
 
   if (loading || !data) {

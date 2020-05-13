@@ -27,9 +27,7 @@ const ContactsScreen: React.FC = () => {
   const { data, error, loading } = useQuery<
     AllContactsQueryResults,
     AllContactsQueryVariables
-  >(ALL_CONTACTS_QUERY, {
-    pollInterval: 60000,
-  });
+  >(ALL_CONTACTS_QUERY);
 
   if (loading || !data) {
     return <Loading />;

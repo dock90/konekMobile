@@ -2,16 +2,15 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { RoomFieldsInterface } from '../queries/RoomQueries';
 import RoomsScreen from './RoomsScreen';
 import MessageScreen from './MessageScreen';
-import Header from '../components/Header';
-import HeaderUser from '../components/HeaderUser';
 
 const styles = StyleSheet.create({
   backContainer: {
     width: 60,
     height: 40,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   backIcon: {
     fontSize: 25,
@@ -23,8 +22,7 @@ const styles = StyleSheet.create({
 export type MessagesStackParamList = {
   Rooms: undefined;
   Message: {
-    name: string;
-    roomId: string;
+    room: RoomFieldsInterface;
   };
 };
 
@@ -42,13 +40,13 @@ const MessagesStackScreen: React.FC = () => {
       <MessagesStack.Screen
         name="Rooms"
         options={{
-          header: () => <Header title="Messages" />,
+          title: 'Messages',
         }}
         component={RoomsScreen}
       />
       <MessagesStack.Screen
         name="Message"
-        options={({ route }) => ({
+        options={{
           headerBackTitleVisible: false,
           headerStyle: {
             height: 70,
@@ -59,9 +57,8 @@ const MessagesStackScreen: React.FC = () => {
               <MaterialIcons name="arrow-back" style={styles.backIcon} />
             </TouchableOpacity>
           ),
-          headerTitle: () => <HeaderUser route={route} />,
           headerTitleAlign: 'left',
-        })}
+        }}
         component={MessageScreen}
       />
     </MessagesStack.Navigator>

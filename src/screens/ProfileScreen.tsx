@@ -1,8 +1,13 @@
 import React, { useContext } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  SafeAreaView,
+} from 'react-native';
 import { auth } from '../config/firebase';
 import { MeFieldsInterface } from '../queries/MeQueries';
-import Header from '../components/Header';
 import AcceptInvitation from '../components/AcceptInvitation';
 import Avatar from '../components/Avatar';
 import { MeContext } from '../contexts/MeContext';
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 50,
   },
-  profileImage: {
+  picture: {
     width: 80,
     height: 80,
     borderRadius: 50,
@@ -65,11 +70,11 @@ function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Header title="Profile" />
+    <SafeAreaView style={styles.container}>
+      {/*<Header title="Profile" />*/}
       <View style={styles.profileContainer}>
         <View style={styles.profile}>
-          <Avatar picture={me.picture} size={80} style={styles.profileImage} />
+          <Avatar picture={me.picture} size={80} style={styles.picture} />
           <Text style={styles.profileTitle}>{me.name}</Text>
           <Text style={styles.profileDetails}>
             {me.city}, {me.state}
@@ -82,7 +87,7 @@ function ProfileScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -3,7 +3,7 @@ import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
 import { AppRegistry, YellowBox } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
-import MainNavContainer from './components/MainNavContainer';
+import MainNavContainer from './screens/MainNavContainer';
 import { client } from './config/Apollo';
 import { auth } from './config/firebase';
 import AuthContainer from './components/AuthContainer';
