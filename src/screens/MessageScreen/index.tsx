@@ -13,19 +13,20 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/client';
-import Error from '../components/Error';
-import Header from '../components/Header';
-import Loading from '../components/Loading';
+import Error from '../../components/Error';
+import Header from '../../components/Header';
+import Loading from '../../components/Loading';
 import {
   MessageQueryVariables,
   MESSAGES_QUERY,
   MessagesQueryInterface,
-} from '../queries/MessageQueries';
-import Message from '../components/Message';
-import { RoomFieldsInterface } from '../queries/RoomQueries';
-import { sendMessage } from '../service/Messages';
-import { PRIMARY } from '../styles/Colors';
-import { MessagesStackParamList } from './MessagesStackScreen';
+} from '../../queries/MessageQueries';
+import Message from '../../components/Message';
+import { RoomFieldsInterface } from '../../queries/RoomQueries';
+import { sendMessage } from '../../service/Messages';
+import { PRIMARY } from '../../styles/Colors';
+import { MessagesStackParamList } from '../MessagesStackScreen';
+import BeginningOfConversation from './BeginningOfConversation';
 
 const styles = StyleSheet.create({
   container: {
@@ -78,11 +79,12 @@ type Props = {
 const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   const [pendingMessage, setPendingMessage] = useState('');
   const [viewHeight, setViewHeight] = useState(false);
+  const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const room: RoomFieldsInterface = route.params.room;
 
   // query messages
-  const { loading, error, data } = useQuery<
+  const { loading, error, data, fetchMore } = useQuery<
     MessagesQueryInterface,
     MessageQueryVariables
   >(MESSAGES_QUERY, {
@@ -102,13 +104,6 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     });
   }, [room]);
 
-  // handle message send
-  const handleSendMessage = async () => {
-    const body = pendingMessage;
-    setPendingMessage('');
-    await sendMessage(room.roomId, body);
-  };
-
   if (loading || !data) {
     return <Loading />;
   }
@@ -117,6 +112,46 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     return <Error error={error} />;
   }
 
+  const handleEndReach = async ({
+    distanceFromEnd,
+  }: {
+    distanceFromEnd: number;
+  }) => {
+    if (isLoadingNext) {
+      return;
+    }
+    setIsLoadingNext(true);
+
+    console.log(distanceFromEnd);
+    const variables: MessageQueryVariables = {
+      roomId: room.roomId,
+      after: data.messages.pageInfo.endCursor,
+    };
+
+    await fetchMore({
+      variables,
+      updateQuery: (prev, { fetchMoreResult }) => {
+        setIsLoadingNext(false);
+        if (!fetchMoreResult || fetchMoreResult.messages.data.length === 0) {
+          return prev;
+        }
+        return {
+          messages: {
+            data: [...prev.messages.data, ...fetchMoreResult.messages.data],
+            pageInfo: fetchMoreResult.messages.pageInfo,
+          },
+        };
+      },
+    });
+  };
+
+  // handle message send
+  const handleSendMessage = async () => {
+    const body = pendingMessage;
+    setPendingMessage('');
+    await sendMessage(room.roomId, body);
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -124,9 +159,13 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     >
       <View style={styles.messages}>
         <FlatList
+          ListFooterComponent={
+            <BeginningOfConversation loading={isLoadingNext} />
+          }
+          onEndReached={handleEndReach}
           data={data.messages.data}
           renderItem={({ item }) => (
-            <Message key={item.messageId} messageData={item} />
+            <Message key={item.messageId} messageData={item} room={room} />
           )}
           keyExtractor={(item) => item.messageId}
           inverted

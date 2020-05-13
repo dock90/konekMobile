@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { MeContext } from '../contexts/MeContext';
-import { MeFieldsInterface } from '../queries/MeQueries';
 import { MessageFieldsInterface } from '../queries/MessageQueries';
+import { RoomFieldsInterface } from '../queries/RoomQueries';
 import formatDateTime from '../utils/formatDate';
 import Avatar from './Avatar';
 
@@ -33,17 +32,11 @@ const styles = StyleSheet.create({
 
 type Props = {
   messageData: MessageFieldsInterface;
+  room: RoomFieldsInterface;
 };
 
-const Message: React.FC<Props> = ({ messageData }) => {
-  const me = useContext(MeContext) as MeFieldsInterface;
-  const {
-    author: { name, picture },
-    body,
-    createdAt,
-  } = messageData;
-
-  const notMe = me.name !== name;
+const Message: React.FC<Props> = ({ messageData, room }) => {
+  const notMe = messageData.author.memberId !== room.memberId;
 
   return (
     <View
@@ -53,22 +46,28 @@ const Message: React.FC<Props> = ({ messageData }) => {
       ]}
     >
       {notMe && (
-        <Avatar picture={picture} size={25} style={styles.profileImg} />
+        <Avatar
+          picture={messageData.author.picture}
+          size={25}
+          style={styles.profileImg}
+        />
       )}
       <View>
-        {notMe && <Text style={styles.contactName}>{name}</Text>}
+        {notMe && (
+          <Text style={styles.contactName}>{messageData.author.name}</Text>
+        )}
         <View
           style={{
             backgroundColor: notMe ? '#69B98F' : '#5D00D8',
             borderRadius: 5,
           }}
         >
-          <Text style={styles.message}>{body}</Text>
+          <Text style={styles.message}>{messageData.body}</Text>
         </View>
         <Text
           style={[styles.timestamp, { textAlign: notMe ? 'right' : 'left' }]}
         >
-          {formatDateTime(createdAt)}
+          {formatDateTime(messageData.createdAt)}
         </Text>
       </View>
     </View>

@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { AssetInterface } from './AssetQueries';
+import { PageInfo } from './GlobalTypes';
 import { MEMBER_FIELDS, MemberFieldsInterface } from './MemberQueries';
 import { ROOM_FIELDS } from './RoomQueries';
 
@@ -32,10 +33,7 @@ export interface MessageQueryVariables {
 export interface MessagesQueryInterface {
   messages: {
     data: Array<MessageFieldsInterface>;
-  };
-  pageInfo: {
-    hasNextPage: boolean;
-    endCursor: string | null;
+    pageInfo: PageInfo;
   };
 }
 export const MESSAGES_QUERY = gql`
