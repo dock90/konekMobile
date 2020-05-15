@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MessageFieldsInterface } from '../queries/MessageQueries';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
 import formatDateTime from '../utils/formatDate';
+import Asset from './Asset';
 import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 35,
+    marginBottom: 10,
   },
   profileImg: {
     marginRight: 10,
@@ -62,7 +63,12 @@ const Message: React.FC<Props> = ({ messageData, room }) => {
             borderRadius: 5,
           }}
         >
-          <Text style={styles.message}>{messageData.body}</Text>
+          {messageData.asset && (
+            <Asset asset={messageData.asset} textColor="#fff" />
+          )}
+          {!!messageData.body && (
+            <Text style={styles.message}>{messageData.body}</Text>
+          )}
         </View>
         <Text
           style={[styles.timestamp, { textAlign: notMe ? 'right' : 'left' }]}

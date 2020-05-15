@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
-import { AssetInterface } from './AssetQueries';
+import {
+  ASSET_FIELDS,
+  AssetFieldsInterface,
+  AssetInterface,
+} from './AssetQueries';
 import { PageInfo } from './GlobalTypes';
 import { MEMBER_FIELDS, MemberFieldsInterface } from './MemberQueries';
 import { ROOM_FIELDS } from './RoomQueries';
@@ -9,6 +13,7 @@ export interface MessageFieldsInterface {
   messageId: string;
   body: string | null;
   createdAt: string;
+  asset: AssetFieldsInterface | null;
   author: MemberFieldsInterface;
 }
 
@@ -18,11 +23,15 @@ const MessageFields = gql`
     messageId
     body
     createdAt
+    asset {
+      ...AssetFields
+    }
     author {
       ...MemberFields
     }
   }
   ${MEMBER_FIELDS}
+  ${ASSET_FIELDS}
 `;
 
 export interface MessageQueryVariables {

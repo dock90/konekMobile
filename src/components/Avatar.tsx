@@ -4,6 +4,7 @@ import { Image, ImageStyle, StyleProp, StyleSheet } from 'react-native';
 import { MeContext } from '../contexts/MeContext';
 import { AssetFieldsInterface } from '../queries/AssetQueries';
 import { MeFieldsInterface } from '../queries/MeQueries';
+import { avatarUri } from '../service/AssetUris';
 import { BORDER } from '../styles/Colors';
 
 const styles = StyleSheet.create({
@@ -20,22 +21,31 @@ type Props = {
   picture?: AssetFieldsInterface | null;
   size?: number;
   style?: StyleProp<ImageStyle>;
+  overlayColor?: string | 'none';
 };
 
-const Avatar: React.FC<Props> = ({ picture, size, style }) => {
+const Avatar: React.FC<Props> = ({ picture, size, style, overlayColor }) => {
   const { cloudinaryInfo } = useContext(MeContext) as MeFieldsInterface;
 
   if (!size) {
     size = 45;
+  }
+  if (!overlayColor) {
+    overlayColor = '#ffffff';
+  } else if (overlayColor === 'none') {
+    overlayColor = '';
   }
 
   const sizing = {
     height: size,
     width: size,
     fontSize: size,
+    overlayColor,
   };
 
   if (!picture) {
+    delete sizing.overlayColor;
+
     return (
       <MaterialIcons
         name="account-circle"
@@ -47,9 +57,12 @@ const Avatar: React.FC<Props> = ({ picture, size, style }) => {
   // Delete this so validation doesn't complain.
   delete sizing.fontSize;
 
-  const uri = `https://res.cloudinary.com/${cloudinaryInfo.cloudName}/${picture.resourceType}/${picture.type}/c_fit,h_100,q_auto,w_100/v1/${picture.publicId}.${picture.format}`;
-
-  return <Image style={[styles.image, sizing, style]} source={{ uri }} />;
+  return (
+    <Image
+      style={[styles.image, sizing, style]}
+      source={{ uri: avatarUri(picture, cloudinaryInfo) }}
+    />
+  );
 };
 
 export default Avatar;

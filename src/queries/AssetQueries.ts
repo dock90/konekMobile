@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export interface AssetInterface {
   format: string | null;
   publicId: string;
-  resourceType: string;
+  resourceType: 'video' | 'image' | 'raw';
   type: string;
   originalFilename: string | null;
   /**

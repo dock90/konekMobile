@@ -102,7 +102,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
         />
       ),
     });
-  }, [room]);
+  }, [room, navigation]);
 
   if (loading || !data) {
     return <Loading />;

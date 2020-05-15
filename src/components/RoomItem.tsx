@@ -41,7 +41,11 @@ const RoomItem: React.FC<Props> = ({ room, navigation }) => {
       ]}
       onPress={handleSelect}
     >
-      <Avatar style={{ marginRight: 20 }} picture={room.picture} />
+      <Avatar
+        style={{ marginRight: 20 }}
+        picture={room.picture}
+        overlayColor="#ffffff"
+      />
       <Text style={styles.messageContact}>{room.name}</Text>
     </TouchableOpacity>
   );
