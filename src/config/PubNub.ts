@@ -8,14 +8,6 @@ import { auth } from './firebase';
 
 const LOCAL_STORAGE_UUID_KEY = 'pnuuid';
 
-auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    await initPubNub();
-  } else {
-    await closePubNub();
-  }
-});
-
 async function getUuid() {
   let uuid = await AsyncStorage.getItem(LOCAL_STORAGE_UUID_KEY);
 
@@ -67,9 +59,11 @@ const listeners: ListenerParameters = {
       case PubNub.CATEGORIES.PNNetworkIssuesCategory:
       case PubNub.CATEGORIES.PNAccessDeniedCategory:
         setConnected(false);
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         await closePubNub();
         // Force a re-load of "me" so that it gets a new key, etc.
         await client.query({ query: ME_QUERY, fetchPolicy: 'network-only' });
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         await initPubNub();
         break;
       default:
@@ -124,3 +118,11 @@ export async function closePubNub() {
     pn = undefined;
   }
 }
+
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    await initPubNub();
+  } else {
+    await closePubNub();
+  }
+});

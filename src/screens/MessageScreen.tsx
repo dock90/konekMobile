@@ -13,20 +13,20 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/client';
-import Error from '../../components/Error';
-import Header from '../../components/Header';
-import Loading from '../../components/Loading';
+import Error from '../components/Error';
+import Header from '../components/Header';
+import Loading from '../components/Loading';
 import {
   MessageQueryVariables,
   MESSAGES_QUERY,
   MessagesQueryInterface,
-} from '../../queries/MessageQueries';
-import Message from '../../components/Message';
-import { RoomFieldsInterface } from '../../queries/RoomQueries';
-import { sendMessage } from '../../service/Messages';
-import { PRIMARY } from '../../styles/Colors';
-import { MessagesStackParamList } from '../MessagesStackScreen';
-import BeginningOfConversation from './BeginningOfConversation';
+} from '../queries/MessageQueries';
+import Message from '../components/Message';
+import { RoomFieldsInterface } from '../queries/RoomQueries';
+import { sendMessage } from '../service/Messages';
+import { PRIMARY } from '../styles/Colors';
+import { MessagesStackParamList } from './MessagesStackScreen';
+import BeginningOfConversation from './MessageScreen/BeginningOfConversation';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 20,
     marginRight: 20,
+    marginTop: 5,
     marginBottom: 20,
     paddingLeft: 12,
     paddingRight: 12,
   },
   input: {
-    flex: 1,
     height: 40,
   },
   sendContainer: {

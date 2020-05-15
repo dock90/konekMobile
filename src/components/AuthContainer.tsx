@@ -7,7 +7,7 @@ import ResetPassSuccessScreen from '../screens/ResetPassSuccessScreen';
 import SignupScreen from '../screens/SignupScreen';
 import SignupConfirmScreen from '../screens/SignupConfirmScreen';
 
-type AuthStack = {
+export type AuthStack = {
   Login: undefined;
   ResetPass: undefined;
   ResetPassSuccess: undefined;

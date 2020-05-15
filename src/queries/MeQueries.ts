@@ -14,7 +14,7 @@ export interface PubNubInfo {
   /**
    * New keys are valid for 5 days.
    */
-  expires: any;
+  expires: string;
   /**
    * Channel group to subscribe to.
    */

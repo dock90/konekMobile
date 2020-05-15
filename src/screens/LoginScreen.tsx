@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import {
   Image,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { AuthStack } from '../components/AuthContainer';
 import { auth } from '../config/firebase';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
 import { InputStyles } from '../styles/InputStyles';
@@ -30,16 +32,20 @@ const styles = StyleSheet.create({
   },
 });
 
-function LoginScreen({ navigation }) {
+type Props = {
+  navigation: StackNavigationProp<AuthStack>;
+};
+
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
-  const [emailError, setEmailError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const handleLogin = () => {
     // reset error states
-    setEmailError(null);
-    setPasswordError(null);
+    setEmailError('');
+    setPasswordError('');
 
     // handle authentication
     auth.signInWithEmailAndPassword(email, password).catch((error) => {
@@ -90,6 +96,6 @@ function LoginScreen({ navigation }) {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 export default LoginScreen;

@@ -18,7 +18,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const ContactsStack = createStackNavigator();
+export type ContactsStack = {
+  Contacts: undefined;
+  Contact: {
+    contactId: string;
+  };
+};
+
+const ContactsStack = createStackNavigator<ContactsStack>();
 
 function ContactsStackScreen() {
   return (

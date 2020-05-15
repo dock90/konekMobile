@@ -10,6 +10,7 @@ import {
 } from '../queries/ContactQueries';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { ContactsStack } from './ContactsStackScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
 });
 type Props = {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<ContactsStack>;
   route: Route;
 };
 

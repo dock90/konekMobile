@@ -1,4 +1,8 @@
-import { ApolloCache, ApolloClient } from '@apollo/client';
+import {
+  ApolloCache,
+  ApolloClient,
+  NormalizedCacheObject,
+} from '@apollo/client';
 import { client } from '../config/Apollo';
 import { AssetInterface } from '../queries/AssetQueries';
 import {
@@ -19,6 +23,58 @@ import {
   ROOMS_QUERY,
   RoomsQuery,
 } from '../queries/RoomQueries';
+
+function hasPreviousMessage(
+  messages: { data: Array<MessageFieldsInterface> },
+  messageId: string
+): boolean {
+  return !!messages.data.find((m) => m.messageId === messageId);
+}
+
+function orderRooms(
+  topRoomId: string,
+  client: ApolloClient<NormalizedCacheObject> | ApolloCache<unknown>
+) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  const roomsQuery = client.readQuery<RoomsQuery>({
+    query: ROOMS_QUERY,
+  });
+  if (!roomsQuery) {
+    return;
+  }
+
+  const rooms = roomsQuery.rooms,
+    newRooms = [...rooms];
+
+  for (let i = 0; i < rooms.length; i++) {
+    const r = rooms[i];
+    if (r.roomId === topRoomId) {
+      if (i === 0) {
+        // If we're already at the top, there is nothing to do, we can abort early.
+        return;
+      }
+      newRooms.splice(i, 1);
+      newRooms.unshift(r);
+      break;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  client.writeQuery({
+    query: ROOMS_QUERY,
+    data: { rooms: newRooms },
+  });
+}
+
+function getRoomInfo(roomId: string): RoomFieldsInterface | null {
+  return client.readFragment({
+    id: roomId,
+    fragment: ROOM_FIELDS,
+    fragmentName: 'RoomFields',
+  });
+}
 
 export async function sendMessage(
   roomId: string,
@@ -185,6 +241,15 @@ export async function addMessage(
   });
 }
 
+function writeRoomInfo(roomId: string, info: RoomFieldsInterface): void {
+  client.writeFragment({
+    id: roomId,
+    fragment: ROOM_FIELDS,
+    fragmentName: 'RoomFields',
+    data: info,
+  });
+}
+
 /**
  *
  * @param roomId {String}
@@ -234,65 +299,4 @@ export async function markAllRead(roomId: string, updateServer: boolean) {
   });
 
   writeRoomInfo(roomId, results.data.setReadThrough);
-}
-
-function getRoomInfo(roomId: string): RoomFieldsInterface | null {
-  return client.readFragment({
-    id: roomId,
-    fragment: ROOM_FIELDS,
-    fragmentName: 'RoomFields',
-  });
-}
-
-function writeRoomInfo(roomId: string, info: RoomFieldsInterface): void {
-  client.writeFragment({
-    id: roomId,
-    fragment: ROOM_FIELDS,
-    fragmentName: 'RoomFields',
-    data: info,
-  });
-}
-
-function orderRooms(
-  topRoomId: string,
-  client: ApolloClient<any> | ApolloCache<any>
-) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  const roomsQuery = client.readQuery<RoomsQuery>({
-    query: ROOMS_QUERY,
-  });
-  if (!roomsQuery) {
-    return;
-  }
-
-  const rooms = roomsQuery.rooms,
-    newRooms = [...rooms];
-
-  for (let i = 0; i < rooms.length; i++) {
-    const r = rooms[i];
-    if (r.roomId === topRoomId) {
-      if (i === 0) {
-        // If we're already at the top, there is nothing to do, we can abort early.
-        return;
-      }
-      newRooms.splice(i, 1);
-      newRooms.unshift(r);
-      break;
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  client.writeQuery({
-    query: ROOMS_QUERY,
-    data: { rooms: newRooms },
-  });
-}
-
-function hasPreviousMessage(
-  messages: { data: Array<MessageFieldsInterface> },
-  messageId: string
-): boolean {
-  return !!messages.data.find((m) => m.messageId === messageId);
 }
