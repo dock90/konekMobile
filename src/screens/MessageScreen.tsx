@@ -22,7 +22,12 @@ import {
   MessagesQueryInterface,
 } from '../queries/MessageQueries';
 import Message from '../components/Message';
-import { RoomFieldsInterface } from '../queries/RoomQueries';
+import {
+  ROOM_QUERY,
+  RoomFieldsInterface,
+  RoomQuery,
+  RoomQueryVariables,
+} from '../queries/RoomQueries';
 import { sendMessage } from '../service/Messages';
 import { PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
@@ -81,17 +86,32 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   const [viewHeight, setViewHeight] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const room: RoomFieldsInterface = route.params.room;
+  let room: RoomFieldsInterface = route.params.room;
+  const roomId = room ? room.roomId : route.params.roomId;
+
+  const roomQuery = useQuery<RoomQuery, RoomQueryVariables>(ROOM_QUERY, {
+    variables: {
+      roomId: route.params.roomId,
+    },
+    skip: room !== undefined,
+  });
+
+  if (!roomQuery.loading && !roomQuery.error && roomQuery.data) {
+    room = roomQuery.data.room;
+  }
 
   // query messages
   const { loading, error, data, fetchMore } = useQuery<
     MessagesQueryInterface,
     MessageQueryVariables
   >(MESSAGES_QUERY, {
-    variables: { roomId: room.roomId, after: null },
+    variables: { roomId, after: null },
   });
 
   useEffect(() => {
+    if (!room) {
+      return;
+    }
     // set header title
     navigation.setOptions({
       headerTitle: () => (
@@ -104,10 +124,13 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     });
   }, [room, navigation]);
 
-  if (loading || !data) {
+  if (loading || !data || roomQuery.loading) {
     return <Loading />;
   }
 
+  if (roomQuery.error) {
+    return <Error error={roomQuery.error} />;
+  }
   if (error) {
     return <Error error={error} />;
   }

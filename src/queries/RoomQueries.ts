@@ -49,6 +49,9 @@ export const ROOMS_QUERY = gql`
 export interface RoomQuery {
   room: RoomFieldsInterface;
 }
+export interface RoomQueryVariables {
+  roomId: string;
+}
 export const ROOM_QUERY = gql`
   query ROOM_QUERY($roomId: ID!) {
     room(roomId: $roomId) {

@@ -74,7 +74,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           textContentType="emailAddress"
           value={email}
         />
-        {emailError && <Text style={TextStyles.error}>{emailError}</Text>}
+        {!!emailError && <Text style={TextStyles.error}>{emailError}</Text>}
         <TextInput
           onChangeText={(text) => onChangePassword(text)}
           placeholder="Password"
@@ -83,7 +83,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           textContentType="password"
           value={password}
         />
-        {passwordError && <Text style={TextStyles.error}>{passwordError}</Text>}
+        {!!passwordError && (
+          <Text style={TextStyles.error}>{passwordError}</Text>
+        )}
       </View>
       <TouchableOpacity onPress={handleLogin} style={ButtonStyles.baseButton}>
         <Text style={TextStyles.button}>login</Text>

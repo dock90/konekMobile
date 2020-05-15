@@ -22,7 +22,12 @@ const styles = StyleSheet.create({
 export type MessagesStackParamList = {
   Rooms: undefined;
   Message: {
-    room: RoomFieldsInterface;
+    /**
+     * room OR roomId are required! Use room if you have it as it will require one
+     * less query to the server.
+     */
+    room?: RoomFieldsInterface;
+    roomId?: string;
   };
 };
 

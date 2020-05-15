@@ -11,6 +11,7 @@ import {
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import { ContactsStack } from './ContactsStackScreen';
+import { MessagesStackParamList } from './MessagesStackScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   },
 });
 type Props = {
-  navigation: StackNavigationProp<ContactsStack>;
+  navigation: StackNavigationProp<ContactsStack & MessagesStackParamList>;
   route: Route;
 };
 
@@ -77,7 +78,6 @@ const ContactScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const handleStartConversation = () => {
     navigation.navigate('Message', {
-      name: data.contact.name,
       roomId: data.contact.profile.roomId,
     });
   };
