@@ -79,10 +79,10 @@ let pn: PubNub | undefined;
  * @return {Promise<void>}
  */
 export async function initPubNub(): Promise<void> {
-  console.log('init');
   if (pn) {
     return;
   }
+  console.log('init PubNub');
 
   const { data } = await client.query<MeQueryInterface>({
     query: ME_QUERY,

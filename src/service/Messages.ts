@@ -4,7 +4,7 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { client } from '../config/Apollo';
-import { AssetInterface } from '../queries/AssetQueries';
+import { AssetFieldsInterface, AssetInterface } from '../queries/AssetQueries';
 import {
   MessageFieldsInterface,
   MESSAGES_QUERY,
@@ -212,15 +212,19 @@ export async function addMessage(
 
     authorInfo = data.member;
   }
-  let assetField = null;
+  let assetField: AssetFieldsInterface | null = null;
   if (asset) {
     assetField = {
       ...asset,
       __typename: 'Asset',
     };
+    if (!assetField.originalFilename) {
+      // Not sure why, but Apollo is dying when this field doesn't exist.
+      assetField.originalFilename = null;
+    }
   }
 
-  const newMessage = {
+  const newMessage: MessageFieldsInterface = {
     messageId,
     body,
     asset: assetField,

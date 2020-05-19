@@ -26,3 +26,14 @@ export const ASSET_FIELDS = gql`
     isAudio
   }
 `;
+export interface SignArgsMutationResultInterface {
+  signUpload: string;
+}
+export interface SignArgsMutationArguments {
+  args: { [key: string]: unknown };
+}
+export const SIGN_ARGS_MUTATION = gql`
+  mutation SIGN_ARGS_MUTATION($args: ParamsToSign!) {
+    signUpload(argToSign: $args)
+  }
+`;

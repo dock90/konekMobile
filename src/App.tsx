@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler';
+import { registerRootComponent } from 'expo';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
-import { AppRegistry, YellowBox } from 'react-native';
+import { YellowBox } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
 import { client } from './config/Apollo';
@@ -39,6 +40,4 @@ function App() {
   }
 }
 
-AppRegistry.registerComponent('KonekMe', () => App);
-
-export default App;
+registerRootComponent(App);
