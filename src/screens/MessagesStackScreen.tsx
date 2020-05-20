@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
+import { BACKGROUND } from '../styles/Colors';
 import RoomsScreen from './RoomsScreen';
 import MessageScreen from './MessageScreen';
 
@@ -38,7 +39,7 @@ const MessagesStackScreen: React.FC = () => {
     <MessagesStack.Navigator
       screenOptions={{
         cardStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: BACKGROUND,
         },
       }}
     >

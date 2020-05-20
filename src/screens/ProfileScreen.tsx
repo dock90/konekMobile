@@ -11,23 +11,24 @@ import { MeFieldsInterface } from '../queries/MeQueries';
 import AcceptInvitation from '../components/AcceptInvitation';
 import Avatar from '../components/Avatar';
 import { MeContext } from '../contexts/MeContext';
+import { BACKGROUND, PRIMARY } from '../styles/Colors';
 
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND,
   },
   errorContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND,
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND,
   },
   profileContainer: {
     flex: 1,
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 12,
-    color: '#5D00D8',
+    color: PRIMARY,
   },
 });
 

@@ -31,7 +31,7 @@ import {
   RoomQueryVariables,
 } from '../queries/RoomQueries';
 import { uploadFile } from '../service/Cloudinary';
-import { sendMessage } from '../service/Messages';
+import { markAllRead, sendMessage } from '../service/Messages';
 import { Recorder } from '../service/Recorder';
 import { PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
@@ -127,6 +127,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     if (!room) {
       return;
     }
+
     // set header title
     navigation.setOptions({
       headerTitle: () => (
@@ -140,6 +141,17 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   }, [room, navigation]);
 
   useEffect(() => {
+    if (!room || loading) {
+      // Wait until after the messages are done loading so that we have them to be able
+      // to set the most recently read message.
+      return;
+    }
+    if (room.qtyUnread > 0) {
+      markAllRead(room.roomId, true);
+    }
+  }, [room, loading]);
+
+  useEffect(() => {
     if (permissionDenied) {
       // If the permission is denied, we want to set the mode to send so the
       // record icon is never shown.
@@ -151,7 +163,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     } else {
       DEFAULT_MODE = MODE_READY;
     }
-  }, [permissionDenied, actionMode]);
+  }, [actionMode]);
 
   if (loading || !data || roomQuery.loading) {
     return <Loading />;

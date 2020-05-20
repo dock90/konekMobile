@@ -10,6 +10,7 @@ import {
 } from '../queries/ContactQueries';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { PRIMARY } from '../styles/Colors';
 import { ContactsStack } from './ContactsStackScreen';
 import { MessagesStackParamList } from './MessagesStackScreen';
 
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   },
   conversationAction: {
     fontSize: 12,
-    color: '#5D00D8',
+    color: PRIMARY,
     textTransform: 'capitalize',
   },
 });

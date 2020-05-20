@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MessageFieldsInterface } from '../queries/MessageQueries';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
+import { PRIMARY, SECONDARY, TEXT_ON_PRIMARY } from '../styles/Colors';
 import formatDateTime from '../utils/formatDate';
 import Asset from './Asset';
 import Avatar from './Avatar';
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 12,
     padding: 12,
-    color: '#FFFFFF',
+    color: TEXT_ON_PRIMARY,
   },
   timestamp: {
     fontSize: 8,
@@ -59,7 +60,7 @@ const Message: React.FC<Props> = ({ messageData, room }) => {
         )}
         <View
           style={{
-            backgroundColor: notMe ? '#69B98F' : '#5D00D8',
+            backgroundColor: notMe ? SECONDARY : PRIMARY,
             borderRadius: 5,
           }}
         >

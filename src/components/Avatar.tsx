@@ -5,12 +5,12 @@ import { MeContext } from '../contexts/MeContext';
 import { AssetFieldsInterface } from '../queries/AssetQueries';
 import { MeFieldsInterface } from '../queries/MeQueries';
 import { avatarUri } from '../service/AssetUris';
-import { BORDER } from '../styles/Colors';
+import { BACKGROUND, SECONDARY } from '../styles/Colors';
 
 const styles = StyleSheet.create({
   icon: {
     textAlign: 'center',
-    color: BORDER,
+    color: SECONDARY,
   },
   image: {
     borderRadius: 50,
@@ -31,7 +31,7 @@ const Avatar: React.FC<Props> = ({ picture, size, style, overlayColor }) => {
     size = 45;
   }
   if (!overlayColor) {
-    overlayColor = '#ffffff';
+    overlayColor = BACKGROUND;
   } else if (overlayColor === 'none') {
     overlayColor = '';
   }

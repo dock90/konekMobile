@@ -1,9 +1,9 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { MessagesStackParamList } from '../screens/MessagesStackScreen';
-import { BORDER } from '../styles/Colors';
+import { BACKGROUND, BORDER, PRIMARY, TEXT_ON_PRIMARY } from '../styles/Colors';
 import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
@@ -16,10 +16,32 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 0.5,
     borderColor: BORDER,
+    backgroundColor: BACKGROUND,
   },
   messageContact: {
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  unreadTag: {
+    position: 'absolute',
+    top: 0,
+    right: -5,
+    backgroundColor: PRIMARY,
+    // so that it stays round, but can grow with longer numbers.
+    minWidth: 17,
+    height: 17,
+    borderRadius: 10,
+    borderColor: BACKGROUND,
+    borderWidth: 0.5,
+    paddingLeft: 4,
+    paddingRight: 4,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  unreadText: {
+    color: TEXT_ON_PRIMARY,
+    textAlign: 'center',
+    fontSize: 10,
   },
 });
 
@@ -34,18 +56,15 @@ const RoomItem: React.FC<Props> = ({ room, navigation }) => {
   };
 
   return (
-    <TouchableOpacity
-      style={[
-        styles.container,
-        { backgroundColor: room.qtyUnread ? '#F5F5F5' : '#FFFFFF' },
-      ]}
-      onPress={handleSelect}
-    >
-      <Avatar
-        style={{ marginRight: 20 }}
-        picture={room.picture}
-        overlayColor="#ffffff"
-      />
+    <TouchableOpacity style={styles.container} onPress={handleSelect}>
+      <View style={{ marginRight: 20, position: 'relative' }}>
+        <Avatar picture={room.picture} overlayColor={BACKGROUND} />
+        {room.qtyUnread > 0 && (
+          <View style={styles.unreadTag}>
+            <Text style={styles.unreadText}>{room.qtyUnread}</Text>
+          </View>
+        )}
+      </View>
       <Text style={styles.messageContact}>{room.name}</Text>
     </TouchableOpacity>
   );

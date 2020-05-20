@@ -163,13 +163,18 @@ export async function addMessage(
 
   if (roomInfo.memberId !== authorId) {
     // We aren't the sender, so we want to update the qty unread.
-    roomInfo.qtyUnread++;
-
     client.writeFragment({
       id: roomId,
       fragment: ROOM_FIELDS,
       fragmentName: 'RoomFields',
-      data: roomInfo,
+      data: {
+        ...roomInfo,
+        // For some unknown reason, I couldn't modify the value directly. Doing a console.log
+        // before and after doing roomInfo.qtyUnread++ would show the same number both times!
+        // I'm suspicious that the cache is immutable or something but couldn't find any info
+        // in the docs.
+        qtyUnread: roomInfo.qtyUnread + 1,
+      },
     });
   }
 
@@ -254,12 +259,7 @@ function writeRoomInfo(roomId: string, info: RoomFieldsInterface): void {
   });
 }
 
-/**
- *
- * @param roomId {String}
- * @param [updateServer=true] {Boolean}
- */
-export async function markAllRead(roomId: string, updateServer: boolean) {
+export async function markAllRead(roomId: string, updateServer = true) {
   const roomInfo = getRoomInfo(roomId);
 
   if (!roomInfo) {
@@ -273,7 +273,7 @@ export async function markAllRead(roomId: string, updateServer: boolean) {
   let messages;
   try {
     // get the local message list.
-    const data = await client.readQuery({
+    const data = client.readQuery({
       query: MESSAGES_QUERY,
       variables: { roomId, after: null },
     });

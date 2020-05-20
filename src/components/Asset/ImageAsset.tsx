@@ -43,7 +43,7 @@ const ImageAsset: React.FC<Props> = ({
         console.log(uri);
       }
     );
-  }, [asset, uri]);
+  }, [asset, uri, thumbnailWidth]);
 
   function handleImageTouch() {
     toggleModal(true);
