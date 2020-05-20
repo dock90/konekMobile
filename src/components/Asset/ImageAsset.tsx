@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, Modal, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import { AssetFieldsInterface } from '../../queries/AssetQueries';
 import { CloudinaryInfo } from '../../queries/MeQueries';
@@ -27,8 +34,8 @@ const ImageAsset: React.FC<Props> = ({
     Image.getSize(
       uri,
       (width, height) => {
-        const scale = width / width;
-        setThumbSize({ width: width, height: Math.round(height / scale) });
+        const scale = thumbnailWidth / (width > 0 ? width : 1);
+        setThumbSize({ width: width, height: Math.round(height * scale) });
       },
       (error) => {
         // now what?
@@ -68,6 +75,8 @@ const ImageAsset: React.FC<Props> = ({
           cropWidth={windowDimen.width}
           imageHeight={windowDimen.height}
           imageWidth={windowDimen.width}
+          enableSwipeDown={true}
+          onSwipeDown={handleRequestClose}
         >
           <Image
             style={{
@@ -78,6 +87,22 @@ const ImageAsset: React.FC<Props> = ({
             resizeMode="contain"
           />
         </ImageZoom>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            // so that it is on top of the image.
+            zIndex: 1000,
+          }}
+        >
+          <Text
+            style={{ textAlign: 'center', color: 'gray', fontStyle: 'italic' }}
+          >
+            swipe down to close
+          </Text>
+        </View>
       </Modal>
     </>
   );

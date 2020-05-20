@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
+  Platform,
   Route,
   StyleSheet,
   TextInput,
@@ -267,7 +268,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     <KeyboardAvoidingView
       behavior="height"
       style={styles.container}
-      keyboardVerticalOffset={10}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 85}
     >
       <View style={styles.messages}>
         <FlatList

@@ -1,21 +1,37 @@
 import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
+import { AppLoading, registerRootComponent } from 'expo';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
-import { YellowBox } from 'react-native';
+import { Platform, StatusBar, YellowBox } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
 import { client } from './config/Apollo';
 import { auth } from './config/firebase';
 import AuthContainer from './components/AuthContainer';
 import './config/PubNub';
+import { MaterialIcons } from '@expo/vector-icons';
+import { loadAsync } from 'expo-font';
 
 enableScreens();
 // PubNub causes this warning, we can disable it.
 YellowBox.ignoreWarnings(['Setting a timer']);
 
+StatusBar.setHidden(false);
+StatusBar.setBarStyle('dark-content');
+if (Platform.OS === 'ios') {
+  StatusBar.setNetworkActivityIndicatorVisible(true);
+} else if (Platform.OS === 'android') {
+  StatusBar.setTranslucent(false);
+}
+
+async function initApp() {
+  await loadAsync(MaterialIcons.font);
+}
+
 function App() {
   const [isAuthorized, setAuthorized] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
+  const [preloaded, setPreloaded] = useState(false);
 
   useEffect(() => {
     // Listen for authentication state to change.
@@ -26,8 +42,15 @@ function App() {
       } else {
         setAuthorized(false);
       }
+      setAuthReady(true);
     });
   });
+
+  if (!authReady || !preloaded) {
+    return (
+      <AppLoading startAsync={initApp} onFinish={() => setPreloaded(true)} />
+    );
+  }
 
   if (isAuthorized) {
     return (
