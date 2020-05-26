@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -7,24 +7,15 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { auth } from '../config/firebase';
-import { MeFieldsInterface } from '../queries/MeQueries';
+import { useMe } from '../hooks/useMe';
 import AcceptInvitation from '../components/AcceptInvitation';
 import Avatar from '../components/Avatar';
-import { MeContext } from '../contexts/MeContext';
 import { BACKGROUND, PRIMARY } from '../styles/Colors';
 import { ContainerStyles } from '../styles/ContainerStyles';
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    ...ContainerStyles.baseContainer,
-    backgroundColor: BACKGROUND,
-  },
-  errorContainer: {
-    ...ContainerStyles.baseContainer,
-    backgroundColor: BACKGROUND,
-  },
   container: {
-    flex: 1,
+    ...ContainerStyles.baseContainer,
     backgroundColor: BACKGROUND,
   },
   profileContainer: {
@@ -59,7 +50,7 @@ const styles = StyleSheet.create({
 });
 
 function ProfileScreen() {
-  const me = useContext(MeContext) as MeFieldsInterface;
+  const { me } = useMe();
 
   const handleLogout = () => {
     auth.signOut().then(() => {
@@ -69,8 +60,7 @@ function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/*<Header title="Profile" />*/}
-      <View style={styles.profileContainer}>
+      <View style={ContainerStyles.baseContainer}>
         <View style={styles.profile}>
           <Avatar picture={me.picture} size={80} style={styles.picture} />
           <Text style={styles.profileTitle}>{me.name}</Text>

@@ -17,9 +17,7 @@ import {
 import { MEMBER_FIELDS, MEMBER_QUERY } from '../queries/MemberQueries';
 import {
   ROOM_FIELDS,
-  ROOM_QUERY,
   RoomFieldsInterface,
-  RoomQuery,
   ROOMS_QUERY,
   RoomsQuery,
 } from '../queries/RoomQueries';
@@ -147,21 +145,16 @@ export async function addMessage(
   authorId: string,
   asset: AssetInterface
 ): Promise<void> {
-  let roomInfo = getRoomInfo(roomId);
+  const roomInfo = getRoomInfo(roomId);
 
   if (!roomInfo) {
-    const roomQuery = await client.query<RoomQuery>({
-      fetchPolicy: 'cache-only',
-      query: ROOM_QUERY,
-      variables: { roomId },
+    // The room info isn't currently  in the cache, so we need to refresh the room list.
+    await client.query<RoomsQuery>({
+      // force a refresh of the rooms list.
+      fetchPolicy: 'network-only',
+      query: ROOMS_QUERY,
     });
-    if (!roomQuery.data) {
-      return;
-    }
-    roomInfo = roomQuery.data.room;
-  }
-
-  if (roomInfo.memberId !== authorId) {
+  } else if (roomInfo.memberId !== authorId) {
     // We aren't the sender, so we want to update the qty unread.
     client.writeFragment({
       id: roomId,

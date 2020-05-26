@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
-import { MeContext } from '../contexts/MeContext';
+import { useMe } from '../hooks/useMe';
 import { AssetFieldsInterface } from '../queries/AssetQueries';
-import { MeFieldsInterface } from '../queries/MeQueries';
 import { originalPath } from '../service/AssetUris';
 import ImageAsset from './Asset/ImageAsset';
 
@@ -49,7 +48,9 @@ const Asset: React.FC<Props> = ({ asset, textColor }) => {
     color: textColor ? textColor : '',
   };
 
-  const { cloudinaryInfo } = useContext(MeContext) as MeFieldsInterface;
+  const {
+    me: { cloudinaryInfo },
+  } = useMe();
   const [audio, setAudio] = useState<null | Audio.Sound>(null);
   const [playbackStatus, setPlaybackStatus] = useState(STATE_INITIAL);
 

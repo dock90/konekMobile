@@ -43,13 +43,6 @@ const styles = StyleSheet.create({
   },
   sendIcon: {
     color: PRIMARY,
-    marginRight: 5,
-  },
-  sendText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    color: PRIMARY,
   },
 });
 
@@ -58,12 +51,13 @@ function AcceptInvitation() {
   const [viewHeight, setViewHeight] = useState(false);
   const [acceptInvitation] = useMutation(ACCEPT_INVITATION_MUTATION);
 
-  const handleAcceptInvitation = (inviteCode) => {
-    acceptInvitation({
+  const handleAcceptInvitation = async () => {
+    await acceptInvitation({
       variables: {
         code: inviteCode,
       },
-    }).then(() => setInviteCode(''));
+    });
+    setInviteCode('');
   };
 
   return (
@@ -81,11 +75,10 @@ function AcceptInvitation() {
           value={inviteCode}
         />
         <TouchableOpacity
-          onPress={() => handleAcceptInvitation(inviteCode)}
+          onPress={handleAcceptInvitation}
           style={styles.sendContainer}
         >
-          <MaterialIcons name="send" style={styles.sendIcon} />
-          <Text style={styles.sendText}>link</Text>
+          <MaterialIcons name="send" style={styles.sendIcon} size={20} />
         </TouchableOpacity>
       </View>
     </View>

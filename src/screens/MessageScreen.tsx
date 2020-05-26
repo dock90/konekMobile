@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -16,8 +16,7 @@ import { useQuery } from '@apollo/client';
 import Error from '../components/Error';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-import { MeContext } from '../contexts/MeContext';
-import { MeFieldsInterface } from '../queries/MeQueries';
+import { useMe } from '../hooks/useMe';
 import {
   MessageQueryVariables,
   MESSAGES_QUERY,
@@ -94,7 +93,9 @@ type Props = {
 };
 
 const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { cloudinaryInfo } = useContext(MeContext) as MeFieldsInterface;
+  const {
+    me: { cloudinaryInfo },
+  } = useMe();
   const [messageText, setMessageText] = useState('');
   // A semaphore to prevent multiple of messages pages from loading simultaneously.
   const [isLoadingNext, setIsLoadingNext] = useState(false);

@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image, ImageStyle, StyleProp, StyleSheet } from 'react-native';
-import { MeContext } from '../contexts/MeContext';
+import { useMe } from '../hooks/useMe';
 import { AssetFieldsInterface } from '../queries/AssetQueries';
-import { MeFieldsInterface } from '../queries/MeQueries';
 import { avatarUri } from '../service/AssetUris';
 import { BACKGROUND, SECONDARY } from '../styles/Colors';
 
@@ -25,7 +24,9 @@ type Props = {
 };
 
 const Avatar: React.FC<Props> = ({ picture, size, style, overlayColor }) => {
-  const { cloudinaryInfo } = useContext(MeContext) as MeFieldsInterface;
+  const {
+    me: { cloudinaryInfo },
+  } = useMe();
 
   if (!size) {
     size = 45;
