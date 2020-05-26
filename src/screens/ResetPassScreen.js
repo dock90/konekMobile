@@ -1,26 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
 import { LogoStyles } from '../styles/LogoStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonStyles } from '../styles/ButtonStyles';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import { ContainerStyles } from '../styles/ContainerStyles';
 
 function ResetPassScreen({ navigation }) {
   const [email, onChangeEmail] = useState('');
@@ -29,7 +15,7 @@ function ResetPassScreen({ navigation }) {
     navigation.navigate('ResetPassSuccessScreen');
   };
   return (
-    <View style={styles.container}>
+    <View style={ContainerStyles.baseContainer}>
       <Image
         source={coloredLogo3x}
         style={[LogoStyles.fullSize, { marginBottom: 20 }]}

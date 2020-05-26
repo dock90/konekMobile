@@ -11,4 +11,7 @@ export const ButtonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  disabledButton: {
+    backgroundColor: 'gray',
+  },
 });

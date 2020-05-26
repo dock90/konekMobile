@@ -11,15 +11,11 @@ import {
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import { PRIMARY } from '../styles/Colors';
+import { ContainerStyles } from '../styles/ContainerStyles';
 import { ContactsStack } from './ContactsStackScreen';
 import { MessagesStackParamList } from './MessagesStackScreen';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   contactContainer: {
     width: 200,
     alignItems: 'center',
@@ -84,7 +80,7 @@ const ContactScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={ContainerStyles.baseContainer}>
       <View style={styles.contactContainer}>
         <View style={styles.contact}>
           <Avatar picture={picture} size={80} style={styles.contactImage} />

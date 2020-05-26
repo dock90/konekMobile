@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { BORDER } from './Colors';
+import { BORDER, ERROR_TEXT } from './Colors';
 
 export const InputStyles = StyleSheet.create({
   base: {
@@ -12,5 +12,9 @@ export const InputStyles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     fontSize: 12,
+  },
+  error: {
+    borderColor: ERROR_TEXT,
+    color: ERROR_TEXT,
   },
 });

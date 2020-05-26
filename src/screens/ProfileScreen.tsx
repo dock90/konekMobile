@@ -12,18 +12,15 @@ import AcceptInvitation from '../components/AcceptInvitation';
 import Avatar from '../components/Avatar';
 import { MeContext } from '../contexts/MeContext';
 import { BACKGROUND, PRIMARY } from '../styles/Colors';
+import { ContainerStyles } from '../styles/ContainerStyles';
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...ContainerStyles.baseContainer,
     backgroundColor: BACKGROUND,
   },
   errorContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...ContainerStyles.baseContainer,
     backgroundColor: BACKGROUND,
   },
   container: {

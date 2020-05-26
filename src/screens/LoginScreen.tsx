@@ -5,23 +5,20 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { AuthStack } from '../components/AuthContainer';
 import { auth } from '../config/firebase';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
+import { ContainerStyles } from '../styles/ContainerStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { LogoStyles } from '../styles/LogoStyles';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonStyles } from '../styles/ButtonStyles';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   inputContainer: {
     marginBottom: 20,
   },
@@ -59,8 +56,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     });
   };
 
+  const disabled = !email || !password;
+
   return (
-    <View style={styles.container}>
+    <View style={ContainerStyles.baseContainer}>
       <Image
         source={coloredLogo3x}
         style={[LogoStyles.fullSize, { marginBottom: 80 }]}
@@ -87,7 +86,14 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={TextStyles.error}>{passwordError}</Text>
         )}
       </View>
-      <TouchableOpacity onPress={handleLogin} style={ButtonStyles.baseButton}>
+      <TouchableOpacity
+        disabled={disabled}
+        onPress={handleLogin}
+        style={[
+          ButtonStyles.baseButton,
+          disabled ? ButtonStyles.disabledButton : null,
+        ]}
+      >
         <Text style={TextStyles.button}>login</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -96,6 +102,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       >
         <Text style={TextStyles.link}>Forgot Your Password?</Text>
       </TouchableOpacity>
+      <TouchableHighlight
+        onPress={() => navigation.navigate('Signup')}
+        style={styles.resetPasswordContainer}
+      >
+        <Text style={TextStyles.link}>Need an account?</Text>
+      </TouchableHighlight>
     </View>
   );
 };

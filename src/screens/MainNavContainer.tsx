@@ -34,7 +34,7 @@ const MainNavContainer: React.FC = () => {
     <MeContext.Provider value={data.me}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName="Messages"
+          initialRouteName={data.me.access.messages ? 'Messages' : 'Profile'}
           tabBarOptions={{
             activeTintColor: PRIMARY,
             inactiveTintColor: BORDER,
