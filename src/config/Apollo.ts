@@ -61,6 +61,8 @@ const cache = new InMemoryCache({
 });
 
 export const client = new ApolloClient({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore There is a bug in the types.
   link: authLink.concat(httpLink),
   cache,
   resolvers: {

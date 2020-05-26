@@ -94,7 +94,7 @@ export async function sendMessage(
       }
       const messages = messagesData.messages;
 
-      if (hasPreviousMessage(messages, data.sendMessage.messageId)) {
+      if (!data || hasPreviousMessage(messages, data.sendMessage.messageId)) {
         // PubNub sometimes gets the message delivered before we get our response back.
         return;
       }

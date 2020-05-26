@@ -43,13 +43,11 @@ export async function uploadFile(
     variables: { args: toSign },
   });
 
-  console.log(file);
-
   const data = new FormData();
   data.append('timestamp', toSign.timestamp);
   data.append('api_key', config.apiKey);
   data.append('file', file);
-  data.append('signature', signed.data.signUpload);
+  data.append('signature', signed.data?.signUpload);
   data.append('folder', config.folder);
   data.append('tags', tags);
 
