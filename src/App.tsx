@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler';
-import { AppLoading, registerRootComponent } from 'expo';
+import { registerRootComponent } from 'expo';
+import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import { enableScreens } from 'react-native-screens';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Platform, StatusBar, YellowBox } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
@@ -24,14 +25,19 @@ if (Platform.OS === 'ios') {
   StatusBar.setTranslucent(false);
 }
 
-async function initApp() {
-  await loadAsync(MaterialIcons.font);
-}
-
 function App() {
   const [isAuthorized, setAuthorized] = useState(false);
   const [authReady, setAuthReady] = useState(false);
-  const [preloaded, setPreloaded] = useState(false);
+
+  const initApp = useCallback(async () => {
+    await preventAutoHideAsync();
+    await loadAsync(MaterialIcons.font);
+    await hideAsync();
+  }, []);
+
+  useEffect(() => {
+    initApp();
+  });
 
   useEffect(() => {
     // Listen for authentication state to change.
@@ -46,10 +52,8 @@ function App() {
     });
   });
 
-  if (!authReady || !preloaded) {
-    return (
-      <AppLoading startAsync={initApp} onFinish={() => setPreloaded(true)} />
-    );
+  if (!authReady) {
+    return null;
   }
 
   if (isAuthorized) {
