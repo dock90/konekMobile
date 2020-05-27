@@ -289,6 +289,8 @@ type Query {
         after: String,
         "How many results to return, max of 100."
         first: Float = 25.0,
+        "If only contacts that can be messaged should be included."
+        messageOnly: Boolean = false,
         "Limit the contacts to certain tags."
         tags: [ID!]
     ): ContactList!

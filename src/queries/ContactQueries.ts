@@ -144,7 +144,7 @@ export interface AllContactsQueryVariables {
 
 export const ALL_CONTACTS_QUERY = gql`
   query ALL_CONTACTS_QUERY($tags: [ID!]) {
-    contacts(tags: $tags) {
+    contacts(tags: $tags, messageOnly: true) {
       data {
         ...ContactSummaryFields
       }

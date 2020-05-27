@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
 import Error from '../components/Error';
 import Loading from '../components/Loading';
@@ -22,9 +22,7 @@ type Props = {
 const RoomsScreen: React.FC<Props> = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const { refresh: refreshMe } = useMe();
-  const { loading, error, data, refetch: refetchRooms } = useQuery<RoomsQuery>(
-    ROOMS_QUERY
-  );
+  const { loading, error, data, refetch } = useQuery<RoomsQuery>(ROOMS_QUERY);
 
   if (loading || !data) {
     return <Loading />;
@@ -35,7 +33,7 @@ const RoomsScreen: React.FC<Props> = ({ navigation }) => {
   }
 
   async function handleRefresh() {
-    const activities: Array<Promise<unknown>> = [refetchRooms(), refreshMe()];
+    const activities: Array<Promise<unknown>> = [refetch(), refreshMe()];
     setRefreshing(true);
     await Promise.all(activities);
     setRefreshing(false);
@@ -51,6 +49,9 @@ const RoomsScreen: React.FC<Props> = ({ navigation }) => {
           <RoomItem key={item.roomId} room={item} navigation={navigation} />
         )}
         keyExtractor={(item) => item.roomId}
+        ListEmptyComponent={
+          <Text style={{ textAlign: 'center' }}>No Messages</Text>
+        }
       />
     </View>
   );

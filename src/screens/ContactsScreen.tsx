@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
 import {
   ALL_CONTACTS_QUERY,
@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
 });
 
 const ContactsScreen: React.FC = () => {
-  const { data, error, loading } = useQuery<
+  const [refreshing, setRefreshing] = useState(false);
+  const { data, error, loading, refetch } = useQuery<
     AllContactsQueryResults,
     AllContactsQueryVariables
   >(ALL_CONTACTS_QUERY);
@@ -37,14 +38,25 @@ const ContactsScreen: React.FC = () => {
     return <Error error={error} />;
   }
 
+  async function handleRefresh() {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
         data={data.contacts.data}
         renderItem={({ item }) => (
           <ContactItem key={item.contactId} contactData={item} />
         )}
         keyExtractor={(item) => item.contactId}
+        ListEmptyComponent={
+          <Text style={{ textAlign: 'center' }}>No Contacts</Text>
+        }
       />
     </View>
   );
