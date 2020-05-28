@@ -2,11 +2,11 @@
   "expo": {
     "name": "Konek Me",
     "slug": "konek_me",
-    "privacy": "public",
+    "privacy": "unlisted",
+    "sdkVersion": "37.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.1.0",
     "orientation": "portrait",
@@ -33,6 +33,5 @@
       "permissions": []
     },
     "description": "",
-    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }

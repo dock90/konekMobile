@@ -1,9 +1,8 @@
 import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, YellowBox } from 'react-native';
+import { Platform, StatusBar, YellowBox, AppRegistry } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
 import { client } from './config/Apollo';
@@ -65,4 +64,4 @@ function App() {
   }
 }
 
-registerRootComponent(App);
+AppRegistry.registerComponent('main', () => App);
