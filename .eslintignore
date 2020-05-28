@@ -1,3 +1,4 @@
 dist/
 web-build/
 types.d.ts
+*.js

@@ -26,20 +26,14 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    'react/display-name': 'off',
+    '@typescript-eslint/explicit-function-return-type': 1,
+    'react/display-name': 1,
   },
   overrides: [
     {
-      files: ['*.js'],
-      rules: {
-        '@typescript-eslint/explicit-function-return-type': 'off',
-      },
-    },
-    {
       files: ['*.tsx'],
       rules: {
-        'react/prop-types': 'off',
+        'react/prop-types': 0,
       },
     },
   ],

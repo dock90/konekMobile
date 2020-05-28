@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -12,7 +12,6 @@
     "noImplicitReturns": true,
     "strict": true,
     "target": "esnext",
-    "outDir": "./dist",
     "rootDir": "./src",
     "sourceMap": true,
     "noUnusedLocals": true,
@@ -21,7 +20,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "web-build",
+    "index.js",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js",

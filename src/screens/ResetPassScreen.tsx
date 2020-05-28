@@ -1,18 +1,23 @@
-import PropTypes from 'prop-types';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
+import { AuthStack } from '../components/AuthContainer';
 import { LogoStyles } from '../styles/LogoStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonStyles } from '../styles/ButtonStyles';
 import { ContainerStyles } from '../styles/ContainerStyles';
 
-function ResetPassScreen({ navigation }) {
+type Props = {
+  navigation: StackNavigationProp<AuthStack>;
+};
+
+const ResetPassScreen: React.FC<Props> = ({ navigation }) => {
   const [email, onChangeEmail] = useState('');
 
   const handleResetPass = () => {
-    navigation.navigate('ResetPassSuccessScreen');
+    navigation.navigate('ResetPassSuccess');
   };
   return (
     <View style={ContainerStyles.baseContainer}>
@@ -37,12 +42,6 @@ function ResetPassScreen({ navigation }) {
       </TouchableOpacity>
     </View>
   );
-}
-
-ResetPassScreen.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }),
 };
 
 export default ResetPassScreen;

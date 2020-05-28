@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 });
 
 function AcceptInvitation() {
-  const [inviteCode, setInviteCode] = useState();
+  const [inviteCode, setInviteCode] = useState('');
   const [viewHeight, setViewHeight] = useState(false);
   const [acceptInvitation] = useMutation(ACCEPT_INVITATION_MUTATION);
 

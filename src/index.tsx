@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import { enableScreens } from 'react-native-screens';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, YellowBox } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
@@ -25,19 +25,17 @@ if (Platform.OS === 'ios') {
   StatusBar.setTranslucent(false);
 }
 
+async function initApp(): Promise<void> {
+  await preventAutoHideAsync();
+  await loadAsync(MaterialIcons.font);
+  await hideAsync();
+}
+
+initApp();
+
 function App() {
   const [isAuthorized, setAuthorized] = useState(false);
   const [authReady, setAuthReady] = useState(false);
-
-  const initApp = useCallback(async () => {
-    await preventAutoHideAsync();
-    await loadAsync(MaterialIcons.font);
-    await hideAsync();
-  }, []);
-
-  useEffect(() => {
-    initApp();
-  });
 
   useEffect(() => {
     // Listen for authentication state to change.

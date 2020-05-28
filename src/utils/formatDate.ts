@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-const formatDateTime = (isoDT) => {
+const formatDateTime = (isoDT: string): string => {
   return format(new Date(isoDT), 'p');
 };
 
