@@ -1,5 +1,5 @@
 import PubNub, { ListenerParameters, MessageEvent, StatusEvent } from 'pubnub';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { PUB_NUB_CONNECTION_STATE_QUERY } from '../queries/LocalStateQueries';
 import { addMessage } from '../service/Messages';
 import { client } from './Apollo';
