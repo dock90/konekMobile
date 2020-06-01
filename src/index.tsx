@@ -16,8 +16,6 @@ enableScreens();
 // PubNub causes this warning, we can disable it.
 YellowBox.ignoreWarnings(['Setting a timer']);
 
-StatusBar.setHidden(false);
-StatusBar.setBarStyle('dark-content');
 if (Platform.OS === 'ios') {
   StatusBar.setNetworkActivityIndicatorVisible(true);
 } else if (Platform.OS === 'android') {
@@ -25,9 +23,13 @@ if (Platform.OS === 'ios') {
 }
 
 async function initApp(): Promise<void> {
-  await preventAutoHideAsync();
-  await loadAsync(MaterialIcons.font);
-  await hideAsync();
+  try {
+    await preventAutoHideAsync();
+    await loadAsync(MaterialIcons.font);
+    await hideAsync();
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 initApp();
@@ -55,9 +57,12 @@ function App() {
 
   if (isAuthorized) {
     return (
-      <ApolloProvider client={client}>
-        <MainNavContainer />
-      </ApolloProvider>
+      <>
+        <StatusBar hidden={false} barStyle="light-content" />
+        <ApolloProvider client={client}>
+          <MainNavContainer />
+        </ApolloProvider>
+      </>
     );
   } else {
     return <AuthContainer />;

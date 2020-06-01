@@ -7,6 +7,9 @@ export const TextStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: ERROR_TEXT,
+    marginRight: 10,
+    marginLeft: 10,
+    textAlign: 'center',
   },
   h1: {
     fontSize: 16,

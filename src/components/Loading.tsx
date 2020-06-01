@@ -4,11 +4,12 @@ import { PRIMARY } from '../styles/Colors';
 
 type Props = {
   size?: number | 'small' | 'large';
+  color?: string;
 };
 
-const Loading: React.FC<Props> = ({ size }) => (
+const Loading: React.FC<Props> = ({ size, color }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <ActivityIndicator size={size || 'large'} color={PRIMARY} />
+    <ActivityIndicator size={size || 'large'} color={color || PRIMARY} />
   </View>
 );
 

@@ -10,8 +10,10 @@ import {
   View,
 } from 'react-native';
 import { AuthStack } from '../components/AuthContainer';
+import Loading from '../components/Loading';
 import { auth } from '../config/firebase';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
+import { INVALID_EMAIL, INVALID_PASSWORD } from '../config/Messages';
 import { ContainerStyles } from '../styles/ContainerStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { LogoStyles } from '../styles/LogoStyles';
@@ -21,6 +23,7 @@ import { ButtonStyles } from '../styles/ButtonStyles';
 const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 20,
+    alignItems: 'center',
   },
   resetPasswordContainer: {
     height: 40,
@@ -34,35 +37,46 @@ type Props = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
+  const [processing, setProcessing] = useState(false);
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async (): Promise<void> => {
+    if (processing) {
+      return;
+    }
     // reset error states
+    setProcessing(true);
     setEmailError('');
     setPasswordError('');
 
     // handle authentication
-    auth.signInWithEmailAndPassword(email, password).catch((error) => {
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (error) {
       const errorCode = error.code;
       if (errorCode === 'auth/invalid-email') {
-        setEmailError('You entered an incorrect email.');
+        setEmailError(INVALID_EMAIL);
       }
       if (errorCode === 'auth/wrong-password') {
-        setPasswordError('You entered an incorrect password.');
+        setPasswordError(INVALID_PASSWORD);
+      } else {
+        setEmailError(error.message);
+        console.log(error);
       }
-    });
+    }
+    setProcessing(false);
   };
 
-  const disabled = !email || !password;
+  const disabled = !email || !password || processing;
 
   return (
     <View style={ContainerStyles.baseContainer}>
       <Image
         source={coloredLogo3x}
-        style={[LogoStyles.fullSize, { marginBottom: 80 }]}
+        style={[LogoStyles.fullSize, { marginBottom: 20 }]}
       />
       <View style={styles.inputContainer}>
         <TextInput
@@ -94,7 +108,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           disabled ? ButtonStyles.disabledButton : null,
         ]}
       >
-        <Text style={TextStyles.button}>login</Text>
+        {!processing && <Text style={TextStyles.button}>login</Text>}
+        {processing && <Loading size={20} color="white" />}
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('ResetPass')}
