@@ -3,8 +3,8 @@
 <plist version="1.0">
 <dict>
         <key>EXUpdatesSDKVersion</key>
-        <string>YOUR-APP-SDK-VERSION-HERE</string>
-        <key>EXUpdatesURL</key>
+        <string>37</string>
+        <key>https://expo.io/@jeffreymb/konek_me</key>
         <string>YOUR-APP-URL-HERE</string>
 </dict>
 </plist>

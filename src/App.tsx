@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import 'expo-asset';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
