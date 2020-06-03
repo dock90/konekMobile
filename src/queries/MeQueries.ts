@@ -19,6 +19,7 @@ export interface PubNubInfo {
    * Channel group to subscribe to.
    */
   channelGroup: string;
+  channels: Array<string>;
 }
 
 export interface AlgoliaInfo {
@@ -88,6 +89,7 @@ export const ME_FIELDS = gql`
       authKey
       expires
       channelGroup
+      channels
     }
     algoliaInfo {
       appId

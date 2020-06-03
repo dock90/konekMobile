@@ -5,6 +5,7 @@ import { addMessage } from '../service/Messages';
 import { client } from './Apollo';
 import { ME_QUERY, MeQueryInterface } from '../queries/MeQueries';
 import { auth } from './firebase';
+import { clearSubscriptions, refreshSubscriptions } from './PushNotifications';
 
 const LOCAL_STORAGE_UUID_KEY = 'pnuuid';
 
@@ -34,19 +35,28 @@ function setConnected(connected: boolean) {
 const listeners: ListenerParameters = {
   message: async (message: MessageEvent) => {
     const data = message.message;
-    if (data.type !== 'message') {
-      console.log(message);
-      // We don't (yet) know how to do anything other than handle messages.
-      return;
+    switch (data.type) {
+      case 'message':
+        await addMessage(
+          data.messageId,
+          data.roomId,
+          data.body,
+          data.authorId,
+          data.asset
+        );
+        break;
+      case 'chChange':
+        console.log(data.type);
+        if (pn) {
+          // TODO: refresh room list and contacts.
+          await refreshSubscriptions(pn, true);
+        }
+        break;
+      default:
+        // Unknown message type.
+        console.log(`Unknown message type: ${JSON.stringify(message)}`);
+        break;
     }
-
-    await addMessage(
-      data.messageId,
-      data.roomId,
-      data.body,
-      data.authorId,
-      data.asset
-    );
   },
   status: async function (status: StatusEvent) {
     switch (status.category) {
@@ -105,6 +115,8 @@ export async function initPubNub(): Promise<void> {
   pn.subscribe({
     channelGroups: [pubNubInfo.channelGroup],
   });
+
+  await refreshSubscriptions(pn, false);
 }
 
 /**
@@ -113,6 +125,7 @@ export async function initPubNub(): Promise<void> {
  */
 export async function closePubNub() {
   if (pn) {
+    await clearSubscriptions(pn);
     pn.removeListener(listeners);
     pn.unsubscribeAll();
     pn = undefined;

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "696329386413",
+    "firebase_url": "https://equiptercrm.firebaseio.com",
+    "project_id": "equiptercrm",
+    "storage_bucket": "equiptercrm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696329386413:android:ee6951b2801ac126024924",
+        "android_client_info": {
+          "package_name": "com.konekme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696329386413-ck2afl4ivjr77mbhn8uc9ce8rb722ra9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClj0Q9AgAm934Tdr5LeVMzBqLG0yTKVIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696329386413-ck2afl4ivjr77mbhn8uc9ce8rb722ra9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -274,6 +274,8 @@ type PubNubInfo {
     authKey: String!
     "Channel group to subscribe to."
     channelGroup: String!
+    "List of all channels that the profile should be subscribed to. Primarily useful for contexts (push notifications) where channel groups aren't supported"
+    channels: [String!]!
     "New keys are valid for 5 days."
     expires: DateTime!
     "`subscribeKey` used when initializing PubNub"
