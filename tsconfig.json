@@ -8,7 +8,7 @@
     "lib": ["es6"],
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "noEmit": false,
+    "noEmit": true,
     "noImplicitReturns": true,
     "strict": true,
     "target": "esnext",
