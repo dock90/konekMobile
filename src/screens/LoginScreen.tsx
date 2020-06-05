@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -117,12 +116,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       >
         <Text style={TextStyles.link}>Forgot Your Password?</Text>
       </TouchableOpacity>
-      <TouchableHighlight
+      <TouchableOpacity
         onPress={() => navigation.navigate('Signup')}
         style={styles.resetPasswordContainer}
       >
         <Text style={TextStyles.link}>Need an account?</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
     </View>
   );
 };

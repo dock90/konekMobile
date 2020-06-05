@@ -8,6 +8,9 @@
 #import <UMReactNativeAdapter/UMNativeModulesProxy.h>
 #import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
 
+#import <EXSplashScreen/EXSplashScreenService.h>
+#import <UMCore/UMModuleRegistryProvider.h>
+
 #if DEBUG
 //  #import <FlipperKit/FlipperClient.h>
 //  #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -69,6 +72,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  EXSplashScreenService *splashScreenService = (EXSplashScreenService *)[UMModuleRegistryProvider getSingletonModuleForClass:[EXSplashScreenService class]];
+  [splashScreenService showSplashScreenFor:rootViewController];
 
   return bridge;
 }
