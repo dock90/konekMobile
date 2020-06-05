@@ -1,4 +1,4 @@
-package com.konekme.generated;
+package com.konek.me.generated;
 
 import java.util.Arrays;
 import java.util.List;

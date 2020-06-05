@@ -1,4 +1,4 @@
-package com.konekme;
+package com.konek.me;
 
 import android.os.Bundle;
 

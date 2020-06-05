@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:696329386413:android:ee6951b2801ac126024924",
+        "mobilesdk_app_id": "1:696329386413:android:acb9efce5d63aef1024924",
         "android_client_info": {
-          "package_name": "com.konekme"
+          "package_name": "com.konek.me"
         }
       },
       "oauth_client": [
