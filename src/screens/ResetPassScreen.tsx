@@ -1,4 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
+import Loading from '../components/Loading';
+import { auth } from '../config/firebase';
 import React, { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
@@ -15,9 +17,16 @@ type Props = {
 
 const ResetPassScreen: React.FC<Props> = ({ navigation }) => {
   const [email, onChangeEmail] = useState('');
+  const [processing, setProcessing] = useState(false);
 
-  const handleResetPass = () => {
+  const handleResetPass = async () => {
+    setProcessing(true);
+    try {
+      await auth.sendPasswordResetEmail(email);
+    } catch (e) {}
+
     navigation.navigate('ResetPassSuccess');
+    setProcessing(false);
   };
   return (
     <View style={ContainerStyles.baseContainer}>
@@ -33,12 +42,18 @@ const ResetPassScreen: React.FC<Props> = ({ navigation }) => {
         style={InputStyles.base}
         textContentType="emailAddress"
         value={email}
+        editable={!processing}
       />
       <TouchableOpacity
         onPress={handleResetPass}
-        style={ButtonStyles.baseButton}
+        disabled={processing}
+        style={[
+          ButtonStyles.baseButton,
+          processing ? ButtonStyles.disabledButton : {},
+        ]}
       >
-        <Text style={TextStyles.button}>send reset email</Text>
+        {!processing && <Text style={TextStyles.button}>send reset email</Text>}
+        {processing && <Loading size={20} color="white" />}
       </TouchableOpacity>
     </View>
   );

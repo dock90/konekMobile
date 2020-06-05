@@ -6,4 +6,8 @@ export const ContainerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textContainer: {
+    marginRight: 25,
+    marginLeft: 25,
+  },
 });

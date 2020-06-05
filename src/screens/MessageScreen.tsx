@@ -240,7 +240,6 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   }
   async function handlePressOut() {
-    console.log('OUT');
     if (!recording) {
       return;
     }
