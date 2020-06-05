@@ -1,23 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
+import HeaderBackImage from '../components/HeaderBackImage';
 import { BACKGROUND } from '../styles/Colors';
 import ContactsScreen from './ContactsScreen';
 import ContactScreen from './ContactScreen';
-
-const styles = StyleSheet.create({
-  backContainer: {
-    width: 60,
-    height: 40,
-    marginBottom: 20,
-  },
-  backIcon: {
-    fontSize: 25,
-    paddingLeft: 20,
-    paddingTop: 10,
-  },
-});
 
 export type ContactsStack = {
   Contacts: undefined;
@@ -47,11 +34,8 @@ function ContactsStackScreen() {
             height: 70,
             shadowColor: 'transparent',
           },
-          headerBackImage: () => (
-            <TouchableOpacity style={styles.backContainer}>
-              <MaterialIcons name="arrow-back" style={styles.backIcon} />
-            </TouchableOpacity>
-          ),
+          headerBackImage:
+            Platform.OS === 'android' ? undefined : () => <HeaderBackImage />,
         }}
         component={ContactScreen}
       />
