@@ -5,6 +5,7 @@ import { FIELD_REQUIRED, INVALID_EMAIL } from '../config/Messages';
 import { isEmailValid } from '../service/Validation';
 import { ButtonStyles } from '../styles/ButtonStyles';
 import logo from '../../assets/coloredLogo3x.png';
+import { PLACEHOLDER_TEXT } from '../styles/Colors';
 import { ContainerStyles } from '../styles/ContainerStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { LogoStyles } from '../styles/LogoStyles';
@@ -83,6 +84,7 @@ const SignupScreen: React.FC = () => {
         value={state.name}
         textContentType="name"
         style={[InputStyles.base, errors.name ? InputStyles.error : null]}
+        placeholderTextColor={PLACEHOLDER_TEXT}
       />
       {!!errors.email && <Text style={TextStyles.error}>{errors.email}</Text>}
       <TextInput
@@ -92,6 +94,7 @@ const SignupScreen: React.FC = () => {
         textContentType="emailAddress"
         value={state.email}
         style={[InputStyles.base, errors.email ? InputStyles.error : null]}
+        placeholderTextColor={PLACEHOLDER_TEXT}
       />
       {!!errors.password && (
         <Text style={TextStyles.error}>{errors.password}</Text>
@@ -103,6 +106,7 @@ const SignupScreen: React.FC = () => {
         textContentType="newPassword"
         value={state.password}
         style={[InputStyles.base, errors.password ? InputStyles.error : null]}
+        placeholderTextColor={PLACEHOLDER_TEXT}
       />
       <TouchableOpacity style={ButtonStyles.baseButton} onPress={handleSignup}>
         <Text style={TextStyles.button}>Sign Up</Text>

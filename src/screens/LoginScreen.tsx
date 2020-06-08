@@ -13,6 +13,7 @@ import Loading from '../components/Loading';
 import { auth } from '../config/firebase';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
 import { INVALID_EMAIL, INVALID_PASSWORD } from '../config/Messages';
+import { PLACEHOLDER_TEXT } from '../styles/Colors';
 import { ContainerStyles } from '../styles/ContainerStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { LogoStyles } from '../styles/LogoStyles';
@@ -83,6 +84,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           onChangeText={(text) => onChangeEmail(text)}
           placeholder="Email"
           style={InputStyles.base}
+          placeholderTextColor={PLACEHOLDER_TEXT}
           textContentType="emailAddress"
           value={email}
         />
@@ -92,6 +94,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           placeholder="Password"
           secureTextEntry
           style={InputStyles.base}
+          placeholderTextColor={PLACEHOLDER_TEXT}
           textContentType="password"
           value={password}
         />

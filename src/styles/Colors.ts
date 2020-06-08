@@ -5,3 +5,5 @@ export const SECONDARY = '#5A9F79';
 export const ACCENT = '#7FE5B0';
 export const ERROR_TEXT = '#E83A30';
 export const BACKGROUND = '#FFFFFF';
+export const TEXT_INPUT = '#000000';
+export const PLACEHOLDER_TEXT = '#999999';

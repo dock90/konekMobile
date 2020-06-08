@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import coloredLogo3x from '../../assets/coloredLogo3x.png';
 import { AuthStack } from '../components/AuthContainer';
+import { PLACEHOLDER_TEXT } from '../styles/Colors';
 import { LogoStyles } from '../styles/LogoStyles';
 import { InputStyles } from '../styles/InputStyles';
 import { TextStyles } from '../styles/TextStyles';
@@ -40,6 +41,7 @@ const ResetPassScreen: React.FC<Props> = ({ navigation }) => {
         onChangeText={(text) => onChangeEmail(text)}
         placeholder="Email"
         style={InputStyles.base}
+        placeholderTextColor={PLACEHOLDER_TEXT}
         textContentType="emailAddress"
         value={email}
         editable={!processing}

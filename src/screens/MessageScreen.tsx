@@ -32,7 +32,7 @@ import {
 import { uploadFile } from '../service/Cloudinary';
 import { markAllRead, sendMessage } from '../service/Messages';
 import { Recorder } from '../service/Recorder';
-import { PRIMARY } from '../styles/Colors';
+import { PLACEHOLDER_TEXT, PRIMARY } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
 import BeginningOfConversation from './MessageScreen/BeginningOfConversation';
 
@@ -278,9 +278,9 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior="height"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 85}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 85}
     >
       <View style={styles.messages}>
         <FlatList
@@ -301,6 +301,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
           onChangeText={handleMessageChange}
           placeholder="Aa"
           style={styles.input}
+          placeholderTextColor={PLACEHOLDER_TEXT}
           value={messageText}
           editable={actionMode !== MODE_RECORDING}
         />

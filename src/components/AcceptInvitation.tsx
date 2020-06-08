@@ -9,7 +9,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_MUTATION } from '../queries/InvitationQueries';
 import { MaterialIcons } from '@expo/vector-icons';
-import { PRIMARY } from '../styles/Colors';
+import { PLACEHOLDER_TEXT, PRIMARY } from '../styles/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,6 +70,7 @@ function AcceptInvitation() {
           onBlur={() => setViewHeight(false)}
           onFocus={() => setViewHeight(true)}
           style={styles.input}
+          placeholderTextColor={PLACEHOLDER_TEXT}
           onChangeText={(text) => setInviteCode(text)}
           placeholder="Code"
           value={inviteCode}
