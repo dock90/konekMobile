@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 40,
     marginBottom: 10,
-    marginRight: 15,
+    marginLeft: 15,
   },
   backIcon: {
     fontSize: 25,
