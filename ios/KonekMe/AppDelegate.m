@@ -143,9 +143,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   completionHandler();
 }
 // IOS 4-10 Required for the localNotification event.
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
- [RNCPushNotificationIOS didReceiveLocalNotification:notification];
-}
+//- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+//{
+// [RNCPushNotificationIOS didReceiveLocalNotification:notification];
+//}
 
 @end

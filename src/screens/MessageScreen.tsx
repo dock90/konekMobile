@@ -32,7 +32,7 @@ import {
 import { uploadFile } from '../service/Cloudinary';
 import { markAllRead, sendMessage } from '../service/Messages';
 import { Recorder } from '../service/Recorder';
-import { PLACEHOLDER_TEXT, PRIMARY } from '../styles/Colors';
+import { PLACEHOLDER_TEXT, PRIMARY, TEXT_INPUT } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
 import BeginningOfConversation from './MessageScreen/BeginningOfConversation';
 
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
+    color: TEXT_INPUT,
   },
   sendContainer: {
     flexDirection: 'row',
@@ -280,7 +281,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 85}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 85}
     >
       <View style={styles.messages}>
         <FlatList

@@ -59,7 +59,7 @@ function App() {
   if (isAuthorized) {
     return (
       <>
-        <StatusBar hidden={false} barStyle="light-content" />
+        <StatusBar hidden={false} barStyle="dark-content" />
         <ApolloProvider client={client}>
           <MainNavContainer />
         </ApolloProvider>

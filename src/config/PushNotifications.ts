@@ -4,7 +4,7 @@ import { ME_QUERY, MeQueryInterface } from '../queries/MeQueries';
 import { client } from './Apollo';
 
 let deviceToken: { os: string; token: string } | undefined;
-let deviceGateway: 'apns' | 'gcm' | undefined;
+let deviceGateway: 'apns' | 'apns2' | 'gcm' | undefined;
 
 export async function refreshSubscriptions(
   pubNub: PubNub,
@@ -30,8 +30,13 @@ export async function refreshSubscriptions(
     },
     onRegister: async function (token) {
       deviceToken = token;
+      let additionalConfig: object = {};
       if (token.os === 'ios') {
-        deviceGateway = 'apns';
+        deviceGateway = 'apns2';
+        additionalConfig = {
+          environment: 'production',
+          topic: 'com.konek.me',
+        };
       } else if (token.os === 'android') {
         deviceGateway = 'gcm';
       } else {
@@ -41,6 +46,7 @@ export async function refreshSubscriptions(
       const { channels: currentChannels } = await pubNub.push.listChannels({
           device: token.token,
           pushGateway: deviceGateway,
+          ...additionalConfig,
         }),
         desiredChannels = data.me.pubNubInfo.channels;
 
@@ -67,6 +73,7 @@ export async function refreshSubscriptions(
             device: token.token,
             channels: remove,
             pushGateway: deviceGateway,
+            ...additionalConfig,
           })
         );
       }
@@ -77,6 +84,7 @@ export async function refreshSubscriptions(
             device: token.token,
             channels: add,
             pushGateway: deviceGateway,
+            ...additionalConfig,
           })
         );
       }
