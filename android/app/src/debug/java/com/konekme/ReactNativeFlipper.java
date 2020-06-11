@@ -1,4 +1,4 @@
-package com.konek.me;
+package app.konek.me;
 
 import android.content.Context;
 import com.facebook.flipper.android.AndroidFlipperClient;

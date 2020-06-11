@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import PubNub from 'pubnub';
 import { ME_QUERY, MeQueryInterface } from '../queries/MeQueries';
@@ -22,7 +23,7 @@ export async function refreshSubscriptions(
   PushNotification.configure({
     requestPermissions: true,
     popInitialNotification: true,
-    senderID: '696329386413',
+    senderID: Platform.OS === 'android' ? '696329386413' : undefined,
     permissions: {
       alert: true,
       badge: true,
@@ -30,12 +31,12 @@ export async function refreshSubscriptions(
     },
     onRegister: async function (token) {
       deviceToken = token;
-      let additionalConfig: object = {};
+      let additionalConfig: Record<string, unknown> = {};
       if (token.os === 'ios') {
         deviceGateway = 'apns2';
         additionalConfig = {
           environment: 'production',
-          topic: 'com.konek.me',
+          topic: 'app.konek.me',
         };
       } else if (token.os === 'android') {
         deviceGateway = 'gcm';

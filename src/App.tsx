@@ -59,7 +59,12 @@ function App() {
   if (isAuthorized) {
     return (
       <>
-        <StatusBar hidden={false} barStyle="dark-content" />
+        <StatusBar
+          hidden={false}
+          barStyle={
+            Platform.OS === 'android' ? 'light-content' : 'dark-content'
+          }
+        />
         <ApolloProvider client={client}>
           <MainNavContainer />
         </ApolloProvider>
