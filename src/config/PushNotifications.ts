@@ -1,11 +1,25 @@
 import { Platform } from 'react-native';
-import PushNotification from 'react-native-push-notification';
+import PushNotification, {
+  PushNotification as PNInterface,
+} from 'react-native-push-notification';
 import PubNub from 'pubnub';
 import { ME_QUERY, MeQueryInterface } from '../queries/MeQueries';
+import { navigate } from '../service/RootNavigation';
 import { client } from './Apollo';
 
+function isAndroidPushNotification(
+  notification: PNInterface
+): notification is AndroidNotification {
+  return Platform.OS == 'android' && 'roomId' in notification;
+}
+function isIosPushNotification(
+  notification: PNInterface
+): notification is IosNotification {
+  return Platform.OS == 'ios' && 'data' in notification;
+}
+
 let deviceToken: { os: string; token: string } | undefined;
-let deviceGateway: 'apns' | 'apns2' | 'gcm' | undefined;
+let deviceGateway: 'apns2' | 'gcm' | undefined;
 
 export async function refreshSubscriptions(
   pubNub: PubNub,
@@ -93,7 +107,15 @@ export async function refreshSubscriptions(
       await Promise.all(tasks);
     },
     onNotification(notification) {
-      console.log(`notification: ${JSON.stringify(notification)}`);
+      let roomId: string | undefined;
+      if (isAndroidPushNotification(notification)) {
+        roomId = notification.roomId;
+      } else if (isIosPushNotification(notification)) {
+        roomId = notification.data.aps.roomId;
+      }
+      if (roomId) {
+        navigate('Message', { roomId });
+      }
     },
   });
 }
@@ -107,4 +129,16 @@ export async function clearSubscriptions(pubNub: PubNub): Promise<void> {
     pushGateway: deviceGateway,
     device: deviceToken.token,
   });
+}
+
+interface AndroidNotification extends PNInterface {
+  roomId?: string;
+}
+
+interface IosNotification extends PNInterface {
+  data: {
+    aps: {
+      roomId?: string;
+    };
+  };
 }
