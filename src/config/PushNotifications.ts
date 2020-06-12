@@ -1,3 +1,4 @@
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { Platform } from 'react-native';
 import PushNotification, {
   PushNotification as PNInterface,
@@ -116,6 +117,8 @@ export async function refreshSubscriptions(
       if (roomId) {
         navigate('Message', { roomId });
       }
+
+      notification.finish(PushNotificationIOS.FetchResult.NewData);
     },
   });
 }
