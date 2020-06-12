@@ -3,6 +3,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useMe } from '../hooks/useMe';
+import { navigationRef } from '../service/RootNavigation';
 import { BORDER, PRIMARY } from '../styles/Colors';
 import MessagesStackScreen from './MessagesStackScreen';
 import ContactsStackScreen from './ContactsStackScreen';
@@ -16,7 +17,7 @@ export type TabNavParamList = {
   Profile: undefined;
 };
 
-const Tab = createBottomTabNavigator<TabNavParamList>();
+const Tabs = createBottomTabNavigator<TabNavParamList>();
 
 const MainNavContainer: React.FC = () => {
   const { me, loading, error } = useMe();
@@ -29,8 +30,10 @@ const MainNavContainer: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Needed because I don't feel like trying to figure out the correct types when this works.
+    <NavigationContainer ref={navigationRef}>
+      <Tabs.Navigator
         initialRouteName={me.access.messages ? 'Messages' : 'Profile'}
         tabBarOptions={{
           activeTintColor: PRIMARY,
@@ -42,7 +45,7 @@ const MainNavContainer: React.FC = () => {
           tabBarVisible: me.access.messages,
         }}
       >
-        <Tab.Screen
+        <Tabs.Screen
           name="Messages"
           options={({ route }) => {
             // All this ignore ugliness is so that everything stays on the same line so that the ignores work!
@@ -60,7 +63,7 @@ const MainNavContainer: React.FC = () => {
           }}
           component={MessagesStackScreen}
         />
-        <Tab.Screen
+        <Tabs.Screen
           name="Contacts"
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -69,7 +72,7 @@ const MainNavContainer: React.FC = () => {
           }}
           component={ContactsStackScreen}
         />
-        <Tab.Screen
+        <Tabs.Screen
           name="Profile"
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -78,7 +81,7 @@ const MainNavContainer: React.FC = () => {
           }}
           component={ProfileScreen}
         />
-      </Tab.Navigator>
+      </Tabs.Navigator>
     </NavigationContainer>
   );
 };
