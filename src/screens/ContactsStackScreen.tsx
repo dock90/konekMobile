@@ -25,7 +25,11 @@ function ContactsStackScreen() {
         },
       }}
     >
-      <ContactsStack.Screen name="People" component={ContactsScreen} />
+      <ContactsStack.Screen
+        name="People"
+        options={{ title: 'Contacts' }}
+        component={ContactsScreen}
+      />
       <ContactsStack.Screen
         name="Person"
         options={{

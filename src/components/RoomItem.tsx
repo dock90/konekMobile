@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { MessagesStackParamList } from '../screens/MessagesStackScreen';
-import { BACKGROUND, BORDER, PRIMARY, TEXT_ON_PRIMARY } from '../styles/Colors';
+import { BACKGROUND, PRIMARY, TEXT_ON_PRIMARY } from '../styles/Colors';
 import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
@@ -13,12 +13,9 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     height: 70,
-    borderStyle: 'solid',
-    borderBottomWidth: 0.5,
-    borderColor: BORDER,
     backgroundColor: BACKGROUND,
   },
-  messageContact: {
+  roomName: {
     fontSize: 12,
     fontWeight: 'bold',
   },
@@ -65,7 +62,7 @@ const RoomItem: React.FC<Props> = ({ room, navigation }) => {
           </View>
         )}
       </View>
-      <Text style={styles.messageContact}>{room.name}</Text>
+      <Text style={styles.roomName}>{room.name}</Text>
     </TouchableOpacity>
   );
 };

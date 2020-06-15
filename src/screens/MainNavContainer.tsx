@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import Avatar from '../components/Avatar';
 import { useMe } from '../hooks/useMe';
 import { navigationRef } from '../service/RootNavigation';
 import { BORDER, PRIMARY } from '../styles/Colors';
@@ -76,7 +77,7 @@ const MainNavContainer: React.FC = () => {
           name="Profile"
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="person" size={size} color={color} />
+              <Avatar size={size} style={{ color }} picture={me.picture} />
             ),
           }}
           component={ProfileScreen}

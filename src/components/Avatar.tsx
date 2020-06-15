@@ -1,6 +1,12 @@
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Image, ImageStyle, StyleProp, StyleSheet } from 'react-native';
+import {
+  Image,
+  ImageStyle,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+} from 'react-native';
 import { useMe } from '../hooks/useMe';
 import { AssetFieldsInterface } from '../queries/AssetQueries';
 import { avatarUri } from '../service/AssetUris';
@@ -19,7 +25,7 @@ const styles = StyleSheet.create({
 type Props = {
   picture?: AssetFieldsInterface | null;
   size?: number;
-  style?: StyleProp<ImageStyle>;
+  style?: StyleProp<ImageStyle | TextStyle>;
   overlayColor?: string | 'none';
 };
 
@@ -60,7 +66,7 @@ const Avatar: React.FC<Props> = ({ picture, size, style, overlayColor }) => {
 
   return (
     <Image
-      style={[styles.image, sizing, style]}
+      style={[styles.image, sizing, style as ImageStyle]}
       source={{ uri: avatarUri(picture, cloudinaryInfo) }}
     />
   );

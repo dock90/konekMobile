@@ -6,12 +6,18 @@ import { ASSET_FIELDS, AssetFieldsInterface } from './AssetQueries';
 
 export interface EmailsFields {
   email: string;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   label: string | null;
+  [email: string]: string;
 }
 
 export interface PhonesFields {
   number: string;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   label: string | null;
+  [number: string]: string;
 }
 
 export interface ContactSummaryFieldsInterface {
