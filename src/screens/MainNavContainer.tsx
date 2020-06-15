@@ -50,7 +50,7 @@ const MainNavContainer: React.FC = () => {
           options={({ route }) => {
             // All this ignore ugliness is so that everything stays on the same line so that the ignores work!
             // prettier-ignore
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const routeName = route.state ? route.state.routes[route.state.index].name : route.params?.screen || 'Messages';
 

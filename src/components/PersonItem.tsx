@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { ContactSummaryFieldsInterface } from '../queries/ContactQueries';
+import { PersonFieldsInterface } from '../queries/PeopleQueries';
 import Avatar from './Avatar';
 
 const styles = StyleSheet.create({
@@ -32,26 +32,25 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  contactData: ContactSummaryFieldsInterface;
+  person: PersonFieldsInterface;
 };
 
-const ContactItem: React.FC<Props> = ({ contactData }) => {
+const PersonItem: React.FC<Props> = ({ person }) => {
   const navigation = useNavigation();
 
   const handleSelectContact = () => {
-    navigation.navigate('Contact', {
-      name: contactData.name,
-      contactId: contactData.contactId,
+    navigation.navigate('Person', {
+      person: person,
     });
   };
 
   const handleStartConversation = () => {
-    if (!contactData.profile) {
+    if (!person.roomId) {
       return;
     }
     navigation.navigate('Message', {
-      name: contactData.name,
-      roomId: contactData.profile.roomId,
+      name: person.name,
+      roomId: person.roomId,
     });
   };
 
@@ -59,12 +58,12 @@ const ContactItem: React.FC<Props> = ({ contactData }) => {
     <View style={styles.container}>
       <TouchableOpacity onPress={handleSelectContact}>
         <View style={styles.contact}>
-          <Avatar picture={contactData.picture} style={styles.contactImage} />
-          <Text style={styles.contactTitle}>{contactData.name}</Text>
+          <Avatar picture={person.picture} style={styles.contactImage} />
+          <Text style={styles.contactTitle}>{person.name}</Text>
         </View>
       </TouchableOpacity>
 
-      {contactData.profile && (
+      {person.roomId && (
         <TouchableOpacity onPress={handleStartConversation}>
           <MaterialIcons name="chat" style={styles.actionIcon} />
         </TouchableOpacity>
@@ -73,4 +72,4 @@ const ContactItem: React.FC<Props> = ({ contactData }) => {
   );
 };
 
-export default ContactItem;
+export default PersonItem;

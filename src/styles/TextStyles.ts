@@ -16,6 +16,10 @@ export const TextStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 30,
   },
+  h2: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   button: {
     color: TEXT_ON_PRIMARY,
     fontSize: 12,

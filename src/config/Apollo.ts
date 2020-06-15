@@ -1,6 +1,10 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
 import { PUB_NUB_CONNECTION_STATE_QUERY } from '../queries/LocalStateQueries';
+import {
+  PersonFieldsInterface,
+  personKeyExtractor,
+} from '../queries/PeopleQueries';
 import { auth } from './firebase';
 import {
   ROOM_FIELDS,
@@ -44,6 +48,8 @@ const cache = new InMemoryCache({
       case 'Note':
       case 'Conversation':
         return object.entryId as string;
+      case 'Person':
+        return personKeyExtractor((object as unknown) as PersonFieldsInterface);
       default:
         const idField = `${
           typeName.charAt(0).toLowerCase() + typeName.slice(1)
@@ -61,13 +67,13 @@ const cache = new InMemoryCache({
 });
 
 export const client = new ApolloClient({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore There is a bug in the types.
   link: authLink.concat(httpLink),
   cache,
   resolvers: {
     Query: {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore so the first error on the unused `obj` param goes away.
       async room(obj, args, ctx) {
         if (!args.roomId) {

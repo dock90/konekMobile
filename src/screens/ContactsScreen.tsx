@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
-import {
-  ALL_CONTACTS_QUERY,
-  AllContactsQueryResults,
-  AllContactsQueryVariables,
-} from '../queries/ContactQueries';
-import ContactItem from '../components/ContactItem';
+import PersonItem from '../components/PersonItem';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import {
+  PEOPLE_QUERY,
+  PeopleQueryResults,
+  personKeyExtractor,
+} from '../queries/PeopleQueries';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,10 +25,9 @@ const styles = StyleSheet.create({
 
 const ContactsScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const { data, error, loading, refetch } = useQuery<
-    AllContactsQueryResults,
-    AllContactsQueryVariables
-  >(ALL_CONTACTS_QUERY);
+  const { data, error, loading, refetch } = useQuery<PeopleQueryResults>(
+    PEOPLE_QUERY
+  );
 
   if (loading || !data) {
     return <Loading />;
@@ -38,7 +37,7 @@ const ContactsScreen: React.FC = () => {
     return <Error error={error} />;
   }
 
-  async function handleRefresh() {
+  async function handleRefresh(): Promise<void> {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
@@ -49,11 +48,11 @@ const ContactsScreen: React.FC = () => {
       <FlatList
         onRefresh={handleRefresh}
         refreshing={refreshing}
-        data={data.contacts.data}
+        data={data.people}
         renderItem={({ item }) => (
-          <ContactItem key={item.contactId} contactData={item} />
+          <PersonItem key={personKeyExtractor(item)} person={item} />
         )}
-        keyExtractor={(item) => item.contactId}
+        keyExtractor={personKeyExtractor}
         ListEmptyComponent={
           <Text style={{ textAlign: 'center' }}>No Contacts</Text>
         }

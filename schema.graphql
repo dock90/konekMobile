@@ -242,6 +242,14 @@ type PageInfo {
     hasNextPage: Boolean!
 }
 
+type Person {
+    contactId: ID
+    name: String!
+    picture: Asset
+    profileId: ID
+    roomId: String!
+}
+
 type Phone {
     label: String
     number: String!
@@ -311,6 +319,8 @@ type Query {
     "List of messages sorted in descending order so the most recent messages are first."
     messages(input: MessagesInput!): MessageList!
     orphanProfiles: [Profile!]!
+    "List of contacts and profiles that current profile can message"
+    people: [Person!]!
     roles: [Role!]!
     "Info about a group or DM chat room."
     room(roomId: ID!): Room!

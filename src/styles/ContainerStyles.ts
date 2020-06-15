@@ -10,4 +10,8 @@ export const ContainerStyles = StyleSheet.create({
     marginRight: 25,
     marginLeft: 25,
   },
+  leftAlign: {
+    width: '100%',
+    alignSelf: 'flex-start',
+  },
 });

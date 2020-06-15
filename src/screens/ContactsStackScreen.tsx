@@ -2,14 +2,15 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
 import HeaderBackImage from '../components/HeaderBackImage';
+import { PersonFieldsInterface } from '../queries/PeopleQueries';
 import { BACKGROUND } from '../styles/Colors';
 import ContactsScreen from './ContactsScreen';
-import ContactScreen from './ContactScreen';
+import PersonScreen from './PersonScreen';
 
 export type ContactsStack = {
-  Contacts: undefined;
-  Contact: {
-    contactId: string;
+  People: undefined;
+  Person: {
+    person: PersonFieldsInterface;
   };
 };
 
@@ -24,20 +25,14 @@ function ContactsStackScreen() {
         },
       }}
     >
-      <ContactsStack.Screen name="Contacts" component={ContactsScreen} />
+      <ContactsStack.Screen name="People" component={ContactsScreen} />
       <ContactsStack.Screen
-        name="Contact"
+        name="Person"
         options={{
-          title: '',
-          headerBackTitleVisible: false,
-          headerStyle: {
-            height: 70,
-            shadowColor: 'transparent',
-          },
           headerBackImage:
             Platform.OS === 'android' ? undefined : () => <HeaderBackImage />,
         }}
-        component={ContactScreen}
+        component={PersonScreen}
       />
     </ContactsStack.Navigator>
   );
