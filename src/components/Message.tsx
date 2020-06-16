@@ -10,25 +10,27 @@ import Avatar from './Avatar';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 5,
+    padding: 3,
+    borderRadius: 6,
   },
   profileImg: {
-    marginRight: 10,
+    marginRight: 5,
   },
   contactName: {
-    fontSize: 8,
-    marginBottom: 5,
+    fontSize: 9,
+    marginBottom: 2,
   },
   message: {
     fontSize: 12,
-    padding: 12,
+    padding: 10,
     color: TEXT_ON_PRIMARY,
   },
   timestamp: {
-    fontSize: 8,
-    color: '#ADADAD',
+    fontSize: 9,
+    marginBottom: 3,
   },
 });
 
@@ -54,14 +56,26 @@ const Message: React.FC<Props> = ({ messageData, room }) => {
           style={styles.profileImg}
         />
       )}
-      <View>
-        {notMe && (
-          <Text style={styles.contactName}>{messageData.author.name}</Text>
-        )}
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: notMe ? 'flex-start' : 'flex-end',
+          }}
+        >
+          {notMe && (
+            <Text style={styles.contactName}>{messageData.author.name} - </Text>
+          )}
+          <Text style={styles.timestamp}>
+            {formatDateTime(messageData.createdAt)}
+          </Text>
+        </View>
         <View
           style={{
             backgroundColor: notMe ? SECONDARY : PRIMARY,
             borderRadius: 5,
+            alignSelf: notMe ? 'flex-start' : 'flex-end',
           }}
         >
           {messageData.asset && (
@@ -71,11 +85,6 @@ const Message: React.FC<Props> = ({ messageData, room }) => {
             <Text style={styles.message}>{messageData.body}</Text>
           )}
         </View>
-        <Text
-          style={[styles.timestamp, { textAlign: notMe ? 'right' : 'left' }]}
-        >
-          {formatDateTime(messageData.createdAt)}
-        </Text>
       </View>
     </View>
   );

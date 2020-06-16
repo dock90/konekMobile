@@ -55,7 +55,7 @@ function App() {
       }
       setAuthReady(true);
     });
-  });
+  }, []);
 
   if (!authReady) {
     return null;
