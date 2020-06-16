@@ -106,7 +106,7 @@ const PersonScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   return hasContact && data && data.contact ? (
-    <SafeAreaView>
+    <SafeAreaView style={ContainerStyles.safeAreaViewContainer}>
       <ScrollView
         contentContainerStyle={ContainerStyles.baseContainer}
         refreshControl={
@@ -119,9 +119,9 @@ const PersonScreen: React.FC<Props> = ({ navigation, route }) => {
             size={80}
             style={styles.picture}
           />
-          {data.contact.legalName && (
-            <Text style={styles.name}>{data.contact.legalName}</Text>
-          )}
+          <LabeledItem label="Legal Name" style={styles.spaced}>
+            {data.contact.legalName}
+          </LabeledItem>
           {data.contact.bio && (
             <Text style={styles.spaced}>{data.contact.bio}</Text>
           )}
