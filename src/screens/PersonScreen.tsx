@@ -50,14 +50,6 @@ const styles = StyleSheet.create({
   spaced: {
     marginBottom: spaceBetween,
   },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 20,
-  },
-  tagText: {
-    color: '#FFFFFF',
-  },
   actionText: {
     fontSize: 12,
     color: PRIMARY,

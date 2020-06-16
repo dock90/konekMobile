@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import { BugSnag } from './BugSnag';
 
 // initialize config
 const config = {
@@ -19,3 +20,17 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+
+if (BugSnag) {
+  auth.onAuthStateChanged((user) => {
+    if (user && BugSnag) {
+      BugSnag.setUser(
+        user.uid,
+        user.displayName || undefined,
+        user.email || undefined
+      );
+    } else if (BugSnag) {
+      BugSnag.clearUser();
+    }
+  });
+}

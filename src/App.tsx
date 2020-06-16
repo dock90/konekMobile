@@ -1,15 +1,17 @@
+import './config/BugSnag';
 import 'react-native-gesture-handler';
 import 'expo-asset';
+import { BugSnag } from './config/BugSnag';
+import { auth } from './config/firebase';
+import { client } from './config/Apollo';
+import './config/PubNub';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, YellowBox, AppRegistry } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
-import { client } from './config/Apollo';
-import { auth } from './config/firebase';
 import AuthContainer from './components/AuthContainer';
-import './config/PubNub';
 import { MaterialIcons } from '@expo/vector-icons';
 import { loadAsync } from 'expo-font';
 
@@ -30,6 +32,9 @@ async function initApp(): Promise<void> {
     await hideAsync();
   } catch (e) {
     console.log(e);
+    try {
+      BugSnag && BugSnag.notify(e);
+    } catch (e) {}
   }
 }
 

@@ -33,6 +33,8 @@ function ContactsStackScreen() {
       <ContactsStack.Screen
         name="Person"
         options={{
+          // Required for iOS.
+          headerBackTitleVisible: false,
           headerBackImage:
             Platform.OS === 'android' ? undefined : () => <HeaderBackImage />,
         }}
