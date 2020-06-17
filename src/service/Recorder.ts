@@ -17,7 +17,7 @@ export class Recorder {
   private startTime?: number;
   private stopTime?: number;
 
-  private onRecordingStatusUpdate(status: Audio.RecordingStatus) {
+  private onRecordingStatusUpdate(status: Audio.RecordingStatus): void {
     console.log(status);
   }
 

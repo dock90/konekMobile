@@ -1,22 +1,20 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   Route,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import { useQuery } from '@apollo/client';
 import Error from '../components/Error';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-import { useMe } from '../hooks/useMe';
+import ActionButton from '../components/Messaging/ActionButton';
+import { AssetInterface } from '../queries/AssetQueries';
 import {
   MessageQueryVariables,
   MESSAGES_QUERY,
@@ -29,9 +27,7 @@ import {
   RoomQuery,
   RoomQueryVariables,
 } from '../queries/RoomQueries';
-import { uploadFile } from '../service/Cloudinary';
 import { markAllRead, sendMessage } from '../service/Messages';
-import { Recorder } from '../service/Recorder';
 import { PLACEHOLDER_TEXT, PRIMARY, TEXT_INPUT } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
 import BeginningOfConversation from './MessageScreen/BeginningOfConversation';
@@ -77,31 +73,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const MODE_READY = 'ready';
-const MODE_SEND = 'send';
-const MODE_RECORDING = 'recording';
-const MODE_PROCESSING = 'proc';
-let DEFAULT_MODE = MODE_READY;
-
-let permissionDenied = false;
-Recorder.isPermissionDenied().then((denied) => {
-  permissionDenied = denied;
-});
-
 type Props = {
   navigation: StackNavigationProp<MessagesStackParamList, 'Message'>;
   route: Route;
 };
 
 const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
-  const {
-    me: { cloudinaryInfo },
-  } = useMe();
   const [messageText, setMessageText] = useState('');
   // A semaphore to prevent multiple of messages pages from loading simultaneously.
   const [isLoadingNext, setIsLoadingNext] = useState(false);
-  const [actionMode, setActionMode] = useState(DEFAULT_MODE);
-  const [recording, setRecording] = useState<null | Recorder>(null);
 
   let room: RoomFieldsInterface = route.params.room;
   const roomId = room ? room.roomId : route.params.roomId;
@@ -153,20 +133,6 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   }, [room, loading]);
 
-  useEffect(() => {
-    if (permissionDenied) {
-      // If the permission is denied, we want to set the mode to send so the
-      // record icon is never shown.
-      DEFAULT_MODE = MODE_SEND;
-      if (actionMode === MODE_READY) {
-        // If we were previously "ready", we should set to the default mode.
-        setActionMode(DEFAULT_MODE);
-      }
-    } else {
-      DEFAULT_MODE = MODE_READY;
-    }
-  }, [actionMode]);
-
   if (loading || !data || roomQuery.loading) {
     return <Loading />;
   }
@@ -178,7 +144,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
     return <Error error={error} />;
   }
 
-  const handleEndReach = async () => {
+  const handleEndReach = async (): Promise<void> => {
     if (isLoadingNext) {
       return;
     }
@@ -207,74 +173,21 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   // handle message send
-  const handleActionExecute = async () => {
+  const handleSend = async (): Promise<void> => {
     if (messageText.length === 0) {
       return;
     }
     const body = messageText;
     setMessageText('');
-    setActionMode(MODE_PROCESSING);
     await sendMessage(room.roomId, body);
-    setActionMode(DEFAULT_MODE);
   };
-  function handleMessageChange(text: string) {
+
+  function handleMessageChange(text: string): void {
     setMessageText(text);
-    if (text.length > 0) {
-      setActionMode(MODE_SEND);
-    } else {
-      setActionMode(MODE_READY);
-    }
-  }
-  async function handlePressIn() {
-    if (actionMode !== DEFAULT_MODE) {
-      return;
-    }
-    setActionMode(MODE_PROCESSING);
-    const r = new Recorder();
-
-    const isRecording = await r.start();
-    if (isRecording) {
-      setRecording(r);
-      setActionMode(MODE_RECORDING);
-    } else {
-      setActionMode(DEFAULT_MODE);
-    }
-  }
-  async function handlePressOut() {
-    if (!recording) {
-      return;
-    }
-
-    await recording.stop();
-    setActionMode(MODE_PROCESSING);
-
-    const file = await recording.getFile();
-
-    if (file) {
-      const upload = await uploadFile(
-        {
-          folder: room.roomId,
-          apiKey: cloudinaryInfo.apiKey,
-          cloudName: cloudinaryInfo.cloudName,
-          resourceType: 'video',
-          tags: ['recording', room.roomId],
-        },
-        file
-      );
-      await sendMessage(room.roomId, '', upload);
-    }
-    setRecording(null);
-    setActionMode(DEFAULT_MODE);
   }
 
-  let actionIcon = 'send';
-  switch (actionMode) {
-    case MODE_RECORDING:
-      actionIcon = 'adjust';
-      break;
-    case MODE_READY:
-      actionIcon = 'mic';
-      break;
+  async function handleAssetSend(asset: AssetInterface): Promise<void> {
+    await sendMessage(roomId.roomId, messageText, asset);
   }
 
   return (
@@ -304,25 +217,14 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
           style={styles.input}
           placeholderTextColor={PLACEHOLDER_TEXT}
           value={messageText}
-          editable={actionMode !== MODE_RECORDING}
         />
 
-        <TouchableOpacity
-          onPress={handleActionExecute}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          style={styles.sendContainer}
-        >
-          {actionMode === MODE_PROCESSING ? (
-            <ActivityIndicator size={20} color={PRIMARY} />
-          ) : (
-            <MaterialIcons
-              name={actionIcon}
-              style={styles.sendIcon}
-              size={20}
-            />
-          )}
-        </TouchableOpacity>
+        <ActionButton
+          room={room}
+          hasText={messageText.length > 0}
+          onSend={handleSend}
+          onRecordingSend={handleAssetSend}
+        />
       </View>
     </KeyboardAvoidingView>
   );

@@ -32,8 +32,8 @@ function hasPreviousMessage(
 function orderRooms(
   topRoomId: string,
   client: ApolloClient<NormalizedCacheObject> | ApolloCache<unknown>
-) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+): void {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const roomsQuery = client.readQuery<RoomsQuery>({
     query: ROOMS_QUERY,
@@ -58,7 +58,7 @@ function orderRooms(
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   client.writeQuery({
     query: ROOMS_QUERY,
@@ -252,7 +252,10 @@ function writeRoomInfo(roomId: string, info: RoomFieldsInterface): void {
   });
 }
 
-export async function markAllRead(roomId: string, updateServer = true) {
+export async function markAllRead(
+  roomId: string,
+  updateServer = true
+): Promise<void> {
   const roomInfo = getRoomInfo(roomId);
 
   if (!roomInfo) {

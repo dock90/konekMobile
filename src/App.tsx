@@ -40,7 +40,7 @@ async function initApp(): Promise<void> {
 
 initApp();
 
-function App() {
+const App: React.FC = () => {
   const [isAuthorized, setAuthorized] = useState(false);
   const [authReady, setAuthReady] = useState(false);
 
@@ -78,6 +78,6 @@ function App() {
   } else {
     return <AuthContainer />;
   }
-}
+};
 
 AppRegistry.registerComponent('main', () => App);
