@@ -16,7 +16,7 @@ export type AuthStack = {
 
 const Stack = createStackNavigator<AuthStack>();
 
-function AuthContainer() {
+const AuthContainer: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -35,6 +35,6 @@ function AuthContainer() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default AuthContainer;

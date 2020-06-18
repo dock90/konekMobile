@@ -54,11 +54,11 @@ const Asset: React.FC<Props> = ({ asset, textColor }) => {
   const [audio, setAudio] = useState<null | Audio.Sound>(null);
   const [playbackStatus, setPlaybackStatus] = useState(STATE_INITIAL);
 
-  async function handlePlay() {
+  async function handlePlay(): Promise<void> {
     if (!audio) {
       const sound = new Audio.Sound();
       setAudio(sound);
-      sound.setOnPlaybackStatusUpdate((status) => {
+      sound.setOnPlaybackStatusUpdate((status): void => {
         if (!status.isLoaded || status.isBuffering) {
           if (audio) {
             // We're only actually loading if we have an audio object.

@@ -1,15 +1,16 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  LayoutAnimation,
+  PanResponder,
   StyleSheet,
   Text,
   TouchableOpacity,
   Vibration,
   View,
 } from 'react-native';
-import { BugSnag } from '../../config/BugSnag';
 import { useInterval } from '../../hooks/useInterval';
 import { useMe } from '../../hooks/useMe';
 import { AssetInterface } from '../../queries/AssetQueries';
@@ -23,6 +24,27 @@ function formatLength(length: number): string {
     seconds = String(Math.round(length / 1000 - minutes * 60)).padStart(2, '0');
   return `${minutes}:${seconds}`;
 }
+
+const Animations = {
+  show() {
+    LayoutAnimation.configureNext({
+      duration: 250,
+      create: {
+        property: 'opacity',
+        type: 'easeIn',
+      },
+    });
+  },
+  hide() {
+    LayoutAnimation.configureNext({
+      duration: 250,
+      delete: {
+        property: 'opacity',
+        type: 'easeOut',
+      },
+    });
+  },
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -68,14 +90,16 @@ const ActionButton: React.FC<Props> = ({
     me: { cloudinaryInfo },
   } = useMe();
 
-  const [actionMode, setActionMode] = useState(DEFAULT_MODE);
-  const [recording, setRecording] = useState<null | Recorder>(null);
-  const [recordingLength, setRecordingLength] = useState(0);
+  const recorderRef = useRef<null | Recorder>(null),
+    doCancel = useRef(false);
+
+  const [actionMode, setActionMode] = useState(DEFAULT_MODE),
+    [recordingLength, setRecordingLength] = useState(0);
 
   useInterval(
     () => {
-      if (recording) {
-        setRecordingLength(recording.length());
+      if (recorderRef.current) {
+        setRecordingLength(recorderRef.current.length());
       } else {
         setRecordingLength(0);
       }
@@ -84,8 +108,94 @@ const ActionButton: React.FC<Props> = ({
     actionMode === MODE.RECORDING
   );
 
+  const cancelRecording = useCallback(async (): Promise<void> => {
+      doCancel.current = true;
+      if (!recorderRef.current) {
+        return;
+      }
+      Animations.hide();
+      setActionMode(DEFAULT_MODE);
+      await recorderRef.current.stop();
+      recorderRef.current = null;
+    }, []),
+    startRecording = useCallback(async (): Promise<void> => {
+      if (actionMode !== DEFAULT_MODE) {
+        return;
+      }
+      setActionMode(MODE.PROCESSING);
+      doCancel.current = false;
+      setRecordingLength(0);
+
+      const r = new Recorder();
+
+      const isRecording = await r.start();
+      recorderRef.current = r;
+
+      if (doCancel.current) {
+        await cancelRecording();
+        return;
+      }
+      if (isRecording) {
+        Vibration.vibrate(100);
+        Animations.show();
+        setActionMode(MODE.RECORDING);
+      } else {
+        setActionMode(DEFAULT_MODE);
+      }
+    }, [actionMode]),
+    stopRecording = useCallback(async (): Promise<void> => {
+      if (!recorderRef.current) {
+        // we didn't hold long enough.
+        doCancel.current = true;
+        console.log('CANCEL!!!!!');
+        return;
+      }
+
+      if (recorderRef.current.length() < 1000) {
+        // If the recording is less than a second long, cancel it.
+        await cancelRecording();
+        return;
+      }
+
+      await recorderRef.current.stop();
+      Animations.hide();
+      setActionMode(MODE.PROCESSING);
+
+      const file = await recorderRef.current.getFile();
+
+      if (file) {
+        try {
+          const upload = await uploadFile(
+            {
+              folder: room.roomId,
+              apiKey: cloudinaryInfo.apiKey,
+              cloudName: cloudinaryInfo.cloudName,
+              resourceType: 'video',
+              tags: ['recording', room.roomId],
+            },
+            file
+          );
+          await onRecordingSend(upload);
+        } catch (e) {
+          // BugSnag && BugSnag.notify(e);
+          Alert.alert('Error', 'Error sending message');
+        }
+      }
+      recorderRef.current = null;
+      setActionMode(DEFAULT_MODE);
+    }, [onRecordingSend, cancelRecording, cloudinaryInfo, room]),
+    handlePress = useCallback(async (): Promise<void> => {
+      if (!hasText) {
+        // Don't attempt to send if we don't have any data!
+        return;
+      }
+      setActionMode(MODE.PROCESSING);
+      await onSend();
+      setActionMode(DEFAULT_MODE);
+    }, [hasText, onSend]);
+
   useEffect(() => {
-    if (actionMode !== DEFAULT_MODE && actionMode !== DEFAULT_MODE) {
+    if (actionMode !== DEFAULT_MODE && actionMode !== MODE.SEND) {
       return;
     }
     if (hasText) {
@@ -95,64 +205,21 @@ const ActionButton: React.FC<Props> = ({
     }
   }, [hasText, actionMode]);
 
-  async function handlePress(): Promise<void> {
-    if (!hasText) {
-      // Don't attempt to send if we don't have any data!
-      return;
-    }
-    setActionMode(MODE.PROCESSING);
-    await onSend();
-    setActionMode(DEFAULT_MODE);
-  }
-
-  async function handlePressIn(): Promise<void> {
-    if (actionMode !== DEFAULT_MODE) {
-      return;
-    }
-    setActionMode(MODE.PROCESSING);
-    setRecordingLength(0);
-    const r = new Recorder();
-
-    const isRecording = await r.start();
-    if (isRecording) {
-      Vibration.vibrate(100);
-      setRecording(r);
-      setActionMode(MODE.RECORDING);
-    } else {
-      setActionMode(DEFAULT_MODE);
-    }
-  }
-  async function handlePressOut(): Promise<void> {
-    if (!recording) {
-      return;
-    }
-
-    await recording.stop();
-    setActionMode(MODE.PROCESSING);
-
-    const file = await recording.getFile();
-
-    if (file) {
-      try {
-        const upload = await uploadFile(
-          {
-            folder: room.roomId,
-            apiKey: cloudinaryInfo.apiKey,
-            cloudName: cloudinaryInfo.cloudName,
-            resourceType: 'video',
-            tags: ['recording', room.roomId],
-          },
-          file
-        );
-        await onRecordingSend(upload);
-      } catch (e) {
-        BugSnag && BugSnag.notify(e);
-        Alert.alert('Error', 'Error sending message.');
-      }
-    }
-    setRecording(null);
-    setActionMode(DEFAULT_MODE);
-  }
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant() {
+        startRecording();
+      },
+      onPanResponderRelease(_e, state) {
+        if (Math.abs(state.dx) + Math.abs(state.dy) > 20) {
+          cancelRecording();
+        } else {
+          stopRecording();
+        }
+      },
+    })
+  ).current;
 
   let actionIcon = 'send';
   switch (actionMode) {
@@ -200,18 +267,23 @@ const ActionButton: React.FC<Props> = ({
           </View>
         </View>
       )}
-      <TouchableOpacity
-        onPress={handlePress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        style={styles.container}
-      >
-        {actionMode === MODE.PROCESSING ? (
-          <ActivityIndicator size={20} color={PRIMARY} />
-        ) : (
-          <MaterialIcons name={actionIcon} style={styles.icon} size={20} />
-        )}
-      </TouchableOpacity>
+      {hasText ? (
+        <TouchableOpacity style={styles.container} onPress={handlePress}>
+          {actionMode === MODE.PROCESSING ? (
+            <ActivityIndicator size={20} color={PRIMARY} />
+          ) : (
+            <MaterialIcons name="send" style={styles.icon} size={20} />
+          )}
+        </TouchableOpacity>
+      ) : (
+        <View {...panResponder.panHandlers} style={styles.container}>
+          {actionMode === MODE.PROCESSING ? (
+            <ActivityIndicator size={20} color={PRIMARY} />
+          ) : (
+            <MaterialIcons name={actionIcon} style={styles.icon} size={20} />
+          )}
+        </View>
+      )}
     </View>
   );
 };

@@ -41,12 +41,10 @@ const MessagesStackScreen: React.FC = () => {
         name="Message"
         options={{
           headerBackTitleVisible: false,
-          headerStyle: {
-            height: 70,
-            shadowRadius: 2,
-          },
           headerBackImage:
-            Platform.OS === 'android' ? undefined : () => <HeaderBackImage />,
+            Platform.OS === 'android'
+              ? undefined
+              : (): React.ReactNode => <HeaderBackImage />,
           headerTitleAlign: 'left',
         }}
         component={MessageScreen}

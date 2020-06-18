@@ -18,11 +18,11 @@ export function useInterval(
       setIntervalId(null);
     }
 
-    return () => {
+    return (): void => {
       if (intervalId) {
         clearInterval(intervalId);
         setIntervalId(null);
       }
     };
-  }, [enabled, intervalId]);
+  }, [enabled, intervalId, callback, intervalMs]);
 }

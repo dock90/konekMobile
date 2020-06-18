@@ -8,7 +8,13 @@ import './config/PubNub';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import { enableScreens } from 'react-native-screens';
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, YellowBox, AppRegistry } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  YellowBox,
+  AppRegistry,
+  UIManager,
+} from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
 import AuthContainer from './components/AuthContainer';
@@ -23,6 +29,8 @@ if (Platform.OS === 'ios') {
   StatusBar.setNetworkActivityIndicatorVisible(true);
 } else if (Platform.OS === 'android') {
   StatusBar.setTranslucent(false);
+  UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 async function initApp(): Promise<void> {

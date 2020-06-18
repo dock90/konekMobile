@@ -5,6 +5,7 @@ import {
   getAsync,
   PermissionStatus,
 } from 'expo-permissions';
+import { BugSnag } from '../config/BugSnag';
 
 interface FileInterface {
   uri: string;
@@ -16,6 +17,7 @@ export class Recorder {
   private recording?: Audio.Recording;
   private startTime?: number;
   private stopTime?: number;
+  private isStarted?: Promise<void>;
 
   private onRecordingStatusUpdate(status: Audio.RecordingStatus): void {
     console.log(status);
@@ -26,6 +28,13 @@ export class Recorder {
    * If permission wasn't granted, will return false.
    */
   public async start(): Promise<boolean> {
+    let startupFinished: () => void = () => {
+      console.log('This should never be called! 👻');
+    };
+    this.isStarted = new Promise<void>((resolve) => {
+      startupFinished = resolve;
+    });
+
     // const start = Date.now();
     // let prev = start;
     const res = await askAsync(AUDIO_RECORDING);
@@ -74,6 +83,7 @@ export class Recorder {
       });
     } catch (e) {
       console.log(e);
+      BugSnag && BugSnag.notify(e);
       return false;
     }
 
@@ -82,16 +92,38 @@ export class Recorder {
 
     this.recording.setProgressUpdateInterval(1000);
     this.recording.setOnRecordingStatusUpdate(this.onRecordingStatusUpdate);
-    await this.recording.startAsync();
+
+    // console.log(
+    //   'setOnRecordingStatusUpdate',
+    //   Date.now() - start,
+    //   Date.now() - prev
+    // );
+    // prev = Date.now();
+
+    try {
+      await this.recording.startAsync();
+    } catch (e) {
+      console.log(e);
+      BugSnag && BugSnag.notify(e);
+      return false;
+    }
 
     // console.log('startAsync', Date.now() - start, Date.now() - prev);
     this.startTime = Date.now();
 
-    console.log('START');
+    console.log('STARTED');
+    setTimeout(() => {
+      // We need to wait a bit until allowing the "stop" method to be called because
+      // Android throws an error if recording is stopped too quickly after starting.
+      startupFinished();
+    }, 500);
     return true;
   }
 
   public async stop(): Promise<void> {
+    if (this.isStarted) {
+      await this.isStarted;
+    }
     if (!this.recording) {
       return;
     }
@@ -103,12 +135,15 @@ export class Recorder {
       await this.recording.stopAndUnloadAsync();
     } catch (e) {
       // swallow any errors.
+      console.log(e);
+      BugSnag && BugSnag.notify(e);
     }
 
     await Audio.setAudioModeAsync({
       // Set this to false so audio isn't routed through the earpiece.
       allowsRecordingIOS: false,
     });
+    this.isStarted = undefined;
   }
 
   public async getFile(): Promise<FileInterface | undefined> {

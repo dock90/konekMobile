@@ -112,6 +112,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
 
     // set header title
     navigation.setOptions({
+      // eslint-disable-next-line react/display-name
       headerTitle: () => (
         <Header
           style={{ marginLeft: -15 }}

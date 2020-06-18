@@ -45,10 +45,10 @@ const ImageAsset: React.FC<Props> = ({
     );
   }, [asset, uri, thumbnailWidth]);
 
-  function handleImageTouch() {
+  function handleImageTouch(): void {
     toggleModal(true);
   }
-  function handleRequestClose() {
+  function handleRequestClose(): void {
     toggleModal(false);
   }
 

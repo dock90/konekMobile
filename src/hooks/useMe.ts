@@ -22,7 +22,7 @@ export function useMe(): UseMeReturn {
     me,
     loading,
     error,
-    refresh: async () => {
+    refresh: async (): Promise<void> => {
       await refetch();
     },
   };
