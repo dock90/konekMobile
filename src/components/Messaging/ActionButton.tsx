@@ -212,7 +212,7 @@ const ActionButton: React.FC<Props> = ({
         startRecording();
       },
       onPanResponderRelease(_e, state) {
-        if (Math.abs(state.dx) + Math.abs(state.dy) > 20) {
+        if (Math.abs(state.dx) + Math.abs(state.dy) > 40) {
           cancelRecording();
         } else {
           stopRecording();
@@ -238,7 +238,7 @@ const ActionButton: React.FC<Props> = ({
           <View
             style={{
               position: 'absolute',
-              height: 40,
+              height: 50,
               width: 75,
               bottom: 5,
               right: 0,
@@ -247,22 +247,38 @@ const ActionButton: React.FC<Props> = ({
               borderRadius: 15,
               borderColor: PRIMARY,
               backgroundColor: '#fff',
+              opacity: 0.95,
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
             }}
           >
-            <MaterialIcons name="mic" style={{ color: 'red' }} size={22} />
-            <Text
+            <View
               style={{
-                color: PRIMARY,
-                textAlign: 'center',
-                opacity: 1,
-                fontSize: 15,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
               }}
             >
-              {formatLength(recordingLength)}
+              <MaterialIcons name="mic" style={{ color: 'red' }} size={22} />
+              <Text
+                style={{
+                  color: PRIMARY,
+                  textAlign: 'center',
+                  opacity: 1,
+                  fontSize: 15,
+                }}
+              >
+                {formatLength(recordingLength)}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: 8,
+                textAlign: 'center',
+              }}
+            >
+              Swipe to cancel
             </Text>
           </View>
         </View>
