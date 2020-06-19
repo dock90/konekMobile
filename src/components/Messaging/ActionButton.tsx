@@ -5,6 +5,7 @@ import {
   Alert,
   LayoutAnimation,
   PanResponder,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -65,7 +66,7 @@ enum MODE {
   RECORDING = 'rec',
   PROCESSING = 'proc',
 }
-let DEFAULT_MODE = MODE.READY;
+let DEFAULT_MODE = Platform.OS === 'android' ? MODE.SEND : MODE.READY;
 
 Recorder.isPermissionDenied().then((denied) => {
   if (denied) {
@@ -151,8 +152,8 @@ const ActionButton: React.FC<Props> = ({
         return;
       }
 
-      if (recorderRef.current.length() < 1000) {
-        // If the recording is less than a second long, cancel it.
+      if (recorderRef.current.length() < 750) {
+        // If the recording is less than a 3/4 second long, cancel it.
         await cancelRecording();
         return;
       }

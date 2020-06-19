@@ -61,6 +61,7 @@ export async function uploadFile(
     });
     resData = await response.json();
   } catch (e) {
+    console.log(e);
     throw e;
   }
 
