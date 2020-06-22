@@ -5,7 +5,6 @@ import {
   Alert,
   LayoutAnimation,
   PanResponder,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -55,6 +54,38 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
   },
+  recordWrapper: { position: 'relative' },
+  recordStats: {
+    position: 'absolute',
+    height: 50,
+    width: 75,
+    bottom: 5,
+    right: 0,
+    paddingBottom: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 15,
+    borderColor: PRIMARY,
+    backgroundColor: '#fff',
+    opacity: 0.95,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  recordTime: {
+    color: PRIMARY,
+    textAlign: 'center',
+    opacity: 1,
+    fontSize: 15,
+  },
+  recordCancelInstructions: {
+    fontSize: 8,
+    textAlign: 'center',
+  },
+  recordCounter: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   icon: {
     color: PRIMARY,
   },
@@ -66,7 +97,7 @@ enum MODE {
   RECORDING = 'rec',
   PROCESSING = 'proc',
 }
-let DEFAULT_MODE = Platform.OS === 'android' ? MODE.SEND : MODE.READY;
+let DEFAULT_MODE = MODE.READY;
 
 Recorder.isPermissionDenied().then((denied) => {
   if (denied) {
@@ -235,52 +266,15 @@ const ActionButton: React.FC<Props> = ({
   return (
     <View>
       {actionMode === MODE.RECORDING && (
-        <View style={{ position: 'relative' }}>
-          <View
-            style={{
-              position: 'absolute',
-              height: 50,
-              width: 75,
-              bottom: 5,
-              right: 0,
-              paddingBottom: 4,
-              borderWidth: StyleSheet.hairlineWidth,
-              borderRadius: 15,
-              borderColor: PRIMARY,
-              backgroundColor: '#fff',
-              opacity: 0.95,
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <View
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}
-            >
+        <View style={styles.recordWrapper}>
+          <View style={styles.recordStats}>
+            <View style={styles.recordCounter}>
               <MaterialIcons name="mic" style={{ color: 'red' }} size={22} />
-              <Text
-                style={{
-                  color: PRIMARY,
-                  textAlign: 'center',
-                  opacity: 1,
-                  fontSize: 15,
-                }}
-              >
+              <Text style={styles.recordTime}>
                 {formatLength(recordingLength)}
               </Text>
             </View>
-            <Text
-              style={{
-                fontSize: 8,
-                textAlign: 'center',
-              }}
-            >
-              Swipe to cancel
-            </Text>
+            <Text style={styles.recordCancelInstructions}>Swipe to cancel</Text>
           </View>
         </View>
       )}

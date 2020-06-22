@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Loading from '../../components/Loading';
+import { PRIMARY } from '../../styles/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -9,12 +10,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 30,
   },
+  textContainer: {
+    borderRadius: 5,
+    backgroundColor: 'lightgray',
+    borderWidth: StyleSheet.hairlineWidth,
+  },
   text: {
     fontSize: 11,
-    borderRadius: 5,
+    color: PRIMARY,
     textAlign: 'center',
-    backgroundColor: 'gray',
-    padding: 5,
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingRight: 6,
+    paddingLeft: 6,
   },
 });
 
@@ -27,7 +35,9 @@ const BeginningOfConversation: React.FC<Props> = ({ loading }) => (
     {loading ? (
       <Loading size="small" />
     ) : (
-      <Text style={styles.text}>Beginning of Chat</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Beginning of Chat</Text>
+      </View>
     )}
   </View>
 );

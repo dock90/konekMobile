@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextStyle } from 'react-native';
+import { StyleSheet, Text, TextStyle, View } from 'react-native';
 import { TagFieldsInterface } from '../../queries/TagQueries';
 import { BORDER } from '../../styles/Colors';
 
@@ -23,10 +23,12 @@ function textColor(hex: string): string {
 }
 
 const styles = StyleSheet.create({
-  tag: {
+  container: {
     borderRadius: 2,
     borderWidth: 0.5,
     borderColor: BORDER,
+  },
+  tag: {
     paddingLeft: 3,
     paddingRight: 3,
     marginRight: 3,
@@ -43,7 +45,11 @@ const TagItem: React.FC<Props> = ({ tag }) => {
     backgroundColor: `#${tag.color}`,
     color: textColor(tag.color),
   };
-  return <Text style={[styles.tag, style]}>{tag.name}</Text>;
+  return (
+    <View style={styles.container}>
+      <Text style={[styles.tag, style]}>{tag.name}</Text>
+    </View>
+  );
 };
 
 export default TagItem;
