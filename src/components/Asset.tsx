@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -51,16 +51,16 @@ const Asset: React.FC<Props> = ({ asset, textColor }) => {
   const {
     me: { cloudinaryInfo },
   } = useMe();
-  const [audio, setAudio] = useState<null | Audio.Sound>(null);
+  const audio = useRef<null | Audio.Sound>(null);
   const [playbackStatus, setPlaybackStatus] = useState(STATE_INITIAL);
 
   async function handlePlay(): Promise<void> {
-    if (!audio) {
+    if (!audio.current) {
       const sound = new Audio.Sound();
-      setAudio(sound);
+      audio.current = sound;
       sound.setOnPlaybackStatusUpdate((status): void => {
         if (!status.isLoaded || status.isBuffering) {
-          if (audio) {
+          if (audio.current) {
             // We're only actually loading if we have an audio object.
             // Otherwise, we may have just now stopped.
             setPlaybackStatus(STATE_LOADING);
@@ -69,7 +69,7 @@ const Asset: React.FC<Props> = ({ asset, textColor }) => {
           setPlaybackStatus(STATE_PLAYING);
         } else if (status.didJustFinish) {
           setPlaybackStatus(STATE_INITIAL);
-          setAudio(null);
+          audio.current = null;
           sound.unloadAsync();
         } else {
           setPlaybackStatus(STATE_INITIAL);
@@ -81,10 +81,10 @@ const Asset: React.FC<Props> = ({ asset, textColor }) => {
       await sound.playAsync();
     } else {
       if (playbackStatus === STATE_PLAYING) {
-        await audio.pauseAsync();
+        await audio.current.pauseAsync();
       } else {
         // Play from whatever our current position is.
-        await audio.playAsync();
+        await audio.current.playAsync();
       }
     }
   }
@@ -106,6 +106,7 @@ const Asset: React.FC<Props> = ({ asset, textColor }) => {
         );
         break;
       }
+    // Fall-through is purposeful so that a video thumbnail is shown for non-audio
     case 'image':
       thumb = (
         <ImageAsset

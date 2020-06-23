@@ -1,4 +1,6 @@
+import RNFetchBlob from 'rn-fetch-blob';
 import { client } from '../config/Apollo';
+import { BugSnag } from '../config/BugSnag';
 import {
   AssetInterface,
   SIGN_ARGS_MUTATION,
@@ -43,29 +45,37 @@ export async function uploadFile(
     variables: { args: toSign },
   });
 
-  const data = new FormData();
-  data.append('timestamp', toSign.timestamp);
-  data.append('api_key', config.apiKey);
-  data.append('file', file);
-  data.append('signature', signed.data?.signUpload);
-  data.append('folder', config.folder);
-  data.append('tags', tags);
-
   const url = `https://api.cloudinary.com/v1_1/${config.cloudName}/${config.resourceType}/upload`;
 
   let resData;
   try {
-    const response = await fetch(url, {
-      method: 'post',
-      body: data,
-    });
+    const response = await RNFetchBlob.fetch(
+      'POST',
+      url,
+      {
+        'Content-Type': 'multipart/form-data',
+      },
+      [
+        {
+          name: 'file',
+          filename: file.name,
+          type: file.type,
+          data: RNFetchBlob.wrap(file.uri),
+        },
+        { name: 'timestamp', data: toSign.timestamp.toString(10) },
+        { name: 'api_key', data: config.apiKey },
+        { name: 'signature', data: signed.data?.signUpload },
+        { name: 'folder', data: config.folder },
+        { name: 'tags', data: tags },
+      ]
+    );
+
     resData = await response.json();
   } catch (e) {
+    BugSnag && BugSnag.notify(e);
     console.log(e);
     throw e;
   }
-
-  console.log(resData);
 
   return {
     format: resData.format,

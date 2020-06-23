@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextStyle, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { TagFieldsInterface } from '../../queries/TagQueries';
 import { BORDER } from '../../styles/Colors';
 
@@ -40,16 +40,12 @@ type Props = {
   tag: TagFieldsInterface;
 };
 
-const TagItem: React.FC<Props> = ({ tag }) => {
-  const style: TextStyle = {
-    backgroundColor: `#${tag.color}`,
-    color: textColor(tag.color),
-  };
-  return (
-    <View style={styles.container}>
-      <Text style={[styles.tag, style]}>{tag.name}</Text>
-    </View>
-  );
-};
+const TagItem: React.FC<Props> = ({ tag }) => (
+  <View style={[styles.container, { backgroundColor: `#${tag.color}` }]}>
+    <Text style={[styles.tag, { color: textColor(tag.color) }]}>
+      {tag.name}
+    </Text>
+  </View>
+);
 
 export default TagItem;

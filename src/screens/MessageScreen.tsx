@@ -188,7 +188,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   async function handleAssetSend(asset: AssetInterface): Promise<void> {
-    await sendMessage(roomId.roomId, messageText, asset);
+    await sendMessage(room.roomId, messageText, asset);
   }
 
   return (

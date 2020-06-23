@@ -159,7 +159,7 @@ export class Recorder {
 
     return {
       uri,
-      name: 'recording',
+      name: 'recording.mp4',
       type: 'audio/mp4',
     };
   }

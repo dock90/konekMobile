@@ -7,7 +7,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint . --ext .js,.ts,.tsx",
-    "codegen:graphql_types": "apollo client:codegen src/queries/types --target=typescript --localSchemaFile=.\\schema.graphql --outputFlat --no-addTypename --tsFileExtension=d.ts"
+    "codegen:graphql_types": "apollo client:codegen src/queries/types --target=typescript --localSchemaFile=.\\schema.graphql --outputFlat --no-addTypename --tsFileExtension=d.ts",
+    "adb:reverse": "adb reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.50",
@@ -26,8 +27,8 @@
     "expo-av": "~8.1.0",
     "expo-font": "~8.1.0",
     "expo-media-library": "~8.1.0",
-    "expo-permissions": "~8.1.0",
-    "expo-splash-screen": "^0.2.3",
+    "expo-permissions": "~9.0.1",
+    "expo-splash-screen": "^0.3.1",
     "expo-updates": "~0.2.0",
     "firebase": "~7.15.0",
     "global": "^4.4.0",
@@ -43,7 +44,8 @@
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.2",
     "react-native-screens": "~2.8.0",
-    "react-native-unimodules": "~0.9.0"
+    "react-native-unimodules": "~0.10.1",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

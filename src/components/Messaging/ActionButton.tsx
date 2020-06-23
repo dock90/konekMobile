@@ -11,6 +11,7 @@ import {
   Vibration,
   View,
 } from 'react-native';
+import { BugSnag } from '../../config/BugSnag';
 import { useInterval } from '../../hooks/useInterval';
 import { useMe } from '../../hooks/useMe';
 import { AssetInterface } from '../../queries/AssetQueries';
@@ -168,7 +169,7 @@ const ActionButton: React.FC<Props> = ({
         return;
       }
       if (isRecording) {
-        Vibration.vibrate(100);
+        Vibration.vibrate(400);
         Animations.show();
         setActionMode(MODE.RECORDING);
       } else {
@@ -209,7 +210,8 @@ const ActionButton: React.FC<Props> = ({
           );
           await onRecordingSend(upload);
         } catch (e) {
-          // BugSnag && BugSnag.notify(e);
+          console.log(e);
+          BugSnag && BugSnag.notify(e);
           Alert.alert('Error', 'Error sending message');
         }
       }
