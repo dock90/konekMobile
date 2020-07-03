@@ -8,9 +8,9 @@ import { navigationRef } from '../service/RootNavigation';
 import { BORDER, PRIMARY } from '../styles/Colors';
 import MessagesStackScreen from './MessagesStackScreen';
 import ContactsStackScreen from './ContactsStackScreen';
-import ProfileScreen from './ProfileScreen';
 import Error from '../components/Error';
 import Loading from '../components/Loading';
+import ProfileStackScreen from './Profile/ProfileStackScreen';
 
 export type TabNavParamList = {
   Messages: undefined;
@@ -80,7 +80,7 @@ const MainNavContainer: React.FC = () => {
               <Avatar size={size} style={{ color }} picture={me.picture} />
             ),
           }}
-          component={ProfileScreen}
+          component={ProfileStackScreen}
         />
       </Tabs.Navigator>
     </NavigationContainer>

@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { client } from '../config/Apollo';
 import { BugSnag } from '../config/BugSnag';
@@ -60,7 +61,9 @@ export async function uploadFile(
           name: 'file',
           filename: file.name,
           type: file.type,
-          data: RNFetchBlob.wrap(file.uri),
+          data: RNFetchBlob.wrap(
+            Platform.OS === 'ios' ? file.uri.replace('file://', '') : file.uri
+          ),
         },
         { name: 'timestamp', data: toSign.timestamp.toString(10) },
         { name: 'api_key', data: config.apiKey },

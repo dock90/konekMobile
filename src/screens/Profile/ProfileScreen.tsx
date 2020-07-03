@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import {
   Text,
@@ -6,12 +7,15 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
-import { auth } from '../config/firebase';
-import { useMe } from '../hooks/useMe';
-import AcceptInvitation from '../components/AcceptInvitation';
-import Avatar from '../components/Avatar';
-import { BACKGROUND, PRIMARY } from '../styles/Colors';
-import { ContainerStyles } from '../styles/ContainerStyles';
+import { auth } from '../../config/firebase';
+import { useMe } from '../../hooks/useMe';
+import AcceptInvitation from '../../components/AcceptInvitation';
+import Avatar from '../../components/Avatar';
+import { ButtonStyles } from '../../styles/ButtonStyles';
+import { BACKGROUND } from '../../styles/Colors';
+import { ContainerStyles } from '../../styles/ContainerStyles';
+import { TextStyles } from '../../styles/TextStyles';
+import { ProfileStackParamList } from './ProfileStackScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,19 +47,22 @@ const styles = StyleSheet.create({
   profileActions: {
     alignItems: 'center',
   },
-  actionText: {
-    fontSize: 12,
-    color: PRIMARY,
-  },
 });
+interface Props {
+  navigation: StackNavigationProp<ProfileStackParamList>;
+}
 
-function ProfileScreen() {
+const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const { me } = useMe();
 
   const handleLogout = () => {
     auth.signOut().then(() => {
       console.log('Logout Success');
     });
+  };
+
+  const handleEditTouch = () => {
+    navigation.navigate('ProfileEdit');
   };
 
   return (
@@ -69,14 +76,23 @@ function ProfileScreen() {
           </Text>
         </View>
         <View style={styles.profileActions}>
+          <TouchableOpacity
+            style={ButtonStyles.baseButton}
+            onPress={handleEditTouch}
+          >
+            <Text style={TextStyles.button}>Edit Profile</Text>
+          </TouchableOpacity>
           {!me.access.hasContact && <AcceptInvitation />}
-          <TouchableOpacity onPress={handleLogout}>
-            <Text style={styles.actionText}>logout</Text>
+          <TouchableOpacity
+            onPress={handleLogout}
+            style={ButtonStyles.smallButton}
+          >
+            <Text style={TextStyles.buttonSmall}>logout</Text>
           </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
   );
-}
+};
 
 export default ProfileScreen;

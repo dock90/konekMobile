@@ -25,6 +25,11 @@ export const TextStyles = StyleSheet.create({
     fontSize: 12,
     textTransform: 'uppercase',
   },
+  buttonSmall: {
+    color: TEXT_ON_PRIMARY,
+    fontSize: 11,
+    textTransform: 'uppercase',
+  },
   link: {
     color: BORDER,
   },

@@ -14,6 +14,10 @@ export const InputStyles = StyleSheet.create({
     fontSize: 12,
     color: TEXT_INPUT,
   },
+  disabled: {
+    backgroundColor: 'lightgray',
+    color: 'gray',
+  },
   error: {
     borderColor: ERROR_TEXT,
     color: ERROR_TEXT,

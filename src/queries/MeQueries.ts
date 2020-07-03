@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
-import { ASSET_FIELDS, AssetFieldsInterface } from './AssetQueries';
+import {
+  ASSET_FIELDS,
+  AssetFieldsInterface,
+  AssetInterface,
+} from './AssetQueries';
 import { EmailsFields, PhonesFields } from './ContactQueries';
 
 export interface PubNubInfo {
@@ -53,11 +57,11 @@ export interface MeFieldsInterface {
   assetFolderId: string;
   emails: EmailsFields[];
   phones: PhonesFields[];
-  city: string | null;
-  state: string | null;
-  postalCode: string | null;
-  country: string | null;
-  language: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  language: string;
   pubNubInfo: PubNubInfo;
   algoliaInfo: AlgoliaInfo;
   cloudinaryInfo: CloudinaryInfo;
@@ -117,6 +121,54 @@ export interface MeQueryInterface {
 export const ME_QUERY = gql`
   query ME_QUERY {
     me {
+      ...MeFields
+    }
+  }
+  ${ME_FIELDS}
+`;
+
+export interface UpdateMeMutationInterface {
+  updateMe: MeFieldsInterface;
+}
+
+export interface UpdateMeMutationVariables {
+  name?: string;
+  picture?: AssetInterface | null;
+  // emails?: EmailInput[];
+  // phones?: PhoneInput[];
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  language?: string;
+}
+
+// UPDATE_ME_MUTATION
+export const UPDATE_ME_MUTATION = gql`
+  mutation UPDATE_ME_MUTATION(
+    $name: String
+    $picture: AssetInput
+    $emails: [EmailInput!]
+    $phones: [PhoneInput!]
+    $city: String
+    $state: String
+    $country: String
+    $postalCode: String
+    $language: String
+  ) {
+    updateMe(
+      input: {
+        name: $name
+        picture: $picture
+        emails: $emails
+        phones: $phones
+        city: $city
+        state: $state
+        country: $country
+        postalCode: $postalCode
+        language: $language
+      }
+    ) {
       ...MeFields
     }
   }
