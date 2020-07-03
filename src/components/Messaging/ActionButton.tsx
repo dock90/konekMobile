@@ -197,8 +197,9 @@ const ActionButton: React.FC<Props> = ({
       const file = await recorderRef.current.getFile();
 
       if (file) {
+        let upload: AssetInterface | false = false;
         try {
-          const upload = await uploadFile(
+          upload = await uploadFile(
             {
               folder: room.roomId,
               apiKey: cloudinaryInfo.apiKey,
@@ -208,7 +209,16 @@ const ActionButton: React.FC<Props> = ({
             },
             file
           );
-          await onRecordingSend(upload);
+        } catch (e) {
+          console.log(e);
+          BugSnag && BugSnag.notify(e);
+          Alert.alert('Error', 'Error saving recording');
+        }
+
+        try {
+          if (upload) {
+            await onRecordingSend(upload);
+          }
         } catch (e) {
           console.log(e);
           BugSnag && BugSnag.notify(e);
