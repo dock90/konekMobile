@@ -38,6 +38,7 @@
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "~0.62.2",
+    "react-native-collapsible": "^1.5.2",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-image-pan-zoom": "^2.1.11",
     "react-native-push-notification": "^3.5.2",

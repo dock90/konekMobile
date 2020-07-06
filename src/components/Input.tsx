@@ -1,6 +1,13 @@
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { InputStyles } from '../styles/InputStyles';
+
+const styles = StyleSheet.create({
+  label: {
+    marginLeft: 5,
+    marginBottom: 2,
+  },
+});
 
 type Props = {
   onChangeText: (text: string) => void;
@@ -19,7 +26,7 @@ const Input: React.FC<Props> = ({
 }) => {
   return (
     <View>
-      {!!label && <Text>{label}</Text>}
+      {!!label && <Text style={styles.label}>{label}</Text>}
       <TextInput
         style={[InputStyles.base, disabled ? InputStyles.disabled : {}]}
         placeholder={placeholder}

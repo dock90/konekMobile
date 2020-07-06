@@ -72,8 +72,12 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
           <Avatar picture={me.picture} size={80} style={styles.picture} />
           <Text style={styles.profileTitle}>{me.name}</Text>
           <Text style={styles.profileDetails}>
-            {me.city}, {me.state}
+            {me.city}, {me.state} {me.postalCode}
+            {!!me.country && ', ' + me.country}
           </Text>
+          {!!me.language && (
+            <Text style={styles.profileDetails}>{me.language}</Text>
+          )}
         </View>
         <View style={styles.profileActions}>
           <TouchableOpacity
