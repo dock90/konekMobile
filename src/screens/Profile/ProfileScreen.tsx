@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { auth } from '../../config/firebase';
 import { useMe } from '../../hooks/useMe';
-import AcceptInvitation from '../../components/AcceptInvitation';
 import Avatar from '../../components/Avatar';
 import { ButtonStyles } from '../../styles/ButtonStyles';
 import { BACKGROUND } from '../../styles/Colors';
@@ -64,6 +63,9 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const handleEditTouch = () => {
     navigation.navigate('ProfileEdit');
   };
+  const handleInviteTouch = () => {
+    navigation.navigate('Invitation');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,7 +88,12 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
           >
             <Text style={TextStyles.button}>Edit Profile</Text>
           </TouchableOpacity>
-          {!me.access.hasContact && <AcceptInvitation />}
+          <TouchableOpacity
+            style={ButtonStyles.baseButton}
+            onPress={handleInviteTouch}
+          >
+            <Text style={TextStyles.button}>Apply Invitation Code</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={handleLogout}
             style={ButtonStyles.smallButton}

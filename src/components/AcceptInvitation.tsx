@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
-import { ACCEPT_INVITATION_MUTATION } from '../queries/InvitationQueries';
-import { MaterialIcons } from '@expo/vector-icons';
-import { PLACEHOLDER_TEXT, PRIMARY } from '../styles/Colors';
+import {
+  ACCEPT_INVITATION_MUTATION,
+  AcceptInvitationMutationResult,
+} from '../queries/InvitationQueries';
+import { ProfileStackParamList } from '../screens/Profile/ProfileStackScreen';
+import { ButtonStyles } from '../styles/ButtonStyles';
+import { PRIMARY } from '../styles/Colors';
+import { TextStyles } from '../styles/TextStyles';
+import Input from './Input';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,41 +50,72 @@ const styles = StyleSheet.create({
 });
 
 function AcceptInvitation() {
+  const [error, setError] = useState('');
   const [inviteCode, setInviteCode] = useState('');
-  const [viewHeight, setViewHeight] = useState(false);
-  const [acceptInvitation] = useMutation(ACCEPT_INVITATION_MUTATION);
+  const [processing, setProcessing] = useState(false);
+  const [usedClipboard, setUsedClipboard] = useState(false);
+  const [acceptInvitation] = useMutation<AcceptInvitationMutationResult>(
+    ACCEPT_INVITATION_MUTATION
+  );
+  const navigation = useNavigation<
+    StackNavigationProp<ProfileStackParamList>
+  >();
 
-  const handleAcceptInvitation = async () => {
-    await acceptInvitation({
+  useEffect(() => {
+    try {
+      Clipboard.getString().then((text) => {
+        if (text && text.length < 25) {
+          setInviteCode(text);
+          setUsedClipboard(true);
+        }
+      });
+    } catch (e) {
+      // in case the Clipboard module isn't installed.
+    }
+  }, []);
+
+  const handleAcceptInvitation = async (): Promise<void> => {
+    setProcessing(true);
+    setError('');
+    const { data } = await acceptInvitation({
       variables: {
         code: inviteCode,
       },
     });
-    setInviteCode('');
+    if (!data || !data.acceptInvitation) {
+      setProcessing(false);
+      setError('Invalid invitation code!');
+      return;
+    }
+    if (usedClipboard) {
+      Clipboard.setString('');
+    }
+    navigation.navigate('Profile');
+  };
+
+  const handleChange = (v: string): void => {
+    setInviteCode(v);
+    setUsedClipboard(false);
+    setError('');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.codeHeader}>Input Invite Code Here</Text>
-      <View
-        style={[styles.inputContainer, { marginBottom: viewHeight ? 75 : 20 }]}
+      {!!error && <Text style={TextStyles.error}>{error}</Text>}
+      <Input
+        label="Invitation Code"
+        onChangeText={handleChange}
+        value={inviteCode}
+        placeholder="Enter Code"
+        disabled={processing}
+      />
+      <TouchableOpacity
+        onPress={handleAcceptInvitation}
+        style={ButtonStyles.baseButton}
+        disabled={processing}
       >
-        <TextInput
-          onBlur={() => setViewHeight(false)}
-          onFocus={() => setViewHeight(true)}
-          style={styles.input}
-          placeholderTextColor={PLACEHOLDER_TEXT}
-          onChangeText={(text) => setInviteCode(text)}
-          placeholder="Code"
-          value={inviteCode}
-        />
-        <TouchableOpacity
-          onPress={handleAcceptInvitation}
-          style={styles.sendContainer}
-        >
-          <MaterialIcons name="send" style={styles.sendIcon} size={20} />
-        </TouchableOpacity>
-      </View>
+        <Text style={TextStyles.button}>Accept Invitation</Text>
+      </TouchableOpacity>
     </View>
   );
 }

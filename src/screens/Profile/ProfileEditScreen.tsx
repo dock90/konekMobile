@@ -82,7 +82,14 @@ const ProfileEditScreen: React.FC = () => {
   function handleChangeAvatar() {
     ImagePicker.showImagePicker(
       {
-        title: 'Select Avatar',
+        title: 'Select Image',
+        mediaType: 'photo',
+        allowsEditing: true,
+        noData: true,
+        storageOptions: {
+          skipBackup: true,
+          path: 'KonekMe',
+        },
       },
       async (response) => {
         if (response.didCancel) {

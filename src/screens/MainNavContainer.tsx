@@ -82,7 +82,7 @@ const MainNavContainer: React.FC = () => {
             const routeName = route.state ? route.state.routes[route.state.index].name : route.params?.screen || 'Profile';
 
             return {
-              tabBarVisible: routeName !== 'ProfileEdit',
+              tabBarVisible: routeName === 'Profile',
               tabBarIcon: ({ color, size }) => (
                 <Avatar size={size} style={{ color }} picture={me.picture} />
               ),

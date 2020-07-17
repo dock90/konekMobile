@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import { MessageFieldsInterface } from '../queries/MessageQueries';
 import { RoomFieldsInterface } from '../queries/RoomQueries';
 import { PRIMARY, SECONDARY, TEXT_ON_PRIMARY } from '../styles/Colors';
@@ -42,51 +43,66 @@ type Props = {
 const Message: React.FC<Props> = ({ messageData, room }) => {
   const notMe = messageData.author.memberId !== room.memberId;
 
+  const onLongPress = () => {
+    if (!messageData.body) {
+      return;
+    }
+    try {
+      Clipboard.setString(messageData.body);
+    } catch (e) {
+      // In case the clipboard module hasn't been installed yet.
+    }
+  };
+
   return (
-    <View
-      style={[
-        styles.container,
-        { justifyContent: notMe ? 'flex-start' : 'flex-end' },
-      ]}
-    >
-      {notMe && (
-        <Avatar
-          picture={messageData.author.picture}
-          size={25}
-          style={styles.profileImg}
-        />
-      )}
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: notMe ? 'flex-start' : 'flex-end',
-          }}
-        >
-          {notMe && (
-            <Text style={styles.contactName}>{messageData.author.name} - </Text>
-          )}
-          <Text style={styles.timestamp}>
-            {formatDateTime(messageData.createdAt)}
-          </Text>
-        </View>
-        <View
-          style={{
-            backgroundColor: notMe ? SECONDARY : PRIMARY,
-            borderRadius: 5,
-            alignSelf: notMe ? 'flex-start' : 'flex-end',
-          }}
-        >
-          {messageData.asset && (
-            <Asset asset={messageData.asset} textColor="#fff" />
-          )}
-          {!!messageData.body && (
-            <Text style={styles.message}>{messageData.body}</Text>
-          )}
+    <TouchableWithoutFeedback onLongPress={onLongPress}>
+      <View
+        style={[
+          styles.container,
+          { justifyContent: notMe ? 'flex-start' : 'flex-end' },
+        ]}
+      >
+        {notMe && (
+          <Avatar
+            picture={messageData.author.picture}
+            size={25}
+            style={styles.profileImg}
+          />
+        )}
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: notMe ? 'flex-start' : 'flex-end',
+            }}
+          >
+            {notMe && (
+              <Text style={styles.contactName}>
+                {messageData.author.name} -{' '}
+              </Text>
+            )}
+            <Text style={styles.timestamp}>
+              {formatDateTime(messageData.createdAt)}
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: notMe ? SECONDARY : PRIMARY,
+              borderRadius: 5,
+              alignSelf: notMe ? 'flex-start' : 'flex-end',
+            }}
+          >
+            {messageData.asset && (
+              <Asset asset={messageData.asset} textColor="#fff" />
+            )}
+            {!!messageData.body && (
+              <Text style={styles.message}>{messageData.body}</Text>
+            )}
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
