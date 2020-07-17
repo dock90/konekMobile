@@ -76,11 +76,11 @@ const MainNavContainer: React.FC = () => {
         <Tabs.Screen
           name="Profile"
           options={({ route }) => {
-            console.log(route);
             // prettier-ignore
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const routeName = route.state ? route.state.routes[route.state.index].name : route.params?.screen || 'ProfileEdit';
+            const routeName = route.state ? route.state.routes[route.state.index].name : route.params?.screen || 'Profile';
+
             return {
               tabBarVisible: routeName !== 'ProfileEdit',
               tabBarIcon: ({ color, size }) => (

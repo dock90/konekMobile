@@ -1,7 +1,9 @@
 import { useMutation } from '@apollo/client';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
+  Image,
+  ImageSourcePropType,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -11,6 +13,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
+import Avatar from '../../components/Avatar';
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
 import { BugSnag } from '../../config/BugSnag';
@@ -21,6 +25,7 @@ import {
   UpdateMeMutationInterface,
   UpdateMeMutationVariables,
 } from '../../queries/MeQueries';
+import { uploadFile } from '../../service/Cloudinary';
 import { ButtonStyles } from '../../styles/ButtonStyles';
 import { BACKGROUND } from '../../styles/Colors';
 import { ContainerStyles } from '../../styles/ContainerStyles';
@@ -36,12 +41,30 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     width: '50%',
   },
+  avatarContainer: {
+    position: 'relative',
+  },
+  tempAvatar: {
+    borderRadius: 80,
+    height: 80,
+    width: 80,
+    overlayColor: '#ffffff',
+  },
+  editIcon: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+    fontSize: 22,
+    opacity: 1,
+  },
 });
 const ProfileEditScreen: React.FC = () => {
   const { me } = useMe();
   const [state, setState] = useState(me),
     [processing, setProcessing] = useState(false),
-    [collapsed, setCollapsed] = useState({ address: true, misc: true });
+    [collapsed, setCollapsed] = useState({ address: true, misc: true }),
+    [avatarProcessing, setAvatarProcessing] = useState(false),
+    [avatarTemp, setAvatarTemp] = useState<null | ImageSourcePropType>(null);
 
   const [updateMeMutation] = useMutation<
     UpdateMeMutationInterface,
@@ -54,6 +77,50 @@ const ProfileEditScreen: React.FC = () => {
     return (text: string): void => {
       setState({ ...state, [name]: text });
     };
+  }
+
+  function handleChangeAvatar() {
+    ImagePicker.showImagePicker(
+      {
+        title: 'Select Avatar',
+      },
+      async (response) => {
+        if (response.didCancel) {
+          return;
+        }
+
+        setAvatarTemp({ uri: response.uri });
+        setAvatarProcessing(true);
+        try {
+          const avatar = await uploadFile(
+            {
+              folder: 'avatar',
+              tags: ['avatar', 'profile'],
+              apiKey: me.cloudinaryInfo.apiKey,
+              cloudName: me.cloudinaryInfo.cloudName,
+              resourceType: 'image',
+            },
+            {
+              uri: response.uri,
+              type: response.type as string,
+              name: response.fileName as string,
+            }
+          );
+
+          await updateMeMutation({
+            variables: {
+              picture: avatar,
+            },
+          });
+        } catch (e) {
+          BugSnag && BugSnag.notify(e);
+          console.log(e);
+        }
+
+        setAvatarProcessing(false);
+        setAvatarTemp(null);
+      }
+    );
   }
 
   async function handleSave() {
@@ -86,6 +153,23 @@ const ProfileEditScreen: React.FC = () => {
           contentContainerStyle={styles.container}
         >
           <View style={ContainerStyles.baseContainer}>
+            {avatarProcessing && (
+              <View style={styles.avatarContainer}>
+                {avatarTemp && (
+                  <Image source={avatarTemp} style={styles.tempAvatar} />
+                )}
+                <Loading size={22} style={styles.editIcon} />
+              </View>
+            )}
+            {!avatarProcessing && (
+              <TouchableOpacity
+                onPress={handleChangeAvatar}
+                style={styles.avatarContainer}
+              >
+                <Avatar size={80} picture={me.picture} />
+                <MaterialCommunityIcons name="pencil" style={styles.editIcon} />
+              </TouchableOpacity>
+            )}
             <Input
               onChangeText={changeHandlerFactory('name')}
               value={state.name}
@@ -146,6 +230,7 @@ const ProfileEditScreen: React.FC = () => {
               style={[
                 ButtonStyles.baseButton,
                 processing ? ButtonStyles.disabledButton : {},
+                { marginTop: 15 },
               ]}
               onPress={handleSave}
             >

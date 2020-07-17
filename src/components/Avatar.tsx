@@ -8,7 +8,7 @@ import {
   TextStyle,
 } from 'react-native';
 import { useMe } from '../hooks/useMe';
-import { AssetFieldsInterface } from '../queries/AssetQueries';
+import { AssetInterface } from '../queries/AssetQueries';
 import { avatarUri } from '../service/AssetUris';
 import { BACKGROUND, SECONDARY } from '../styles/Colors';
 
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  picture?: AssetFieldsInterface | null;
+  picture?: AssetInterface | null;
   size?: number;
   style?: StyleProp<ImageStyle | TextStyle>;
   overlayColor?: string | 'none';

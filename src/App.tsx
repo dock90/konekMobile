@@ -18,7 +18,7 @@ import {
 import { ApolloProvider } from '@apollo/client';
 import MainNavContainer from './screens/MainNavContainer';
 import AuthContainer from './components/AuthContainer';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { loadAsync } from 'expo-font';
 
 enableScreens();
@@ -36,7 +36,10 @@ if (Platform.OS === 'ios') {
 async function initApp(): Promise<void> {
   try {
     await preventAutoHideAsync();
-    await loadAsync(MaterialIcons.font);
+    await Promise.all([
+      loadAsync(MaterialIcons.font),
+      loadAsync(MaterialCommunityIcons.font),
+    ]);
     await hideAsync();
   } catch (e) {
     console.log(e);

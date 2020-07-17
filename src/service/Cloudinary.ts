@@ -12,7 +12,7 @@ import {
 interface ConfigInterface {
   apiKey: string;
   cloudName: string;
-  resourceType: string;
+  resourceType: 'image' | 'raw' | 'video';
   folder: string;
   tags?: string[];
 }
@@ -20,6 +20,9 @@ interface ConfigInterface {
 interface FileInterface {
   uri: string;
   name: string;
+  /**
+   * MIME type of the file.
+   */
   type: string;
 }
 
