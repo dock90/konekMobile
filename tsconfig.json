@@ -23,6 +23,6 @@
     "index.js",
     "babel.config.js",
     "metro.config.js",
-    "jest.config.js",
+    "jest.config.js"
   ]
 }

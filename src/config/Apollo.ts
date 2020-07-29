@@ -73,9 +73,7 @@ export const client = new ApolloClient({
   cache,
   resolvers: {
     Query: {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore so the first error on the unused `obj` param goes away.
-      async room(obj, args, ctx) {
+      async room(_obj, args, ctx): Promise<undefined | unknown> {
         if (!args.roomId) {
           return undefined;
         }
