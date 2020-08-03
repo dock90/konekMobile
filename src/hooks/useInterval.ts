@@ -5,7 +5,7 @@ export function useInterval(
   intervalMs: number,
   enabled: boolean
 ): void {
-  const [intervalId, setIntervalId] = useState<null | number>(null);
+  const [intervalId, setIntervalId] = useState<null | NodeJS.Timeout>(null);
 
   useEffect(() => {
     if (enabled) {

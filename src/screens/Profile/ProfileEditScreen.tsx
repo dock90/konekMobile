@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 import {
   Image,
   ImageSourcePropType,
-  KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -151,108 +149,103 @@ const ProfileEditScreen: React.FC = () => {
         { backgroundColor: BACKGROUND },
       ]}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 85}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.container}
       >
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.container}
-        >
-          <View style={ContainerStyles.baseContainer}>
-            {avatarProcessing && (
-              <View style={styles.avatarContainer}>
-                {avatarTemp && (
-                  <Image source={avatarTemp} style={styles.tempAvatar} />
-                )}
-                <Loading size={22} style={styles.editIcon} />
-              </View>
-            )}
-            {!avatarProcessing && (
-              <TouchableOpacity
-                onPress={handleChangeAvatar}
-                style={styles.avatarContainer}
-              >
-                <Avatar size={80} picture={me.picture} />
-                <MaterialCommunityIcons name="pencil" style={styles.editIcon} />
-              </TouchableOpacity>
-            )}
+        <View style={ContainerStyles.baseContainer}>
+          {avatarProcessing && (
+            <View style={styles.avatarContainer}>
+              {avatarTemp && (
+                <Image source={avatarTemp} style={styles.tempAvatar} />
+              )}
+              <Loading size={22} style={styles.editIcon} />
+            </View>
+          )}
+          {!avatarProcessing && (
+            <TouchableOpacity
+              onPress={handleChangeAvatar}
+              style={styles.avatarContainer}
+            >
+              <Avatar size={80} picture={me.picture} />
+              <MaterialCommunityIcons name="pencil" style={styles.editIcon} />
+            </TouchableOpacity>
+          )}
+          <Input
+            onChangeText={changeHandlerFactory('name')}
+            value={state.name}
+            label="Name"
+            disabled={processing}
+          />
+          <TouchableOpacity
+            style={[ButtonStyles.secondaryButton, styles.toggleButton]}
+            onPress={() =>
+              setCollapsed({ ...collapsed, address: !collapsed.address })
+            }
+          >
+            <Text>Location Info</Text>
+          </TouchableOpacity>
+          <Collapsible collapsed={collapsed.address}>
             <Input
-              onChangeText={changeHandlerFactory('name')}
-              value={state.name}
-              label="Name"
+              onChangeText={changeHandlerFactory('city')}
+              value={state.city}
+              label="City"
               disabled={processing}
             />
-            <TouchableOpacity
-              style={[ButtonStyles.secondaryButton, styles.toggleButton]}
-              onPress={() =>
-                setCollapsed({ ...collapsed, address: !collapsed.address })
-              }
-            >
-              <Text>Location Info</Text>
-            </TouchableOpacity>
-            <Collapsible collapsed={collapsed.address}>
-              <Input
-                onChangeText={changeHandlerFactory('city')}
-                value={state.city}
-                label="City"
-                disabled={processing}
-              />
-              <Input
-                onChangeText={changeHandlerFactory('state')}
-                value={state.state}
-                label="State"
-                disabled={processing}
-              />
-              <Input
-                onChangeText={changeHandlerFactory('postalCode')}
-                value={state.postalCode}
-                label="Postal Code"
-                disabled={processing}
-              />
-              <Input
-                onChangeText={changeHandlerFactory('country')}
-                value={state.country}
-                label="Country"
-                disabled={processing}
-              />
-            </Collapsible>
-            <TouchableOpacity
-              style={[ButtonStyles.secondaryButton, styles.toggleButton]}
-              onPress={() =>
-                setCollapsed({ ...collapsed, misc: !collapsed.misc })
-              }
-            >
-              <Text>Misc Info</Text>
-            </TouchableOpacity>
-            <Collapsible collapsed={collapsed.misc}>
-              <Input
-                onChangeText={changeHandlerFactory('language')}
-                value={state.language}
-                label="Language"
-                disabled={processing}
-              />
-            </Collapsible>
-            <TouchableOpacity
-              style={[
-                ButtonStyles.baseButton,
-                processing ? ButtonStyles.disabledButton : {},
-                { marginTop: 15 },
-              ]}
-              onPress={handleSave}
-            >
-              {processing ? (
-                <Loading size={20} />
-              ) : (
-                <>
-                  <MaterialIcons style={TextStyles.button} name="save" />
-                  <Text style={TextStyles.button}> Save</Text>
-                </>
-              )}
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+            <Input
+              onChangeText={changeHandlerFactory('state')}
+              value={state.state}
+              label="State"
+              disabled={processing}
+            />
+            <Input
+              onChangeText={changeHandlerFactory('postalCode')}
+              value={state.postalCode}
+              label="Postal Code"
+              disabled={processing}
+            />
+            <Input
+              onChangeText={changeHandlerFactory('country')}
+              value={state.country}
+              label="Country"
+              disabled={processing}
+            />
+          </Collapsible>
+          <TouchableOpacity
+            style={[ButtonStyles.secondaryButton, styles.toggleButton]}
+            onPress={() =>
+              setCollapsed({ ...collapsed, misc: !collapsed.misc })
+            }
+          >
+            <Text>Misc Info</Text>
+          </TouchableOpacity>
+          <Collapsible collapsed={collapsed.misc}>
+            <Input
+              onChangeText={changeHandlerFactory('language')}
+              value={state.language}
+              label="Language"
+              disabled={processing}
+            />
+          </Collapsible>
+          <TouchableOpacity
+            style={[
+              ButtonStyles.baseButton,
+              processing ? ButtonStyles.disabledButton : {},
+              { marginTop: 15 },
+            ]}
+            onPress={handleSave}
+          >
+            {processing ? (
+              <Loading size={20} />
+            ) : (
+              <>
+                <MaterialIcons style={TextStyles.button} name="save" />
+                <Text style={TextStyles.button}> Save</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

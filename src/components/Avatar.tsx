@@ -63,6 +63,10 @@ const Avatar: React.FC<Props> = ({ picture, size, style, overlayColor }) => {
 
   // Delete this so validation doesn't complain.
   delete sizing.fontSize;
+  if (style && 'color' in style) {
+    // remove this so RN doesn't throw a warning.
+    delete style.color;
+  }
 
   return (
     <Image

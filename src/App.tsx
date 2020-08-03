@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Platform,
   StatusBar,
-  YellowBox,
+  LogBox,
   AppRegistry,
   UIManager,
 } from 'react-native';
@@ -23,7 +23,7 @@ import { loadAsync } from 'expo-font';
 
 enableScreens();
 // PubNub causes this warning, we can disable it.
-YellowBox.ignoreWarnings(['Setting a timer']);
+LogBox.ignoreLogs(['Setting a timer']);
 
 if (Platform.OS === 'ios') {
   StatusBar.setNetworkActivityIndicatorVisible(true);
