@@ -5,13 +5,13 @@ import {
   Image,
   ImageSourcePropType,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Avatar from '../../components/Avatar';
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
@@ -32,7 +32,7 @@ import Collapsible from 'react-native-collapsible';
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    paddingTop: 10,
   },
   toggleButton: {
     marginTop: 4,
@@ -149,7 +149,7 @@ const ProfileEditScreen: React.FC = () => {
         { backgroundColor: BACKGROUND },
       ]}
     >
-      <ScrollView
+      <KeyboardAwareScrollView
         style={styles.container}
         contentContainerStyle={styles.container}
       >
@@ -245,7 +245,7 @@ const ProfileEditScreen: React.FC = () => {
             )}
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
