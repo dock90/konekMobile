@@ -1,8 +1,7 @@
-import { useQuery } from '@apollo/client';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
-import { ROOMS_QUERY, RoomsQuery } from '../../queries/RoomQueries';
+import { useQtyUnread } from '../../hooks/useQtyUnread';
 import { BACKGROUND, PRIMARY, TEXT_ON_PRIMARY } from '../../styles/Colors';
 
 const styles = StyleSheet.create({
@@ -14,6 +13,7 @@ const styles = StyleSheet.create({
     top: -3,
     right: -10,
     backgroundColor: PRIMARY,
+    // so that it stays round, but can grow with longer numbers.
     minWidth: 17,
     height: 17,
     borderRadius: 10,
@@ -37,21 +37,7 @@ interface Props {
 }
 
 const MessagesTabIcon: React.FC<Props> = ({ size, color }) => {
-  const { loading, data, error } = useQuery<RoomsQuery>(ROOMS_QUERY);
-
-  const qtyUnread: number = useMemo(() => {
-    if (loading || error || !data || data.rooms.length == 0) {
-      return 0;
-    }
-
-    let unread = 0;
-
-    data.rooms.forEach((r) => {
-      unread += r.qtyUnread;
-    });
-
-    return unread;
-  }, [loading, data, error]);
+  const qtyUnread = useQtyUnread();
 
   return (
     <View style={styles.container}>
