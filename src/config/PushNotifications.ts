@@ -43,12 +43,12 @@ PushNotification.configure({
     sound: true,
   },
   onNotification(notification) {
-    // console.log(notification);
+    console.log(notification);
     let data: PushData | undefined;
     if (isAndroidPushNotification(notification)) {
       data = notification.data;
     } else if (isIosPushNotification(notification)) {
-      data = notification.data.aps;
+      data = notification.data.aps.data;
     }
 
     if (data?.roomId && notification.userInteraction) {
@@ -234,6 +234,8 @@ interface AndroidNotification extends PNInterface {
 
 interface IosNotification extends PNInterface {
   data: {
-    aps: PushData;
+    aps: {
+      data: PushData;
+    };
   };
 }
