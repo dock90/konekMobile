@@ -4,6 +4,7 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { client } from '../config/Apollo';
+import { updateApplicationIconBadgeNumber } from '../config/PushNotifications';
 import { AssetFieldsInterface, AssetInterface } from '../queries/AssetQueries';
 import {
   MessageFieldsInterface,
@@ -21,6 +22,8 @@ import {
   ROOMS_QUERY,
   RoomsQuery,
 } from '../queries/RoomQueries';
+import { MessageRouteParams } from '../screens/MessagesStackScreen';
+import { getNavigationRoute } from './RootNavigation';
 
 function hasPreviousMessage(
   messages: { data: Array<MessageFieldsInterface> },
@@ -162,10 +165,6 @@ export async function addMessage(
       fragmentName: 'RoomFields',
       data: {
         ...roomInfo,
-        // For some unknown reason, I couldn't modify the value directly. Doing a console.log
-        // before and after doing roomInfo.qtyUnread++ would show the same number both times!
-        // I'm suspicious that the cache is immutable or something but couldn't find any info
-        // in the docs.
         qtyUnread: roomInfo.qtyUnread + 1,
       },
     });
@@ -241,6 +240,19 @@ export async function addMessage(
       },
     },
   });
+
+  const route = getNavigationRoute();
+
+  if (route && route.name === 'Message') {
+    const params = route.params as MessageRouteParams;
+
+    const currentRoomId = params.room?.roomId || params.roomId;
+
+    if (currentRoomId === roomId) {
+      // We're currently in this room, mark it read.
+      await markAllRead(roomId);
+    }
+  }
 }
 
 function writeRoomInfo(roomId: string, info: RoomFieldsInterface): void {
@@ -290,6 +302,8 @@ export async function markAllRead(
   writeRoomInfo(roomId, roomInfo);
 
   if (!updateServer) {
+    console.log('markAllReady no update server');
+    await updateApplicationIconBadgeNumber();
     return;
   }
 
@@ -299,4 +313,6 @@ export async function markAllRead(
   });
 
   writeRoomInfo(roomId, results.data.setReadThrough);
+
+  await updateApplicationIconBadgeNumber();
 }

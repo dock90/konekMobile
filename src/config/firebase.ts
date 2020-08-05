@@ -34,3 +34,18 @@ if (BugSnag) {
     }
   });
 }
+
+let userResolver = (): void => {};
+const userPromise = new Promise<null>((resolve) => {
+  userResolver = resolve;
+});
+
+export function userReady(): Promise<null> {
+  return userPromise;
+}
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    userResolver();
+  }
+});

@@ -58,7 +58,7 @@ const cache = new InMemoryCache({
           return object[idField] as string;
         }
     }
-    console.info(`Unable to find ID for object of type "${typeName}"`);
+    console.warn(`Unable to find ID for object of type "${typeName}"`);
     return undefined;
   },
   possibleTypes: {

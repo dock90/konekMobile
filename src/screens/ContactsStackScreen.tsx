@@ -7,14 +7,14 @@ import { BACKGROUND } from '../styles/Colors';
 import ContactsScreen from './ContactsScreen';
 import PersonScreen from './PersonScreen';
 
-export type ContactsStack = {
+export type ContactsStackParamList = {
   People: undefined;
   Person: {
     person: PersonFieldsInterface;
   };
 };
 
-const ContactsStack = createStackNavigator<ContactsStack>();
+const ContactsStack = createStackNavigator<ContactsStackParamList>();
 
 function ContactsStackScreen() {
   return (

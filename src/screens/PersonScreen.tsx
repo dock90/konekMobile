@@ -25,7 +25,7 @@ import {
 import { PersonFieldsInterface } from '../queries/PeopleQueries';
 import { PRIMARY } from '../styles/Colors';
 import { ContainerStyles } from '../styles/ContainerStyles';
-import { ContactsStack } from './ContactsStackScreen';
+import { ContactsStackParamList } from './ContactsStackScreen';
 import { MessagesStackParamList } from './MessagesStackScreen';
 
 const spaceBetween = 20;
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 
 type Props = {
   navigation: StackNavigationProp<
-    ContactsStack & MessagesStackParamList,
+    ContactsStackParamList & MessagesStackParamList,
     'Person'
   >;
   route: Route;

@@ -7,16 +7,18 @@ import { BACKGROUND } from '../styles/Colors';
 import RoomsScreen from './RoomsScreen';
 import MessageScreen from './MessageScreen';
 
+export interface MessageRouteParams {
+  /**
+   * room OR roomId are required! Use room if you have it as it will require one
+   * less query to the server.
+   */
+  room?: RoomFieldsInterface;
+  roomId?: string;
+}
+
 export type MessagesStackParamList = {
   Rooms: undefined;
-  Message: {
-    /**
-     * room OR roomId are required! Use room if you have it as it will require one
-     * less query to the server.
-     */
-    room?: RoomFieldsInterface;
-    roomId?: string;
-  };
+  Message: MessageRouteParams;
 };
 
 const MessagesStack = createStackNavigator<MessagesStackParamList>();

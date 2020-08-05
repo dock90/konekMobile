@@ -123,7 +123,7 @@ export async function initPubNub(): Promise<void> {
  *
  * @return {Promise<void>}
  */
-export async function closePubNub() {
+export async function closePubNub(): Promise<void> {
   if (pn) {
     await clearSubscriptions(pn);
     pn.removeListener(listeners);

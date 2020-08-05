@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
 import Error from '../components/Error';
 import Loading from '../components/Loading';
+import { updateApplicationIconBadgeNumber } from '../config/PushNotifications';
 import { useMe } from '../hooks/useMe';
 import { ROOMS_QUERY, RoomsQuery } from '../queries/RoomQueries';
 import RoomItem from '../components/RoomItem';
@@ -33,7 +34,11 @@ const RoomsScreen: React.FC<Props> = ({ navigation }) => {
   }
 
   async function handleRefresh() {
-    const activities: Array<Promise<unknown>> = [refetch(), refreshMe()];
+    const activities: Array<Promise<unknown>> = [
+      refetch(),
+      refreshMe(),
+      updateApplicationIconBadgeNumber(false),
+    ];
     setRefreshing(true);
     await Promise.all(activities);
     setRefreshing(false);
