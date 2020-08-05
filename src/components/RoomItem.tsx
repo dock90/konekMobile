@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
-  unreadTag: {
+  unreadContainer: {
     position: 'absolute',
     top: 0,
     right: -5,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     height: 17,
     borderRadius: 10,
     borderColor: BACKGROUND,
-    borderWidth: 0.5,
+    borderWidth: StyleSheet.hairlineWidth,
     paddingLeft: 4,
     paddingRight: 4,
     display: 'flex',
@@ -57,7 +57,7 @@ const RoomItem: React.FC<Props> = ({ room, navigation }) => {
       <View style={{ marginRight: 20, position: 'relative' }}>
         <Avatar picture={room.picture} overlayColor={BACKGROUND} />
         {room.qtyUnread > 0 && (
-          <View style={styles.unreadTag}>
+          <View style={styles.unreadContainer}>
             <Text style={styles.unreadText}>{room.qtyUnread}</Text>
           </View>
         )}

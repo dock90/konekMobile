@@ -6,6 +6,7 @@ import Avatar from '../components/Avatar';
 import { useMe } from '../hooks/useMe';
 import { navigationRef } from '../service/RootNavigation';
 import { BORDER, PRIMARY } from '../styles/Colors';
+import MessagesTabIcon from './MainNav/MessagesTabIcon';
 import MessagesStackScreen from './MessagesStackScreen';
 import ContactsStackScreen from './ContactsStackScreen';
 import Error from '../components/Error';
@@ -58,7 +59,7 @@ const MainNavContainer: React.FC = () => {
             return {
               tabBarVisible: routeName !== 'Message',
               tabBarIcon: ({ color, size }) => (
-                <MaterialIcons name="chat" size={size} color={color} />
+                <MessagesTabIcon color={color} size={size} />
               ),
             };
           }}
