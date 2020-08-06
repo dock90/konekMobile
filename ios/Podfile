@@ -1,3 +1,4 @@
+require_relative '../node_modules/react-native-unimodules/cocoapods'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -6,12 +7,15 @@ platform :ios, '10.0'
 target 'KonekMe' do
   config = use_native_modules!
 
+  # Automatically detect installed unimodules
+  use_unimodules!
+  
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'KonekMeTests' do
-    inherit! :complete
+#  target 'KonekMeTests' do
+#    inherit! :complete
     # Pods for testing
-  end
+#  end
 
   # Enables Flipper.
   #
