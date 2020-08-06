@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3DE4DAD41476765101945408 /* libPods-KonekMe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FF9D506E70904424FA7E9 /* libPods-KonekMe.a */; };
 		F935B9E724898F5A000B4200 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F935B9E624898F5A000B4200 /* Temp.swift */; };
+		F9687BEE24DC9BED008A7FE5 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9687BED24DC9BED008A7FE5 /* SplashScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		F935B9E524898F59000B4200 /* KonekMe-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KonekMe-Bridging-Header.h"; sourceTree = "<group>"; };
 		F935B9E624898F5A000B4200 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 		F935B9E8248995C8000B4200 /* KonekMe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = KonekMe.entitlements; path = KonekMe/KonekMe.entitlements; sourceTree = "<group>"; };
+		F9687BED24DC9BED008A7FE5 /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				F9687BED24DC9BED008A7FE5 /* SplashScreen.storyboard */,
 				0731D3B524204D62009CAE85 /* Expo.plist */,
 				F935B9E624898F5A000B4200 /* Temp.swift */,
 				F935B9E524898F59000B4200 /* KonekMe-Bridging-Header.h */,
@@ -177,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0731D3B824204D62009CAE85 /* Expo.plist in Resources */,
+				F9687BEE24DC9BED008A7FE5 /* SplashScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
