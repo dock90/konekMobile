@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -45,7 +45,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const handleLogin = async (): Promise<void> => {
+  const handleLogin = useCallback(async (): Promise<void> => {
     if (processing) {
       return;
     }
@@ -70,7 +70,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       }
     }
     setProcessing(false);
-  };
+  }, [email, password]);
 
   const disabled = !email || !password || processing;
 
