@@ -12,7 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3DE4DAD41476765101945408 /* libPods-KonekMe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FF9D506E70904424FA7E9 /* libPods-KonekMe.a */; };
-		F935B9E724898F5A000B4200 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F935B9E624898F5A000B4200 /* Temp.swift */; };
+		739BD31F24F404A3009C7BBE /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739BD31E24F404A3009C7BBE /* Swift.swift */; };
 		F9687BEE24DC9BED008A7FE5 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9687BED24DC9BED008A7FE5 /* SplashScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -27,12 +27,12 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = KonekMe/main.m; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B47C5AFCB8BDE514B7D1AC6 /* Pods-KonekMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KonekMe.debug.xcconfig"; path = "Target Support Files/Pods-KonekMe/Pods-KonekMe.debug.xcconfig"; sourceTree = "<group>"; };
+		739BD31E24F404A3009C7BBE /* Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift.swift; sourceTree = "<group>"; };
 		8AC623DBF3A3E2CB072F81F2 /* Pods-KonekMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KonekMe.release.xcconfig"; path = "Target Support Files/Pods-KonekMe/Pods-KonekMe.release.xcconfig"; sourceTree = "<group>"; };
 		D43FF9D506E70904424FA7E9 /* libPods-KonekMe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KonekMe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F935B9E524898F59000B4200 /* KonekMe-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KonekMe-Bridging-Header.h"; sourceTree = "<group>"; };
-		F935B9E624898F5A000B4200 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 		F935B9E8248995C8000B4200 /* KonekMe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = KonekMe.entitlements; path = KonekMe/KonekMe.entitlements; sourceTree = "<group>"; };
 		F9687BED24DC9BED008A7FE5 /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,8 +61,8 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				F9687BED24DC9BED008A7FE5 /* SplashScreen.storyboard */,
 				0731D3B524204D62009CAE85 /* Expo.plist */,
-				F935B9E624898F5A000B4200 /* Temp.swift */,
 				F935B9E524898F59000B4200 /* KonekMe-Bridging-Header.h */,
+				739BD31E24F404A3009C7BBE /* Swift.swift */,
 			);
 			name = KonekMe;
 			sourceTree = "<group>";
@@ -152,7 +152,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = Q8YH4M2MHC;
 						LastSwiftMigration = 1140;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -269,8 +269,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				739BD31F24F404A3009C7BBE /* Swift.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				F935B9E724898F5A000B4200 /* Temp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,8 +286,8 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = KonekMe/KonekMe.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = Q8YH4M2MHC;
@@ -302,7 +302,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = app.konek.me;
 				PRODUCT_NAME = KonekMe;
-				PROVISIONING_PROFILE_SPECIFIER = "Konek Me JMB";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "KonekMe-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -319,7 +319,8 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = KonekMe/KonekMe.entitlements;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Q8YH4M2MHC;
 				INFOPLIST_FILE = KonekMe/Info.plist;
@@ -333,7 +334,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = app.konek.me;
 				PRODUCT_NAME = KonekMe;
-				PROVISIONING_PROFILE_SPECIFIER = "Konek Me JMB";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "KonekMe-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -370,6 +371,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution: Aaron Beiler (Q8YH4M2MHC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: Aaron Beiler (Q8YH4M2MHC)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -424,6 +426,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution: Aaron Beiler (Q8YH4M2MHC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: Aaron Beiler (Q8YH4M2MHC)";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
