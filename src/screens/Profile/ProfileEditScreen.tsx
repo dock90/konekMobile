@@ -132,7 +132,14 @@ const ProfileEditScreen: React.FC = () => {
     setProcessing(true);
     try {
       await updateMeMutation({
-        variables: state,
+        variables: {
+          name: state.name,
+          city: state.city,
+          state: state.state,
+          country: state.country,
+          postalCode: state.postalCode,
+          language: state.language,
+        },
       });
     } catch (e) {
       BugSnag && BugSnag.notify(e);
