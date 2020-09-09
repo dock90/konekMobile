@@ -69,7 +69,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         console.log(error);
       }
     }
-    setProcessing(false);
+    // setProcessing(false);
   }, [email, password]);
 
   const disabled = !email || !password || processing;

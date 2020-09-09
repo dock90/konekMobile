@@ -4,6 +4,7 @@ import { PUB_NUB_CONNECTION_STATE_QUERY } from '../queries/LocalStateQueries';
 import { addMessage } from '../service/Messages';
 import { client } from './Apollo';
 import { ME_QUERY, MeQueryInterface } from '../queries/MeQueries';
+import { BugSnag } from './BugSnag';
 import { auth } from './firebase';
 import { clearSubscriptions, refreshSubscriptions } from './PushNotifications';
 
@@ -82,7 +83,18 @@ const listeners: ListenerParameters = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let pubNubResolve = (_pn: PubNub): void => {
+  // noop
+};
+const pubNubPromise = new Promise<PubNub>((resolve) => {
+  pubNubResolve = resolve;
+});
 let pn: PubNub | undefined;
+
+export async function getPubNub(): Promise<PubNub> {
+  return pubNubPromise;
+}
 
 /**
  * Must be called AFTER firebase has been authorized.
@@ -116,7 +128,7 @@ export async function initPubNub(): Promise<void> {
     channelGroups: [pubNubInfo.channelGroup],
   });
 
-  await refreshSubscriptions(pn, false);
+  pubNubResolve(pn);
 }
 
 /**
@@ -125,7 +137,13 @@ export async function initPubNub(): Promise<void> {
  */
 export async function closePubNub(): Promise<void> {
   if (pn) {
-    await clearSubscriptions(pn);
+    try {
+      await clearSubscriptions(pn);
+    } catch (e) {
+      console.log(e);
+      BugSnag && BugSnag.notify(e);
+    }
+
     pn.removeListener(listeners);
     pn.unsubscribeAll();
     pn = undefined;

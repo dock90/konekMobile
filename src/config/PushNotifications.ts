@@ -12,6 +12,7 @@ import { PRIMARY } from '../styles/Colors';
 import { client } from './Apollo';
 import { BugSnag } from './BugSnag';
 import { userReady } from './firebase';
+import { getPubNub } from './PubNub';
 
 function isAndroidPushNotification(
   notification: PNInterface
@@ -21,22 +22,36 @@ function isAndroidPushNotification(
 function isIosPushNotification(
   notification: PNInterface
 ): notification is IosNotification {
-  return Platform.OS == 'ios' && 'data' in notification;
+  return (
+    Platform.OS == 'ios' &&
+    'data' in notification &&
+    'data' in notification.data
+  );
+}
+function isLocalNotification(
+  notification: PNInterface
+): notification is LocalNotification {
+  return 'data' in notification && 'isLocal' in notification.data;
 }
 
 AppState.addEventListener('change', (newState) => {
   console.log(`AppState change: ${newState}`);
   if (newState === 'active') {
+    // Clean up all notifications when the app is activated.
     PushNotification.cancelAllLocalNotifications();
   }
 });
+
+let deviceToken: { os: string; token: string } | undefined;
+let deviceGateway: 'apns2' | 'gcm' | undefined;
+let additionalConfig: Record<string, unknown> = {};
 
 // Initial configuration needs to happen ASAP so that background notifications are
 // handled. Otherwise they don't seem to hit the JS code at all.
 PushNotification.configure({
   requestPermissions: true,
-  popInitialNotification: true,
-  senderID: Platform.OS === 'android' ? '696329386413' : undefined,
+  popInitialNotification: false,
+  // senderID: Platform.OS === 'android' ? '696329386413' : undefined,
   permissions: {
     alert: true,
     badge: true,
@@ -44,19 +59,23 @@ PushNotification.configure({
   },
   onNotification(notification) {
     console.log(notification);
-    let data: PushData | undefined;
-    if (isAndroidPushNotification(notification)) {
+    let data: PushData | undefined,
+      isLocal = false;
+    if (isLocalNotification(notification)) {
+      data = notification.data;
+      isLocal = true;
+    } else if (isAndroidPushNotification(notification)) {
       data = notification.data;
     } else if (isIosPushNotification(notification)) {
-      data = notification.data.aps.data;
+      data = notification.data.data;
     }
 
-    if (data?.roomId && notification.userInteraction) {
+    if (data?.roomId && isLocal) {
       navigate('Message', { roomId: data.roomId });
       return;
     }
 
-    if (data?.roomId) {
+    if (data?.roomId && isLocal) {
       const route = getNavigationRoute();
 
       if (route && route.name == 'Message' && route.params) {
@@ -72,119 +91,133 @@ PushNotification.configure({
 
     const isActive = AppState.currentState === 'active';
 
-    PushNotification.localNotification({
-      color: PRIMARY,
-      title: data?.title || '',
-      message: data?.body || '',
-      userInfo: {
-        roomId: data?.roomId,
-      },
-      // If sound isn't played when active, it appears to not show a notification but only add it to the drawer.
-      playSound: true,
-      soundName: 'default',
-      // Don't vibrate if app is active.
-      vibrate: !isActive,
-      ticker: data?.title,
-    });
+    if (isLocal) {
+      notification.finish(PushNotificationIOS.FetchResult.NoData);
+    } else {
+      PushNotification.localNotification({
+        color: PRIMARY,
+        title: data?.title || '',
+        message: data?.body || '',
+        userInfo: {
+          roomId: data?.roomId,
+          isLocal: true,
+        },
+        // If sound isn't played when active, it appears to not show a notification but only add it to the drawer.
+        playSound: true,
+        soundName: 'default',
+        // Don't vibrate if app is active.
+        vibrate: !isActive,
+        ticker: data?.title,
+      });
 
-    updateApplicationIconBadgeNumber(true).then();
+      updateApplicationIconBadgeNumber(true).then(() => {
+        notification.finish(PushNotificationIOS.FetchResult.NewData);
+      });
+    }
+  },
+  onRegister: async function (token) {
+    console.log('PushNotification.onRegister', token);
+    deviceToken = token;
+    if (token.os === 'ios') {
+      deviceGateway = 'apns2';
+      additionalConfig = {
+        environment: 'development',
+        topic: 'app.konek.me',
+      };
+    } else if (token.os === 'android') {
+      deviceGateway = 'gcm';
+    } else {
+      return;
+    }
 
-    notification.finish(PushNotificationIOS.FetchResult.NewData);
+    const pubNub = await getPubNub();
+
+    await refreshSubscriptions(pubNub, false);
   },
 });
-
-let deviceToken: { os: string; token: string } | undefined;
-let deviceGateway: 'apns2' | 'gcm' | undefined;
 
 export async function refreshSubscriptions(
   pubNub: PubNub,
   forceRefresh: boolean
 ): Promise<void> {
+  console.log('refreshSubscriptions');
   const { data } = await client.query<MeQueryInterface>({
     query: ME_QUERY,
     fetchPolicy: forceRefresh ? 'network-only' : 'cache-first',
   });
 
-  if (!data) {
+  if (!data || !deviceToken || !deviceGateway) {
     return;
   }
 
-  PushNotification.configure({
-    onRegister: async function (token) {
-      deviceToken = token;
-      let additionalConfig: Record<string, unknown> = {};
-      if (token.os === 'ios') {
-        deviceGateway = 'apns2';
-        additionalConfig = {
-          environment: 'production',
-          topic: 'app.konek.me',
-        };
-      } else if (token.os === 'android') {
-        deviceGateway = 'gcm';
-      } else {
-        return;
-      }
+  const { channels: currentChannels } = await pubNub.push.listChannels({
+      device: deviceToken.token,
+      pushGateway: deviceGateway,
+      ...additionalConfig,
+    }),
+    desiredChannels = data.me.pubNubInfo.channels;
 
-      const { channels: currentChannels } = await pubNub.push.listChannels({
-          device: token.token,
-          pushGateway: deviceGateway,
-          ...additionalConfig,
-        }),
-        desiredChannels = data.me.pubNubInfo.channels;
+  const remove: Array<string> = [],
+    add: Array<string> = [];
 
-      const remove: Array<string> = [],
-        add: Array<string> = [];
+  for (const currentChannel of currentChannels) {
+    if (!desiredChannels.includes(currentChannel)) {
+      remove.push(currentChannel);
+    }
+  }
 
-      for (const currentChannel of currentChannels) {
-        if (!desiredChannels.includes(currentChannel)) {
-          remove.push(currentChannel);
-        }
-      }
+  for (const desiredChannel of desiredChannels) {
+    if (!currentChannels.includes(desiredChannel)) {
+      add.push(desiredChannel);
+    }
+  }
 
-      for (const desiredChannel of desiredChannels) {
-        if (!currentChannels.includes(desiredChannel)) {
-          add.push(desiredChannel);
-        }
-      }
+  const tasks = [];
 
-      const tasks = [];
+  if (remove.length > 0) {
+    tasks.push(
+      pubNub.push.removeChannels({
+        device: deviceToken.token,
+        channels: remove,
+        pushGateway: deviceGateway,
+        ...additionalConfig,
+      })
+    );
+  }
+  console.log(add.length, remove.length);
 
-      if (remove.length > 0) {
-        tasks.push(
-          pubNub.push.removeChannels({
-            device: token.token,
-            channels: remove,
-            pushGateway: deviceGateway,
-            ...additionalConfig,
-          })
-        );
-      }
+  if (add.length > 0) {
+    tasks.push(
+      pubNub.push.addChannels({
+        device: deviceToken.token,
+        channels: add,
+        pushGateway: deviceGateway,
+        ...additionalConfig,
+      })
+    );
+  }
 
-      if (add.length > 0) {
-        tasks.push(
-          pubNub.push.addChannels({
-            device: token.token,
-            channels: add,
-            pushGateway: deviceGateway,
-            ...additionalConfig,
-          })
-        );
-      }
-
-      await Promise.all(tasks);
-    },
-  });
+  if (tasks.length > 0) {
+    await Promise.all(tasks);
+  }
 }
 
 export async function clearSubscriptions(pubNub: PubNub): Promise<void> {
   if (!deviceToken || !deviceGateway) {
     return;
   }
+  console.log('clearing Subscriptions');
 
-  await pubNub.push.deleteDevice({
-    pushGateway: deviceGateway,
-    device: deviceToken.token,
-  });
+  try {
+    await pubNub.push.deleteDevice({
+      pushGateway: deviceGateway,
+      device: deviceToken.token,
+      ...additionalConfig,
+    });
+  } catch (e) {
+    console.log({ keys: Object.keys(e), json: JSON.stringify(e) });
+    BugSnag && BugSnag.notify(e);
+  }
 }
 
 export async function updateApplicationIconBadgeNumber(
@@ -234,8 +267,11 @@ interface AndroidNotification extends PNInterface {
 
 interface IosNotification extends PNInterface {
   data: {
-    aps: {
-      data: PushData;
-    };
+    data: PushData;
+    aps: Record<string, unknown>;
   };
+}
+
+interface LocalNotification extends PNInterface {
+  data: PushData & { isLocal: true };
 }

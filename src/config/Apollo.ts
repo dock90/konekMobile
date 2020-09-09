@@ -34,22 +34,31 @@ const authLink = setContext(async (_, { headers }) => {
 
 const cache = new InMemoryCache({
   addTypename: false,
+  typePolicies: {
+    Asset: {
+      keyFields: () => undefined,
+    },
+    Me: {
+      // Will only ever be one, so a static ID is fine.
+      keyFields: () => 'Me',
+    },
+    Note: {
+      keyFields: ['entryId'],
+    },
+    Conversation: {
+      keyFields: ['entryId'],
+    },
+    Person: {
+      keyFields: (object) =>
+        personKeyExtractor((object as unknown) as PersonFieldsInterface),
+    },
+  },
   dataIdFromObject: (object): string | undefined => {
     const typeName = object.__typename;
     if (!typeName) {
       return undefined;
     }
     switch (typeName) {
-      case 'Asset':
-        return undefined;
-      case 'Me':
-        // Will only ever be one, so a static ID is fine.
-        return typeName;
-      case 'Note':
-      case 'Conversation':
-        return object.entryId as string;
-      case 'Person':
-        return personKeyExtractor((object as unknown) as PersonFieldsInterface);
       default:
         const idField = `${
           typeName.charAt(0).toLowerCase() + typeName.slice(1)
