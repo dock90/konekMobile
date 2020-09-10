@@ -14,6 +14,7 @@ import Error from '../components/Error';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 import ActionButton from '../components/Messaging/ActionButton';
+import Attach from '../components/Messaging/Attach';
 import { AssetInterface } from '../queries/AssetQueries';
 import {
   MessageQueryVariables,
@@ -30,7 +31,7 @@ import {
 import { markAllRead, sendMessage } from '../service/Messages';
 import { PLACEHOLDER_TEXT, PRIMARY, TEXT_INPUT } from '../styles/Colors';
 import { MessagesStackParamList } from './MessagesStackScreen';
-import BeginningOfConversation from './MessageScreen/BeginningOfConversation';
+import BeginningOfConversation from '../components/Messaging/BeginningOfConversation';
 
 const styles = StyleSheet.create({
   container: {
@@ -41,19 +42,34 @@ const styles = StyleSheet.create({
   messages: {
     flex: 1,
   },
+  footer: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 50,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'lightgray',
+  },
+  attachButton: {
+    marginLeft: 5,
+    display: 'flex',
+    alignContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   inputContainer: {
     height: 40,
     flexDirection: 'row',
+    flexGrow: 1,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'gray',
     backgroundColor: '#F5F5F5',
     borderRadius: 5,
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: 5,
+    marginRight: 10,
     marginTop: 5,
-    marginBottom: 15,
-    paddingLeft: 12,
+    // marginBottom: 15,
+    paddingLeft: 10,
     paddingRight: 0,
   },
   input: {
@@ -79,9 +95,10 @@ type Props = {
 };
 
 const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
-  const [messageText, setMessageText] = useState('');
-  // A semaphore to prevent multiple of messages pages from loading simultaneously.
-  const [isLoadingNext, setIsLoadingNext] = useState(false);
+  const [messageText, setMessageText] = useState(''),
+    // A semaphore to prevent multiple of messages pages from loading simultaneously.
+    [isLoadingNext, setIsLoadingNext] = useState(false),
+    [isProcessing, setProcessing] = useState(false);
 
   let room: RoomFieldsInterface = route.params.room;
   const roomId = room ? room.roomId : route.params.roomId;
@@ -188,7 +205,11 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   async function handleAssetSend(asset: AssetInterface): Promise<void> {
-    await sendMessage(room.roomId, messageText, asset);
+    setProcessing(true);
+    const body = messageText;
+    setMessageText('');
+    await sendMessage(room.roomId, body, asset);
+    setProcessing(false);
   }
 
   return (
@@ -211,21 +232,31 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
           inverted
         />
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={handleMessageChange}
-          placeholder="Aa"
-          style={styles.input}
-          placeholderTextColor={PLACEHOLDER_TEXT}
-          value={messageText}
-        />
+      <View style={styles.footer}>
+        <View style={styles.attachButton}>
+          <Attach
+            onSend={handleAssetSend}
+            room={room}
+            setProcessing={setProcessing}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            onChangeText={handleMessageChange}
+            placeholder="Aa"
+            style={styles.input}
+            placeholderTextColor={PLACEHOLDER_TEXT}
+            value={messageText}
+          />
 
-        <ActionButton
-          room={room}
-          hasText={messageText.length > 0}
-          onSend={handleSend}
-          onRecordingSend={handleAssetSend}
-        />
+          <ActionButton
+            room={room}
+            hasText={messageText.length > 0}
+            onSend={handleSend}
+            onRecordingSend={handleAssetSend}
+            isProcessing={isProcessing}
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

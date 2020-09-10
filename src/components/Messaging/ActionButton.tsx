@@ -111,6 +111,7 @@ type Props = {
   hasText: boolean;
   onRecordingSend: (asset: AssetInterface) => void;
   room: RoomFieldsInterface;
+  isProcessing?: boolean;
 };
 
 const ActionButton: React.FC<Props> = ({
@@ -118,6 +119,7 @@ const ActionButton: React.FC<Props> = ({
   hasText,
   onRecordingSend,
   room,
+  isProcessing = false,
 }) => {
   const {
     me: { cloudinaryInfo },
@@ -140,6 +142,14 @@ const ActionButton: React.FC<Props> = ({
     500,
     actionMode === MODE.RECORDING
   );
+
+  useEffect(() => {
+    if (actionMode === DEFAULT_MODE && isProcessing) {
+      setActionMode(MODE.PROCESSING);
+    } else if (actionMode === MODE.PROCESSING && !isProcessing) {
+      setActionMode(DEFAULT_MODE);
+    }
+  }, [isProcessing]);
 
   const cancelRecording = useCallback(async (): Promise<void> => {
       doCancel.current = true;
