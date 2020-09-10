@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Loading from '../../components/Loading';
-import { PRIMARY } from '../../styles/Colors';
+import { DISABLED_BACKGROUND, PRIMARY } from '../../styles/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     borderRadius: 5,
-    backgroundColor: 'lightgray',
+    backgroundColor: DISABLED_BACKGROUND,
     borderWidth: StyleSheet.hairlineWidth,
   },
   text: {

@@ -7,3 +7,5 @@ export const ERROR_TEXT = '#E83A30';
 export const BACKGROUND = '#FFFFFF';
 export const TEXT_INPUT = '#000000';
 export const PLACEHOLDER_TEXT = '#999999';
+export const DISABLED = 'gray';
+export const DISABLED_BACKGROUND = 'lightgray';

@@ -238,6 +238,7 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
             onSend={handleAssetSend}
             room={room}
             setProcessing={setProcessing}
+            disabled={!!messageText}
           />
         </View>
         <View style={styles.inputContainer}>

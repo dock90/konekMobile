@@ -7,15 +7,16 @@ import { useMe } from '../../hooks/useMe';
 import { AssetInterface } from '../../queries/AssetQueries';
 import { RoomFieldsInterface } from '../../queries/RoomQueries';
 import { uploadFile } from '../../service/Cloudinary';
-import { PRIMARY } from '../../styles/Colors';
+import { DISABLED, PRIMARY } from '../../styles/Colors';
 
 interface Props {
   room: RoomFieldsInterface;
   onSend: (asset: AssetInterface) => Promise<void>;
   setProcessing?: (processing: boolean) => void;
+  disabled?: boolean;
 }
 
-const Attach: React.FC<Props> = ({ onSend, room, setProcessing }) => {
+const Attach: React.FC<Props> = ({ onSend, room, setProcessing, disabled }) => {
   const {
     me: { cloudinaryInfo },
   } = useMe();
@@ -27,7 +28,6 @@ const Attach: React.FC<Props> = ({ onSend, room, setProcessing }) => {
         mediaType: 'photo',
         allowsEditing: true,
         noData: true,
-        tintColor: PRIMARY,
         storageOptions: {
           skipBackup: true,
           path: 'KonekMe',
@@ -63,10 +63,14 @@ const Attach: React.FC<Props> = ({ onSend, room, setProcessing }) => {
         setProcessing && setProcessing(false);
       }
     );
-  }, [cloudinaryInfo, onSend, room.roomId, setProcessing]);
+  }, [cloudinaryInfo, onSend, room.roomId, setProcessing, disabled]);
   return (
-    <TouchableOpacity onPress={onPress}>
-      <MaterialIcons name="add" size={30} color={PRIMARY} />
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
+      <MaterialIcons
+        name="add"
+        size={30}
+        color={disabled ? DISABLED : PRIMARY}
+      />
     </TouchableOpacity>
   );
 };

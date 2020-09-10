@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { PRIMARY } from './Colors';
+import { DISABLED, PRIMARY } from './Colors';
 
 export const ButtonStyles = StyleSheet.create({
   baseButton: {
@@ -23,7 +23,7 @@ export const ButtonStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   disabledButton: {
-    backgroundColor: 'gray',
+    backgroundColor: DISABLED,
   },
   secondaryButton: {
     borderRadius: 5,

@@ -1,5 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { TEXT_INPUT, BORDER, ERROR_TEXT } from './Colors';
+import {
+  TEXT_INPUT,
+  BORDER,
+  ERROR_TEXT,
+  DISABLED,
+  DISABLED_BACKGROUND,
+} from './Colors';
 
 export const InputStyles = StyleSheet.create({
   base: {
@@ -15,8 +21,8 @@ export const InputStyles = StyleSheet.create({
     color: TEXT_INPUT,
   },
   disabled: {
-    backgroundColor: 'lightgray',
-    color: 'gray',
+    backgroundColor: DISABLED_BACKGROUND,
+    color: DISABLED,
   },
   error: {
     borderColor: ERROR_TEXT,
