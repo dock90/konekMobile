@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -97,8 +97,11 @@ type Props = {
 const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   const [messageText, setMessageText] = useState(''),
     // A semaphore to prevent multiple of messages pages from loading simultaneously.
-    [isLoadingNext, setIsLoadingNext] = useState(false),
+    [isLoadingNext, setIsLoadingNext] = useState<boolean | undefined>(false),
     [isProcessing, setProcessing] = useState(false);
+
+  // A semaphore to prevent multiple of messages pages from loading simultaneously.
+  const loadingSemaphore = useRef<boolean>();
 
   let room: RoomFieldsInterface = route.params.room;
   const roomId = room ? room.roomId : route.params.roomId;
@@ -147,9 +150,16 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
       return;
     }
     if (room.qtyUnread > 0) {
-      markAllRead(room.roomId, true);
+      markAllRead(room.roomId, true).then();
     }
   }, [room, loading]);
+
+  useEffect(() => {
+    if (loadingSemaphore.current === undefined) {
+      loadingSemaphore.current = false;
+    }
+    setIsLoadingNext(loadingSemaphore.current);
+  }, [loadingSemaphore.current]);
 
   if (loading || !data || roomQuery.loading) {
     return <Loading />;
@@ -163,31 +173,18 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   const handleEndReach = async (): Promise<void> => {
-    if (isLoadingNext) {
+    if (loadingSemaphore.current == true) {
       return;
     }
-    setIsLoadingNext(true);
+    loadingSemaphore.current = true;
 
     const variables: MessageQueryVariables = {
       roomId: room.roomId,
       after: data.messages.pageInfo.endCursor,
     };
 
-    await fetchMore({
-      variables,
-      updateQuery: (prev, { fetchMoreResult }) => {
-        setIsLoadingNext(false);
-        if (!fetchMoreResult || fetchMoreResult.messages.data.length === 0) {
-          return prev;
-        }
-        return {
-          messages: {
-            data: [...prev.messages.data, ...fetchMoreResult.messages.data],
-            pageInfo: fetchMoreResult.messages.pageInfo,
-          },
-        };
-      },
-    });
+    await fetchMore({ variables });
+    loadingSemaphore.current = false;
   };
 
   // handle message send
@@ -221,7 +218,10 @@ const MessageScreen: React.FC<Props> = ({ navigation, route }) => {
       <View style={styles.messages}>
         <FlatList
           ListFooterComponent={
-            <BeginningOfConversation loading={isLoadingNext} />
+            <BeginningOfConversation
+              loading={isLoadingNext}
+              hasNextPage={data.messages.pageInfo.hasNextPage}
+            />
           }
           onEndReached={handleEndReach}
           data={data.messages.data}

@@ -52,6 +52,26 @@ const cache = new InMemoryCache({
       keyFields: (object) =>
         personKeyExtractor((object as unknown) as PersonFieldsInterface),
     },
+    // Query: {
+    //   fields: {
+    //     messages: {
+    //       merge(
+    //         existing: undefined | MessagesQueryDataInterface,
+    //         incoming: MessagesQueryDataInterface,
+    //         options
+    //       ): MessagesQueryDataInterface {
+    //         console.log({ existing, incoming, args: options.args });
+    //         if (!existing) {
+    //           return incoming;
+    //         }
+    //         return {
+    //           data: [...existing.data, ...incoming.data],
+    //           pageInfo: incoming.pageInfo,
+    //         };
+    //       },
+    //     },
+    //   },
+    // },
   },
   dataIdFromObject: (object): string | undefined => {
     const typeName = object.__typename;

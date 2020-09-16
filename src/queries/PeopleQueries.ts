@@ -2,7 +2,8 @@ import { gql } from '@apollo/client';
 import { ASSET_FIELDS, AssetFieldsInterface } from './AssetQueries';
 
 export function personKeyExtractor(person: PersonFieldsInterface): string {
-  return person.contactId ? person.contactId : person.profileId;
+  // Need a prefix on there so that it doesn't collide with the profile entity.
+  return 'prsn' + (person.contactId ? person.contactId : person.profileId);
 }
 
 export interface PersonFieldsInterface {

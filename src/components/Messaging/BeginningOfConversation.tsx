@@ -27,13 +27,18 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  hasNextPage?: boolean;
   loading?: boolean;
 };
 
-const BeginningOfConversation: React.FC<Props> = ({ loading }) => (
+const BeginningOfConversation: React.FC<Props> = ({ loading, hasNextPage }) => (
   <View style={styles.container}>
     {loading ? (
       <Loading size="small" />
+    ) : hasNextPage ? (
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Please Wait...</Text>
+      </View>
     ) : (
       <View style={styles.textContainer}>
         <Text style={styles.text}>Beginning of Chat</Text>

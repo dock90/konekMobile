@@ -39,15 +39,16 @@ export interface MessageQueryVariables {
   after?: string | null;
   first?: number;
 }
+export interface MessagesQueryDataInterface {
+  data: Array<MessageFieldsInterface>;
+  pageInfo: PageInfo;
+}
 export interface MessagesQueryInterface {
-  messages: {
-    data: Array<MessageFieldsInterface>;
-    pageInfo: PageInfo;
-  };
+  messages: MessagesQueryDataInterface;
 }
 export const MESSAGES_QUERY = gql`
-  query MESSAGES_QUERY($roomId: ID!, $after: String) {
-    messages(input: { roomId: $roomId, after: $after, first: 100 }) {
+  query MESSAGES_QUERY($roomId: ID!, $after: String, $first: Float = 100) {
+    messages(input: { roomId: $roomId, after: $after, first: $first }) {
       data {
         ...MessageFields
       }
